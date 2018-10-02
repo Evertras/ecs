@@ -15,17 +15,18 @@ void SystemSpriteRender::Run(ECS::EntityList &el, ECS::DeltaSeconds deltaSeconds
 	m_TimePassed += deltaSeconds;
 	float scale = glm::sin(m_TimePassed * 4) * 10;
 
-	SDL_Log("%f = %f", m_TimePassed, scale);
+	//SDL_Log("%f = %f", m_TimePassed, scale);
 
-	scale = 1.f;
+	//scale = 1.f;
 
-	// TOOD: this is awful but works for now
+	// TOOD: this is probably awful but works for now... make this class a functor maybe?
 	std::function<void(ECS::DeltaSeconds, ECS::Entity&)> f = [&target, scale](
 		ECS::DeltaSeconds deltaSeconds,
 		ECS::Entity &e)
 	{
 		Component::Position &pos = e.Data<Component::Position>();
 		Component::AnimatedSprite &sprite = e.Data<Component::AnimatedSprite>();
+		const Assets::SpriteAnimation::Frame &frame = sprite.m_Animation.GetFrame(sprite.m_CurrentFrame);
 		target.QueueAnimatedSprite(
 			sprite.m_Animation.GetTexture(),
 			pos,
