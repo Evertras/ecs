@@ -24,7 +24,7 @@ SCENARIO("EntityList can add and remove entities", "[entityList]") {
 					REQUIRE(entity.ID() == id);
 				};
 
-				el.Run(checkID, 0.f);
+				el.RunAll(checkID, 0.f);
 
 				REQUIRE(foundID);
 			}

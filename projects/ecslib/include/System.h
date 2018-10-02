@@ -19,9 +19,9 @@ namespace ECS {
 		}
 
 	protected:
-		System(std::function<void(DeltaSeconds, T&...)> f) : m_F(f) {}
+		System(std::function<void(DeltaSeconds, Entity&)> f) : m_F(f) {}
 		System() {}
 
-		std::function<void(DeltaSeconds, T&...)> m_F;
+		std::function<void(DeltaSeconds, Entity&)> m_F;
 	};
 }

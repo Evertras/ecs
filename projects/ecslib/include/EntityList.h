@@ -37,7 +37,8 @@ namespace ECS {
 			}
 		}
 
-		void Run(std::function<void(DeltaSeconds, Entity&)> f, DeltaSeconds deltaSeconds) {
+		// Use sparingly
+		void RunAll(std::function<void(DeltaSeconds, Entity&)> f, DeltaSeconds deltaSeconds) {
 			for (auto i = m_Entities.begin(); i != m_Entities.end(); ++i) {
 				f(deltaSeconds, *i->second);
 			}

@@ -1,8 +1,13 @@
-#include <iostream>
+#include "pch.h"
+#include "Game.h"
 
-#include <Entity.h>
+int main(int argc, char** argv)
+{
+	Game g;
 
-int main(int argc, char** argv) {
-	std::cout << "Hi" << std::endl;
+	if (g.Initialize()) {
+		g.Run();
+	}
+
 	return 0;
 }

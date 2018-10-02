@@ -5,32 +5,42 @@ function os.winSdkVersion()
 end
 
 function includeCatch()
-	-- Catch is header-only, we need just the Catch.hpp header
 	includedirs "Libraries/Catch/Include"
-	
-	-- We can also configure Catch through defines
 	defines "CATCH_CPP11_OR_GREATER"
 end
 
 function useECSLib()
-	-- The library's public headers
 	includedirs "projects/ecslib/include"
-	
-	-- We link against a library that's in the same workspace, so we can just
-	-- use the project name - premake is really smart and will handle everything for us.
 	links "ECSLib"
 end
 
-function includeSDL2()
-	includedirs "libraries/SDL2/include"
-end	
+function useSDL()
+	includedirs "libraries/SDL/include"
 
--- This function links statically against SDL2
-function linkSDL2()
-	libdirs "libraries/SDL2/lib/%{cfg.architecture}"
+	-- TODO: figure out how to change between windows/linux when we get linux libs in
+	libdirs "libraries/SDL/lib/windows/%{cfg.architecture}"
 	
 	links "SDL2"
 	links "SDL2main"
+end
+
+function useSOIL()
+	includedirs "libraries/SOIL/src"
+
+	-- TODO: figure out how to change between windows/linux when we get linux libs in
+	libdirs "libraries/SOIL/lib/windows/%{cfg.architecture}"
+	
+	links "SOIL"
+end
+
+function useGlew()
+	includedirs "libraries/glew/include"
+
+	-- TODO: figure out how to change between windows/linux when we get linux libs in
+	libdirs "libraries/glew/lib/windows/%{cfg.architecture}"
+
+	links "glew32"
+	links "glew32s"
 end
 
 workspace "ECS"
@@ -52,7 +62,7 @@ workspace "ECS"
   filter {"system:windows", "action:vs*"}
     systemversion(os.winSdkVersion() .. ".0")
 
-  startproject "ECSLibTest"
+  startproject "Sample"
 
 project "ECSLib"
   kind "StaticLib"
@@ -68,4 +78,15 @@ project "ECSLibTest"
 project "Sample"
   kind "ConsoleApp"
   files "projects/sample/**"
+  debugdir "projects/sample"
   useECSLib()
+  useSDL()
+  useSOIL()
+  useGlew()
+  links "OpenGL32.lib"
+
+  includedirs "libraries/glm/include"
+
+  --pchheader "pch.h"
+  --pchsource "pch.cpp"
+  --includedirs "projects/sample"

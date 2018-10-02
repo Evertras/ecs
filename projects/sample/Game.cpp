@@ -73,25 +73,22 @@ bool Game::Initialize() {
 	AddActor(camera);
 	*/
 
-	Component::Sprite playerSprite;
+	{
+		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
 
-	playerSprite.m_Animation = Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE);
-	playerSprite.m_CurrentFrame = 0;
+		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 0 });
+		//player->With<Component::Velocity>({ 0, 0 });
 
-	std::unique_ptr<ECS::Entity> player = std::unique_ptr<ECS::Entity>();
+		m_EntityList.Add(std::move(player));
+	}
 
-	player.get()->AddComponent<Component::Sprite>(playerSprite);
-	//player->With<Component::Position>({ 200, 0 });
-	//player->With<Component::Velocity>({ 0, 0 });
-
-	m_EntityList.Add(std::move(player));
-
-	std::function<void(ECS::DeltaSeconds, Component::Position &pos)> debugThing = [](ECS::DeltaSeconds d, Component::Position &pos) {
+	std::function<void(ECS::DeltaSeconds, ECS::Entity &)> debugThing = [](ECS::DeltaSeconds d, ECS::Entity &e) {
+		Component::Position &pos = e.Data<Component::Position>();
 		SDL_Log("Position: %f %f", pos.x, pos.y);
 		pos.x = 100;
 	};
 
-	m_EntityList.Run(debugThing, 0.f);
+	m_EntityList.Run<Component::Position>(debugThing, 0.f);
 
 	m_SpriteTargets.push_back(std::make_unique<RenderTargetSprite>(*m_SpriteShader.get()));
 
