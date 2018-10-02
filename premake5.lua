@@ -43,6 +43,8 @@ workspace "ECS"
   filter {"system:windows", "action:vs*"}
     systemversion(os.winSdkVersion() .. ".0")
 
+  startproject "ECSLibTest"
+
 project "ECSLib"
   kind "StaticLib"
 
