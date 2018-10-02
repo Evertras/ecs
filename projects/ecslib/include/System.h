@@ -12,7 +12,7 @@ namespace ECS {
 	class System : public BaseSystem
 	{
 	public:
-		virtual ~System() {}	
+		virtual ~System() {}
 
 		void Run(EntityList &list, DeltaSeconds deltaSeconds) override {
 			list.Run<T...>(m_F, deltaSeconds);

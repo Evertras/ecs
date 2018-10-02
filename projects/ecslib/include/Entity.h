@@ -7,10 +7,14 @@
 #include "Component.h"
 
 namespace ECS {
+	typedef unsigned long EntityID;
+
+	const EntityID UnassignedID = static_cast<unsigned long>(-1);
+
 	class Entity
 	{
 	public:
-		Entity() {}
+		Entity() : m_ID(UnassignedID) {}
 		~Entity() {}
 		Entity(const Entity &rhs) = delete;
 
@@ -42,7 +46,16 @@ namespace ECS {
 				);
 		}
 
+		EntityID ID() const { return m_ID; }
+
 	private:
 		std::unordered_map<std::type_index, std::unique_ptr<Internal::BaseComponent>> m_Components;
+		EntityID m_ID;
+
+		// EntityList should call this instead of manipulating m_ID directly
+		void SetID(EntityID id) { m_ID = id; }
+
+		// EntityList has free reign with Entity
+		friend class EntityList;
 	};
 }

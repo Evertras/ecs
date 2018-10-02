@@ -19,9 +19,18 @@ function useECSLib()
 	-- We link against a library that's in the same workspace, so we can just
 	-- use the project name - premake is really smart and will handle everything for us.
 	links "ECSLib"
+end
+
+function includeSDL2()
+	includedirs "libraries/SDL2/include"
+end	
+
+-- This function links statically against SDL2
+function linkSDL2()
+	libdirs "libraries/SDL2/lib/%{cfg.architecture}"
 	
-	-- Users of ExampleLib need to link GLFW
-	--linkGLFW()
+	links "SDL2"
+	links "SDL2main"
 end
 
 workspace "ECS"
@@ -54,4 +63,9 @@ project "ECSLibTest"
   kind "ConsoleApp"
   files "projects/ecslibtest/**"
   includeCatch()
+  useECSLib()
+
+project "Sample"
+  kind "ConsoleApp"
+  files "projects/sample/**"
   useECSLib()

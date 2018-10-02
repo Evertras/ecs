@@ -7,7 +7,6 @@
 #include "Entity.h"
 
 namespace ECS {
-	typedef unsigned long EntityID;
 	typedef float DeltaSeconds;
 
 	class EntityList
@@ -21,7 +20,7 @@ namespace ECS {
 
 		EntityID Add(std::unique_ptr<Entity> entity) {
 			++m_IDCounter;
-			entity->AddComponent<EntityID>(m_IDCounter);
+			entity->SetID(m_IDCounter);
 			m_Entities.insert({ m_IDCounter, std::move(entity) });
 			return m_IDCounter;
 		}
@@ -30,11 +29,17 @@ namespace ECS {
 
 		template<typename ...T>
 		typename std::enable_if<sizeof...(T) != 0, void>::type
-		Run(std::function<void(DeltaSeconds, T&...)> f, DeltaSeconds deltaSeconds) {
+		Run(std::function<void(DeltaSeconds, Entity&)> f, DeltaSeconds deltaSeconds) {
 			for (auto i = m_Entities.begin(); i != m_Entities.end(); ++i) {
 				if (i->second->Has<T...>()) {
-					f(deltaSeconds, (i->second->Data<T>())...);
+					f(deltaSeconds, *i->second);
 				}
+			}
+		}
+
+		void Run(std::function<void(DeltaSeconds, Entity&)> f, DeltaSeconds deltaSeconds) {
+			for (auto i = m_Entities.begin(); i != m_Entities.end(); ++i) {
+				f(deltaSeconds, *i->second);
 			}
 		}
 

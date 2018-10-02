@@ -19,11 +19,12 @@ SCENARIO("EntityList can add and remove entities", "[entityList]") {
 			THEN("the id is set to assigned") {
 				bool foundID = false;
 
-				std::function<void(ECS::DeltaSeconds, ECS::EntityID&)> checkID = [id, &foundID](ECS::DeltaSeconds d, ECS::EntityID &iterID) {
-					foundID = foundID || iterID == id;
+				std::function<void(ECS::DeltaSeconds, ECS::Entity&)> checkID = [id, &foundID](ECS::DeltaSeconds d, ECS::Entity &entity) {
+					foundID = foundID || entity.ID() == id;
+					REQUIRE(entity.ID() == id);
 				};
 
-				el.Run<ECS::EntityID>(checkID, 0.f);
+				el.Run(checkID, 0.f);
 
 				REQUIRE(foundID);
 			}
@@ -60,7 +61,7 @@ SCENARIO("EntityList can add and remove entities", "[entityList]") {
 		}
 	}
 
-	GIVEN("an entity list with two entities") {
+	GIVEN("an entity list with two entities that have positions") {
 		ECS::EntityList el;
 		Position firstPosition = { 70.f, 140.f };
 		Position secondPosition = { 100.f, 300.f };
@@ -81,7 +82,8 @@ SCENARIO("EntityList can add and remove entities", "[entityList]") {
 				REQUIRE(el.Size() == 1);
 				bool foundSecond = false;
 
-				std::function<void(ECS::DeltaSeconds, Position&)> checkFirst = [&foundSecond, secondPosition](ECS::DeltaSeconds d, Position& pos) {
+				std::function<void(ECS::DeltaSeconds, ECS::Entity&)> checkFirst = [&foundSecond, secondPosition](ECS::DeltaSeconds d, ECS::Entity& entity) {
+					Position &pos = entity.Data<Position>();
 					foundSecond = foundSecond || (pos.x == secondPosition.x && pos.y == secondPosition.y);
 				};
 
@@ -98,7 +100,8 @@ SCENARIO("EntityList can add and remove entities", "[entityList]") {
 				REQUIRE(el.Size() == 1);
 				bool foundFirst = false;
 
-				std::function<void(ECS::DeltaSeconds, Position&)> checkFirst = [&foundFirst, firstPosition](ECS::DeltaSeconds d, Position& pos) {
+				std::function<void(ECS::DeltaSeconds, ECS::Entity&)> checkFirst = [&foundFirst, firstPosition](ECS::DeltaSeconds d, ECS::Entity& entity) {
+					Position &pos = entity.Data<Position>();
 					foundFirst = foundFirst || (pos.x == firstPosition.x && pos.y == firstPosition.y);
 				};
 
@@ -114,6 +117,35 @@ SCENARIO("EntityList can add and remove entities", "[entityList]") {
 			THEN("the entity list is unchanged") {
 				REQUIRE(el.Size() == 2);
 			}
+		}
+
+		WHEN("a function is run that doubles positions") {
+			std::function<void(ECS::DeltaSeconds, ECS::Entity&)> positionDoubler = [](ECS::DeltaSeconds d, ECS::Entity &entity) {
+				Position &pos = entity.Data<Position>();
+				pos.x *= 2;
+				pos.y *= 2;
+			};
+
+			el.Run<Position>(positionDoubler, 0.f);
+
+			bool doubledFirst = false;
+			bool doubledSecond = false;
+
+			std::function<void(ECS::DeltaSeconds, ECS::Entity&)> doubleChecker = [&doubledFirst, &doubledSecond, firstPosition, secondPosition](ECS::DeltaSeconds d, ECS::Entity &entity) {
+				Position &pos = entity.Data<Position>();
+				if (pos.x == Approx(firstPosition.x * 2) && pos.y == Approx(firstPosition.y*2)) {
+					doubledFirst = true;
+				}
+
+				if (pos.x == Approx(secondPosition.x * 2) && pos.y == Approx(secondPosition.y*2)) {
+					doubledSecond = true;
+				}
+			};
+
+			el.Run<Position>(doubleChecker, 0.f);
+
+			REQUIRE(doubledFirst);
+			REQUIRE(doubledSecond);
 		}
 	}
 }
