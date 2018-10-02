@@ -54,7 +54,7 @@ SCENARIO("Entity can set and modify components", "[entity]") {
 }
 
 SCENARIO("Entities properly report that they have components") {
-	GIVEN("an entity with no components") {
+	GIVEN("an entity with no added components") {
 		ECS::Entity e;
 
 		REQUIRE(e.NumComponents() == 0);

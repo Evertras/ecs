@@ -20,7 +20,9 @@ namespace ECS {
 		size_t Size() const { return m_Entities.size(); }
 
 		EntityID Add(std::unique_ptr<Entity> entity) {
-			m_Entities.insert({ ++m_IDCounter, std::move(entity) });
+			++m_IDCounter;
+			entity->AddComponent<EntityID>(m_IDCounter);
+			m_Entities.insert({ m_IDCounter, std::move(entity) });
 			return m_IDCounter;
 		}
 
