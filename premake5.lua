@@ -12,9 +12,9 @@ function includeCatch()
 	defines "CATCH_CPP11_OR_GREATER"
 end
 
-function useExampleLib()
+function useECSLib()
 	-- The library's public headers
-	includedirs "projects/ecs/include"
+	includedirs "projects/ecslib/include"
 	
 	-- We link against a library that's in the same workspace, so we can just
 	-- use the project name - premake is really smart and will handle everything for us.
@@ -50,7 +50,6 @@ project "ECSLib"
 
 project "ECSLibTest"
   kind "ConsoleApp"
-
   files "projects/ecslibtest/**"
-
   includeCatch()
+  useECSLib()
