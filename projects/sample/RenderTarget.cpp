@@ -4,10 +4,10 @@
 RenderTargetSprite::RenderTargetSprite(Assets::SpriteShader &shader) : m_Shader(shader)
 {
 	float vertexBuffer[] = {
-		-0.5f, 1.0f, 1.0f, 0.f, 1.f,
-		0.5f, 1.0f, 1.0f, 1.f, 1.f,
-		0.5f, 0.f, 1.0f, 1.f, 0.f,
-		-0.5f, 0.f, 1.0f, 0.f, 0.f
+		-0.5f, -1.0f, 1.0f, 0.f, 0.f,
+		0.5f, -1.0f, 1.0f, 1.f, 0.f,
+		0.5f, 0.f, 1.0f, 1.f, 1.f,
+		-0.5f, 0.f, 1.0f, 0.f, 1.f
 	};
 
 	unsigned int indexBuffer[] = {
@@ -42,8 +42,9 @@ RenderTargetSprite::~RenderTargetSprite()
 void RenderTargetSprite::QueueAnimatedSprite(
 	const Assets::Texture &texture,
 	glm::vec2 bottomCenter,
-	float scale,
-	const Assets::SpriteAnimation::Frame &frame)
+	const Assets::SpriteAnimation::Frame &frame,
+	float scaleX,
+	float scaleY)
 {
 	PendingDrawRequest request(texture);
 	auto id = glm::identity<glm::mat4>();
@@ -53,8 +54,8 @@ void RenderTargetSprite::QueueAnimatedSprite(
 	request.frame = frame;
 	request.modelMatrix = glm::scale(translate,
 		glm::vec3(
-			scale * frame.width,
-			scale * frame.height,
+			scaleX * frame.width,
+			scaleY * frame.height,
 			1.f
 		));
 

@@ -12,8 +12,14 @@ public:
 	void QueueAnimatedSprite(
 		const Assets::Texture &texture,
 		glm::vec2 bottomCenter,
-		float scale,
 		const Assets::SpriteAnimation::Frame &frame);
+
+	void QueueAnimatedSprite(
+		const Assets::Texture &texture,
+		glm::vec2 bottomCenter,
+		const Assets::SpriteAnimation::Frame &frame,
+		float scaleX,
+		float scaleY);
 
 	void Draw(const glm::mat4 &vp);
 

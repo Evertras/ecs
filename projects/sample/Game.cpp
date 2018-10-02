@@ -7,6 +7,7 @@
 #include "RenderTarget.h"
 
 #include "SystemSpriteRender.h"
+#include "SystemSpriteWobble.h"
 #include "SystemVelocity.h"
 
 
@@ -76,12 +77,14 @@ bool Game::Initialize() {
 	{
 		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
 
-		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 0 });
+		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 0, 1.f, 1.f });
 		player->AddComponent(Component::Position{ 0.f, 0.f });
+		player->AddComponent(Component::WobbleSprite());
 
 		m_EntityList.Add(std::move(player));
 	}
 
+	/*
 	std::function<void(ECS::DeltaSeconds, ECS::Entity &)> debugThing = [](ECS::DeltaSeconds d, ECS::Entity &e) {
 		Component::Position &pos = e.Data<Component::Position>();
 		SDL_Log("Position: %f %f", pos.x, pos.y);
@@ -89,10 +92,12 @@ bool Game::Initialize() {
 	};
 
 	m_EntityList.Run<Component::Position>(debugThing, 0.f);
+	*/
 
 	m_SpriteTargets.push_back(std::make_unique<RenderTargetSprite>(*m_SpriteShader.get()));
 
 	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteRender(*m_SpriteTargets[0].get())));
+	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteWobble()));
 
 	return true;
 }

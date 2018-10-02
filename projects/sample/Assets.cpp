@@ -57,7 +57,7 @@ SpriteAnimation Factory::CreateAnimation(Assets::ANIM anim) {
 		};
 
 		frames = {
-			{0, 0, 32, 24}
+			{0, 0, 16, 24}
 		};
 
 		return SpriteAnimation(
