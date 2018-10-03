@@ -84,16 +84,6 @@ bool Game::Initialize() {
 		m_EntityList.Add(std::move(player));
 	}
 
-	/*
-	std::function<void(ECS::DeltaSeconds, ECS::Entity &)> debugThing = [](ECS::DeltaSeconds d, ECS::Entity &e) {
-		Component::Position &pos = e.Data<Component::Position>();
-		SDL_Log("Position: %f %f", pos.x, pos.y);
-		pos.x = 100;
-	};
-
-	m_EntityList.Run<Component::Position>(debugThing, 0.f);
-	*/
-
 	m_SpriteTargets.push_back(std::make_unique<RenderTargetSprite>(*m_SpriteShader.get()));
 
 	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteRender(*m_SpriteTargets[0].get())));
@@ -123,25 +113,11 @@ void Game::ProcessInput() {
 		}
 	}
 
-	m_KeyboardState = SDL_GetKeyboardState(NULL);
+	m_InputState.Update();
 
-	if (m_KeyboardState[SDL_SCANCODE_ESCAPE]) {
+	if (m_InputState.Quit()) {
 		m_IsRunning = false;
 	}
-	
-	/*
-	auto state = SDL_GetMouseState(&m_MouseState.x, &m_MouseState.y);
-	auto cameraPos = m_Camera->GetPosition();
-	int width, height;
-	SDL_GetWindowSize(m_Window, &width, &height);
-
-	m_MouseState.x += (int)cameraPos.x - width / 2;
-	m_MouseState.y += (int)cameraPos.y - height / 2;
-
-	m_MouseState.left = state & SDL_BUTTON_LEFT;
-	m_MouseState.right = state & SDL_BUTTON_RIGHT;
-	m_MouseState.middle = state & SDL_BUTTON_MIDDLE;
-	*/
 }
 
 void Game::Update() {
@@ -172,6 +148,12 @@ void Game::Draw() {
 	// Draw here
 	int width, height;
 	SDL_GetWindowSize(m_Window, &width, &height);
+
+	float zoom = 0.95f;
+
+	width *= zoom;
+	height *= zoom;
+
 	glm::mat4 proj = glm::ortho(0.f, (float)width, (float)height, 0.f, -100.f, 100.f);
 
 	//auto cameraPos = m_Camera->GetPosition();

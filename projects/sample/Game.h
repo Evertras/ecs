@@ -5,6 +5,7 @@
 #include <EntityList.h>
 
 #include "Assets.h"
+#include "InputState.h"
 
 class Game
 {
@@ -31,5 +32,6 @@ private:
 
 	Uint64 m_TickCount;
 	bool m_IsRunning;
-	const Uint8* m_KeyboardState;
+
+	InputState m_InputState;
 };
