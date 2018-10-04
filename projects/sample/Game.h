@@ -24,7 +24,8 @@ private:
 	std::vector<std::unique_ptr<ECS::BaseSystem>> m_Systems;
 	std::vector<std::unique_ptr<class RenderTargetSprite>> m_SpriteTargets;
 
-	glm::mat4 m_VP;
+	glm::mat4 m_View;
+	glm::mat4 m_Projection;
 
 	std::unique_ptr<Assets::SpriteShader> m_SpriteShader;
 

@@ -5,6 +5,8 @@
 
 class InputState {
 public:
+	InputState() : m_MouseState({ 0, 0, 0.f, 0.f, false, false, false }) {}
+
 	void Update(const glm::mat4 &vp);
 
 	bool MoveUp() const { return m_KeyboardState[SDL_SCANCODE_E]; }
@@ -18,8 +20,11 @@ private:
 	const Uint8* m_KeyboardState;
 
 	struct {
-		int x;
-		int y;
+		int screenX;
+		int screenY;
+
+		float worldX;
+		float worldY;
 
 		bool left;
 		bool right;

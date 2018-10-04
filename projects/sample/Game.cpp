@@ -114,16 +114,18 @@ void Game::UpdateViewProjection() {
 	int width, height;
 	SDL_GetWindowSize(m_Window, &width, &height);
 
-	float zoom = 1.f;
+	m_Projection = glm::ortho(0.f, (float)width, (float)height, 0.f, -100.f, 100.f);
 
-	width = static_cast<int>(width*zoom);
-	height = static_cast<int>(height*zoom);
-
-	glm::mat4 proj = glm::ortho(0.f, (float)width, (float)height, 0.f, -100.f, 100.f);
-
-	//auto cameraPos = m_Camera->GetPosition();
+	// TODO: Make camera more interesting
 	glm::vec2 cameraPos = { 0, 0 };
-	m_VP = glm::translate(proj, glm::vec3(-cameraPos.x + (float)width*0.5f, -cameraPos.y + (float)height*0.5f, 0.0f));
+	float zoom = 1.5f;
+
+	m_View =
+		glm::scale(
+			glm::translate(
+				glm::identity<glm::mat4>(),
+				glm::vec3(-cameraPos.x + (float)width*0.5f, -cameraPos.y + (float)height*0.5f, 0.0f)),
+			glm::vec3(zoom, zoom, 1.f));
 }
 
 void Game::ProcessInput() {
@@ -137,7 +139,7 @@ void Game::ProcessInput() {
 		}
 	}
 
-	m_InputState.Update(m_VP);
+	m_InputState.Update(m_View);
 
 	if (m_InputState.Quit()) {
 		m_IsRunning = false;
@@ -169,8 +171,10 @@ void Game::Draw() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	auto vp = m_Projection * m_View;
+
 	for (auto iter = m_SpriteTargets.begin(); iter != m_SpriteTargets.end(); ++iter) {
-		(*iter)->Draw(m_VP);
+		(*iter)->Draw(vp);
 	}
 
 	SDL_GL_SwapWindow(m_Window);
