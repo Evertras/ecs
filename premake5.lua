@@ -17,8 +17,7 @@ end
 function useSDL()
 	includedirs "libraries/SDL/include"
 
-	-- TODO: figure out how to change between windows/linux when we get linux libs in
-	libdirs "libraries/SDL/lib/windows/%{cfg.architecture}"
+	libdirs "libraries/SDL/lib/%{cfg.system}/%{cfg.architecture}"
 	
 	links "SDL2"
 	links "SDL2main"
@@ -27,8 +26,7 @@ end
 function useSOIL()
 	includedirs "libraries/SOIL/src"
 
-	-- TODO: figure out how to change between windows/linux when we get linux libs in
-	libdirs "libraries/SOIL/lib/windows/%{cfg.architecture}"
+	libdirs "libraries/SOIL/lib/%{cfg.system}/%{cfg.architecture}"
 	
 	links "SOIL"
 end
@@ -36,11 +34,18 @@ end
 function useGlew()
 	includedirs "libraries/glew/include"
 
-	-- TODO: figure out how to change between windows/linux when we get linux libs in
-	libdirs "libraries/glew/lib/windows/%{cfg.architecture}"
+	libdirs "libraries/glew/lib/%{cfg.system}/%{cfg.architecture}"
 
-	links "glew32"
-	links "glew32s"
+  filter "system:windows"
+    links "glew32"
+    links "glew32s"
+
+  filter "system:linux"
+    links "libGLEW"
+end
+
+function useOpenGL()
+  links "OpenGL32"
 end
 
 workspace "ECS"
@@ -59,8 +64,9 @@ workspace "ECS"
 
   targetdir "build/bin/%{prj.name}/%{cfg.longname}"
   objdir "build/obj/%{prj.name}/%{cfg.longname}"
+
   filter {"system:windows", "action:vs*"}
-    systemversion(os.winSdkVersion() .. ".0")
+    --systemversion(os.winSdkVersion() .. ".0")
 
   startproject "Sample"
 
@@ -79,14 +85,19 @@ project "Sample"
   kind "ConsoleApp"
   files "projects/sample/**"
   debugdir "projects/sample"
+
+  -- Internal
   useECSLib()
+
+  -- Third party
   useSDL()
   useSOIL()
   useGlew()
-  links "OpenGL32.lib"
+  useOpenGL()
 
   includedirs "libraries/glm/include"
 
   --pchheader "pch.h"
   --pchsource "pch.cpp"
   --includedirs "projects/sample"
+
