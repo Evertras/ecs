@@ -5,7 +5,7 @@ function os.winSdkVersion()
 end
 
 function includeCatch()
-	includedirs "Libraries/Catch/Include"
+	includedirs "libraries/catch/include"
 	defines "CATCH_CPP11_OR_GREATER"
 end
 
@@ -41,11 +41,15 @@ function useGlew()
     links "glew32s"
 
   filter "system:linux"
-    links "libGLEW"
+    links "GLEW"
 end
 
 function useOpenGL()
-  links "OpenGL32"
+  filter "system:windows"
+    links "OpenGL32"
+
+  filter "system:linux"
+    links "GL"
 end
 
 workspace "ECS"
@@ -60,13 +64,16 @@ workspace "ECS"
   filter { "configurations:release" }
   	optimize "On"
 
+  filter {"system:windows", "action:vs*"}
+    --systemversion(os.winSdkVersion() .. ".0")
+
+  filter { "action:gmake" }
+    buildoptions { "-std=c++17" }
+
   filter {}
 
   targetdir "build/bin/%{prj.name}/%{cfg.longname}"
   objdir "build/obj/%{prj.name}/%{cfg.longname}"
-
-  filter {"system:windows", "action:vs*"}
-    --systemversion(os.winSdkVersion() .. ".0")
 
   startproject "Sample"
 
