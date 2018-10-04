@@ -88,6 +88,15 @@ project "ECSLibTest"
   includeCatch()
   useECSLib()
 
+  filter "action:gmake"
+    --prebuildcommands {
+      --"@echo BEFORE"
+    --}
+
+    postbuildcommands {
+      "@%{cfg.buildtarget.relpath}"
+    }
+
 project "Sample"
   kind "ConsoleApp"
   files "projects/sample/**"
@@ -103,6 +112,12 @@ project "Sample"
   useOpenGL()
 
   includedirs "libraries/glm/include"
+
+  filter 'files:projects/sample/shaders/*.frag'
+    buildmessage '{COPY} %{cfg.objdir}/assets %{cfg.targetdir}'
+
+  postbuildcommands {
+  }
 
   --pchheader "pch.h"
   --pchsource "pch.cpp"
