@@ -160,7 +160,7 @@ void Game::Draw() {
 	int width, height;
 	SDL_GetWindowSize(m_Window, &width, &height);
 
-	float zoom = 0.95f;
+	float zoom = 1.f;
 
 	width = static_cast<int>(width*zoom);
 	height = static_cast<int>(height*zoom);
