@@ -2,9 +2,9 @@
 
 #include <System.h>
 
-#include "Components.h"
+#include "Component.h"
 
-class SystemVelocity : ECS::System<Component::Position, Component::Velocity>
+class SystemVelocity : public ECS::System<Component::Position, Component::Velocity>
 {
 public:
 	SystemVelocity() : System<Component::Position, Component::Velocity>
@@ -12,9 +12,11 @@ public:
 			ECS::DeltaSeconds t,
 			ECS::Entity &e
 		) {
-		Component::Position &pos = e.Data<Component::Position>();
-		Component::Velocity &vel = e.Data<Component::Velocity>();
-		pos+= vel * t;
+		Component::Position &p = e.Data<Component::Position>();
+		const Component::Velocity &v = e.Data<Component::Velocity>();
+
+		p.pos.x += v.vel.x * t;
+		p.pos.y += v.vel.y * t;
 	}) {}
 
 	~SystemVelocity() {}

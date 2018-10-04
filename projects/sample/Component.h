@@ -5,11 +5,17 @@
 #include "Assets.h"
 
 namespace Component {
-	// Basically tags
-	typedef char WobbleSprite;
+	// Tags
+	struct WobbleSprite {};
+	struct Player {};
 
-	typedef glm::vec2 Position;
-	typedef glm::vec2 Velocity;
+	struct Position {
+		glm::vec2 pos;
+	};
+
+	struct Velocity {
+		glm::vec2 vel;
+	};
 
 	struct AnimatedSprite {
 		Assets::SpriteAnimation animation;
@@ -21,5 +27,9 @@ namespace Component {
 	struct Size {
 		float x;
 		float y;
+	};
+
+	struct Move {
+		float unitsPerSecond;
 	};
 }

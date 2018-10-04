@@ -66,6 +66,16 @@ SCENARIO("Entities properly report that they have components") {
 				REQUIRE(!hasPosition);
 			}
 		}
+
+		WHEN("the entity gets an empty struct as a tag") {
+			struct SomeTag {};
+
+			e.AddComponent<SomeTag>({});
+
+			THEN("the entity says it has that tag") {
+				REQUIRE(e.Has<SomeTag>());
+			}
+		}
 	}
 
 	GIVEN("an entity with only a position component") {

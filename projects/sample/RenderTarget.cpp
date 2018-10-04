@@ -59,8 +59,6 @@ void RenderTargetSprite::QueueAnimatedSprite(
 			1.f
 		));
 
-	//request.modelMatrix = glm::identity<glm::mat4>();
-
 	for (auto iter = m_Requests.begin(); iter != m_Requests.end(); ++iter) {
 		if (iter->bottomCenter.y < bottomCenter.y) {
 			m_Requests.insert(iter, request);

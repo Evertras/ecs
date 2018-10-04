@@ -2,10 +2,11 @@
 #include "Game.h"
 
 #include "Assets.h"
-#include "Components.h"
+#include "Component.h"
 
 #include "RenderTarget.h"
 
+#include "SystemInputMovement.h"
 #include "SystemSpriteRender.h"
 #include "SystemSpriteWobble.h"
 #include "SystemVelocity.h"
@@ -75,17 +76,27 @@ bool Game::Initialize() {
 	*/
 
 	{
+		const float playerSpeed = 100.f;
+
 		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
 
 		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 0, 1.f, 1.f });
-		player->AddComponent(Component::Position{ 0.f, 0.f });
+		player->AddComponent(Component::Position{ glm::vec2(0.f, 0.f) });
+		player->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
+		player->AddComponent(Component::Move{ playerSpeed });
 		player->AddComponent(Component::WobbleSprite());
+		player->AddComponent(Component::Player());
 
 		m_EntityList.Add(std::move(player));
 	}
 
 	m_SpriteTargets.push_back(std::make_unique<RenderTargetSprite>(*m_SpriteShader.get()));
 
+	// Mechanical systems
+	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemInputMovement(m_InputState)));
+	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemVelocity()));
+
+	// Draw systems
 	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteRender(*m_SpriteTargets[0].get())));
 	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteWobble()));
 
@@ -151,8 +162,8 @@ void Game::Draw() {
 
 	float zoom = 0.95f;
 
-	width *= zoom;
-	height *= zoom;
+	width = static_cast<int>(width*zoom);
+	height = static_cast<int>(height*zoom);
 
 	glm::mat4 proj = glm::ortho(0.f, (float)width, (float)height, 0.f, -100.f, 100.f);
 

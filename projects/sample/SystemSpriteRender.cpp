@@ -22,13 +22,13 @@ void SystemSpriteRender::Run(ECS::EntityList &el, ECS::DeltaSeconds deltaSeconds
 		ECS::DeltaSeconds deltaSeconds,
 		ECS::Entity &e)
 	{
-		Component::Position &pos = e.Data<Component::Position>();
+		const Component::Position &p = e.Data<Component::Position>();
 		Component::AnimatedSprite &sprite = e.Data<Component::AnimatedSprite>();
 		Component::Size &size = e.Data<Component::Size>();
 
 		target.QueueAnimatedSprite(
 			sprite.animation.GetTexture(),
-			pos,
+			p.pos,
 			sprite.animation.GetFrame(sprite.currentFrame),
 			sprite.scaleX,
 			sprite.scaleY);
