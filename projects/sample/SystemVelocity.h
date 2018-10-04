@@ -12,11 +12,11 @@ public:
 			ECS::DeltaSeconds t,
 			ECS::Entity &e
 		) {
-		Component::Position &p = e.Data<Component::Position>();
-		const Component::Velocity &v = e.Data<Component::Velocity>();
+		glm::vec2 &pos = e.Data<Component::Position>().pos;
+		const glm::vec2 &vel = e.Data<Component::Velocity>().vel;
 
-		p.pos.x += v.vel.x * t;
-		p.pos.y += v.vel.y * t;
+		pos.x += vel.x * t;
+		pos.y += vel.y * t;
 	}) {}
 
 	~SystemVelocity() {}
