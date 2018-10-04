@@ -24,10 +24,13 @@ private:
 	std::vector<std::unique_ptr<ECS::BaseSystem>> m_Systems;
 	std::vector<std::unique_ptr<class RenderTargetSprite>> m_SpriteTargets;
 
+	glm::mat4 m_VP;
+
 	std::unique_ptr<Assets::SpriteShader> m_SpriteShader;
 
 	void ProcessInput();
-	void Update();
+	void UpdateEntities();
+	void UpdateViewProjection();
 	void Draw();
 
 	Uint64 m_TickCount;

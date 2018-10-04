@@ -1,10 +1,11 @@
 #pragma once
 
 #include <SDL/SDL.h>
+#include <glm/matrix.hpp>
 
 class InputState {
 public:
-	void Update();
+	void Update(const glm::mat4 &vp);
 
 	bool MoveUp() const { return m_KeyboardState[SDL_SCANCODE_E]; }
 	bool MoveDown() const { return m_KeyboardState[SDL_SCANCODE_D]; }
@@ -15,4 +16,13 @@ public:
 
 private:
 	const Uint8* m_KeyboardState;
+
+	struct {
+		int x;
+		int y;
+
+		bool left;
+		bool right;
+		bool middle;
+	} m_MouseState;
 };

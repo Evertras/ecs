@@ -19,63 +19,58 @@ Game::Game() : m_Window(nullptr), m_IsRunning(false), m_SpriteShader(std::make_u
 Game::~Game()
 {
 	SDL_DestroyWindow(m_Window);
+	SDL_GL_DeleteContext(m_Context);
 	SDL_Quit();
 }
 
 bool Game::Initialize() {
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-
-	m_Window = SDL_CreateWindow("ECS Sample", 100, 100, 1024, 768, SDL_WINDOW_OPENGL);
-
-	if (!m_Window) {
-		SDL_Log("Failed to create window: %s", SDL_GetError());
-		return false;
+	{
+		// OpenGL settings
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 	}
-
-	m_Context = SDL_GL_CreateContext(m_Window);
-
-	glewExperimental = GL_TRUE;
-	if (glewInit() != GLEW_OK) {
-		SDL_Log("Failed to initialize GLEW.");
-		return false;
-	}
-
-	// Apparently we need to call this to clear an erroneous error
-	glGetError();
-
-	m_SpriteShader = std::make_unique<Assets::SpriteShader>();
-
-	if (!m_SpriteShader->Load("shaders/basic.vert", "shaders/basic.frag")) {
-		return false;
-	}
-
-	/*
-	auto player = m_ActorFactory.CreatePlayer();
-	player->SetCenter(glm::vec2{ 100, 100 });
-	AddActor(player);
-
-	for (int i = 0; i < 20; ++i) {
-		AddActor(m_ActorFactory.CreateSimpleEnemy());
-	}
-
-	auto camera = new Actor(this);
-
-	m_Camera = new CameraComponent(camera);
-	m_Camera->SetTarget(player);
-	camera->AddComponent(m_Camera);
-
-	AddActor(camera);
-	*/
 
 	{
+		// Window creation
+		m_Window = SDL_CreateWindow("ECS Sample", 100, 100, 1024, 768, SDL_WINDOW_OPENGL);
+
+		if (!m_Window) {
+			SDL_Log("Failed to create window: %s", SDL_GetError());
+			return false;
+		}
+	}
+
+	{
+		// GLEW
+		m_Context = SDL_GL_CreateContext(m_Window);
+		glewExperimental = GL_TRUE;
+		if (glewInit() != GLEW_OK) {
+			SDL_Log("Failed to initialize GLEW.");
+			return false;
+		}
+
+		// Apparently we need to call this to clear an erroneous error
+		glGetError();
+	}
+
+	{
+		// Shaders
+		m_SpriteShader = std::make_unique<Assets::SpriteShader>();
+
+		if (!m_SpriteShader->Load("shaders/basic.vert", "shaders/basic.frag")) {
+			return false;
+		}
+	}
+
+	{
+		// Sandbox for initial entities
 		const float playerSpeed = 100.f;
 
 		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
@@ -90,6 +85,7 @@ bool Game::Initialize() {
 		m_EntityList.Add(std::move(player));
 	}
 
+	// Render targets
 	m_SpriteTargets.push_back(std::make_unique<RenderTargetSprite>(*m_SpriteShader.get()));
 
 	// Mechanical systems
@@ -107,10 +103,27 @@ void Game::Run() {
 	m_IsRunning = true;
 
 	while (m_IsRunning) {
+		UpdateViewProjection();
 		ProcessInput();
-		Update();
+		UpdateEntities();
 		Draw();
 	}
+}
+
+void Game::UpdateViewProjection() {
+	int width, height;
+	SDL_GetWindowSize(m_Window, &width, &height);
+
+	float zoom = 1.f;
+
+	width = static_cast<int>(width*zoom);
+	height = static_cast<int>(height*zoom);
+
+	glm::mat4 proj = glm::ortho(0.f, (float)width, (float)height, 0.f, -100.f, 100.f);
+
+	//auto cameraPos = m_Camera->GetPosition();
+	glm::vec2 cameraPos = { 0, 0 };
+	m_VP = glm::translate(proj, glm::vec3(-cameraPos.x + (float)width*0.5f, -cameraPos.y + (float)height*0.5f, 0.0f));
 }
 
 void Game::ProcessInput() {
@@ -124,14 +137,14 @@ void Game::ProcessInput() {
 		}
 	}
 
-	m_InputState.Update();
+	m_InputState.Update(m_VP);
 
 	if (m_InputState.Quit()) {
 		m_IsRunning = false;
 	}
 }
 
-void Game::Update() {
+void Game::UpdateEntities() {
 	while (!SDL_TICKS_PASSED(SDL_GetTicks(), m_TickCount + 16));
 
 	auto ticks = SDL_GetTicks();
@@ -156,23 +169,8 @@ void Game::Draw() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// Draw here
-	int width, height;
-	SDL_GetWindowSize(m_Window, &width, &height);
-
-	float zoom = 1.f;
-
-	width = static_cast<int>(width*zoom);
-	height = static_cast<int>(height*zoom);
-
-	glm::mat4 proj = glm::ortho(0.f, (float)width, (float)height, 0.f, -100.f, 100.f);
-
-	//auto cameraPos = m_Camera->GetPosition();
-	glm::vec2 cameraPos = { 0, 0 };
-	glm::mat4 vp = glm::translate(proj, glm::vec3(-cameraPos.x + (float)width*0.5f, -cameraPos.y + (float)height*0.5f, 0.0f));
-
 	for (auto iter = m_SpriteTargets.begin(); iter != m_SpriteTargets.end(); ++iter) {
-		(*iter)->Draw(vp);
+		(*iter)->Draw(m_VP);
 	}
 
 	SDL_GL_SwapWindow(m_Window);
