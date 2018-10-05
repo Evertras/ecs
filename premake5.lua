@@ -67,7 +67,7 @@ workspace "ECS"
   filter {"system:windows", "action:vs*"}
     --systemversion(os.winSdkVersion() .. ".0")
 
-  filter { "action:gmake" }
+  filter { "action:gmake*" }
     buildoptions { "-std=c++17" }
 
   filter {}
@@ -88,12 +88,13 @@ project "ECSLibTest"
   includeCatch()
   useECSLib()
 
-  filter "action:gmake"
+  filter "action:gmake*"
     --prebuildcommands {
       --"@echo BEFORE"
     --}
 
     postbuildcommands {
+      -- Run the tests
       "@%{cfg.buildtarget.relpath}"
     }
 
@@ -113,11 +114,15 @@ project "Sample"
 
   includedirs "libraries/glm/include"
 
-  filter 'files:projects/sample/shaders/*.frag'
-    buildmessage '{COPY} %{cfg.objdir}/assets %{cfg.targetdir}'
+  -- debugdir handles development in Windows, but we need to copy over our
+  -- assets in Linux/makefile land
+  filter { "action:gmake*" }
+    prebuildcommands {
+      '@echo Copying static assets',
+      'cp -R ../projects/sample/shaders %{cfg.buildtarget.directory}',
+      'cp -R ../projects/sample/assets %{cfg.buildtarget.directory}'
+    }
 
-  postbuildcommands {
-  }
 
   --pchheader "pch.h"
   --pchsource "pch.cpp"
