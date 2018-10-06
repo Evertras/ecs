@@ -13,8 +13,8 @@ void InputState::Update(const glm::mat4 &view) {
 
 	glm::vec4 screenPos(static_cast<float>(m_MouseState.screenX), static_cast<float>(m_MouseState.screenY), 0, 1);
 
-	auto res = glm::inverse(view) * screenPos;
+	auto worldPos = glm::inverse(view) * screenPos;
 
-	m_MouseState.worldX = res.x;
-	m_MouseState.worldY = res.y;
+	m_MouseState.worldX = worldPos.x;
+	m_MouseState.worldY = worldPos.y;
 }
