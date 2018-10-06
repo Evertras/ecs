@@ -9,19 +9,19 @@ public:
 	RenderTargetSprite(Assets::SpriteShader &shader);
 	~RenderTargetSprite();
 
-	void QueueAnimatedSprite(
+	void QueueSprite(
 		const Assets::Texture &texture,
 		glm::vec2 bottomCenter,
 		const Assets::CropRect &frame,
 		float scaleX,
 		float scaleY);
 
-	void QueueAnimatedSprite(
+	void QueueSprite(
 		const Assets::Texture &texture,
 		glm::vec2 bottomCenter,
 		const Assets::CropRect &frame)
 	{
-		QueueAnimatedSprite(texture, bottomCenter, frame, 1.f, 1.f);
+		QueueSprite(texture, bottomCenter, frame, 1.f, 1.f);
 	}
 
 	void Draw(const glm::mat4 &vp);

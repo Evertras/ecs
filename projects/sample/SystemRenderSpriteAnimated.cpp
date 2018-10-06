@@ -23,7 +23,7 @@ void SystemRenderSpriteAnimated::Run(ECS::EntityList &el, ECS::DeltaSeconds delt
 		const Component::Position &p = e.Data<Component::Position>();
 		Component::AnimatedSprite &sprite = e.Data<Component::AnimatedSprite>();
 
-		target.QueueAnimatedSprite(
+		target.QueueSprite(
 			sprite.animation.GetTexture(),
 			p.pos,
 			sprite.animation.GetFrame(sprite.currentFrame),

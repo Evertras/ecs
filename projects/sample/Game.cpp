@@ -24,8 +24,8 @@ Game::~Game()
 }
 
 bool Game::Initialize() {
+	// OpenGL settings
 	{
-		// OpenGL settings
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -37,8 +37,8 @@ bool Game::Initialize() {
 		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 	}
 
+	// Window creation
 	{
-		// Window creation
 		m_Window = SDL_CreateWindow("ECS Sample", 100, 100, 1024, 768, SDL_WINDOW_OPENGL);
 
 		if (!m_Window) {
@@ -47,8 +47,8 @@ bool Game::Initialize() {
 		}
 	}
 
+	// GLEW
 	{
-		// GLEW
 		m_Context = SDL_GL_CreateContext(m_Window);
 		glewExperimental = GL_TRUE;
 		if (glewInit() != GLEW_OK) {
@@ -69,8 +69,8 @@ bool Game::Initialize() {
 		}
 	}
 
+	// Sandbox for initial entities
 	{
-		// Sandbox for initial entities
 		const float playerSpeed = 5.f;
 
 		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
@@ -88,13 +88,16 @@ bool Game::Initialize() {
 	// Render targets
 	m_SpriteTargets.push_back(std::make_unique<RenderTargetSprite>(*m_SpriteShader.get()));
 
-	// Mechanical systems
-	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemInputMovement(m_InputState)));
-	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemVelocity()));
+	// Systems
+	{
+		// Mechanical systems
+		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemInputMovement(m_InputState)));
+		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemVelocity()));
 
-	// Draw systems
-	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTargets[0].get())));
-	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteWobble()));
+		// Draw systems
+		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTargets[0].get())));
+		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteWobble()));
+	}
 
 	return true;
 }
@@ -129,7 +132,10 @@ void Game::UpdateViewProjection() {
 		glm::scale(
 			glm::translate(
 				glm::identity<glm::mat4>(),
-				glm::vec3(-cameraPos.x + (float)width*0.5f, -cameraPos.y + (float)height*0.5f, 0.0f)),
+				glm::vec3(
+					-cameraPos.x + (float)width*0.5f,
+					-cameraPos.y + (float)height*0.5f,
+					0.0f)),
 			glm::vec3(zoom, zoom, 1.f));
 }
 

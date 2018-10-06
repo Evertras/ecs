@@ -41,7 +41,7 @@ RenderTargetSprite::~RenderTargetSprite()
 	glDeleteVertexArrays(1, &m_VertexArray);
 }
 
-void RenderTargetSprite::QueueAnimatedSprite(
+void RenderTargetSprite::QueueSprite(
 	const Assets::Texture &texture,
 	glm::vec2 bottomCenter,
 	const Assets::CropRect &frame,
