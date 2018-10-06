@@ -52,10 +52,11 @@ void RenderTargetSprite::QueueAnimatedSprite(
 
 	request.bottomCenter = bottomCenter;
 	request.frame = frame;
+	float ratio = static_cast<float>(request.frame.width) / static_cast<float>(request.frame.height);
 	request.modelMatrix = glm::scale(translate,
 		glm::vec3(
-			scaleX * frame.width,
-			scaleY * frame.height,
+			scaleX * ratio,
+			scaleY,
 			1.f
 		));
 

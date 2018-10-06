@@ -71,7 +71,7 @@ bool Game::Initialize() {
 
 	{
 		// Sandbox for initial entities
-		const float playerSpeed = 100.f;
+		const float playerSpeed = 5.f;
 
 		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
 
@@ -111,14 +111,19 @@ void Game::Run() {
 }
 
 void Game::UpdateViewProjection() {
-	int width, height;
-	SDL_GetWindowSize(m_Window, &width, &height);
+	int windowWidth, windowHeight;
+	SDL_GetWindowSize(m_Window, &windowWidth, &windowHeight);
 
-	m_Projection = glm::ortho(0.f, (float)width, (float)height, 0.f, -100.f, 100.f);
+	float ratio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
+	float visibleSquares = 10.f;
+	float width = visibleSquares * ratio;
+	float height = visibleSquares;
+
+	m_Projection = glm::ortho(0.f, width, height, 0.f, -100.f, 100.f);
 
 	// TODO: Make camera more interesting
 	glm::vec2 cameraPos = { 0, 0 };
-	float zoom = 1.5f;
+	float zoom = 1.f;
 
 	m_View =
 		glm::scale(
