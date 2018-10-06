@@ -4,6 +4,13 @@
 namespace Assets {
 	typedef GLuint TextureID;
 
+	struct CropRect {
+		int left;
+		int top;
+		int width;
+		int height;
+	};
+
 	class Texture {
 	public:
 		Texture(TextureID texID, int texWidth, int texHeight) : m_ID(texID), m_Width(texWidth), m_Height(texHeight) {}
@@ -31,20 +38,13 @@ namespace Assets {
 
 	struct SpriteAnimation {
 	public:
-		struct Frame {
-			int left;
-			int top;
-			int width;
-			int height;
-		};
-
-		SpriteAnimation(Texture texture, std::vector<Frame> frames, float fps, bool isLooping);
+		SpriteAnimation(Texture texture, std::vector<CropRect> frames, float fps, bool isLooping);
 		
 		float FPS() const { return m_FPS; }
 		bool IsLooping() const { return m_IsLooping; }
 
 		int NumFrames() const { return m_NumFrames; }
-		Frame GetFrame(int i) const { return m_Frames[i]; }
+		CropRect GetFrame(int i) const { return m_Frames[i]; }
 
 		Texture GetTexture() { return m_Texture; }
 
@@ -53,7 +53,23 @@ namespace Assets {
 		float m_FPS;
 		bool m_IsLooping;
 		int m_NumFrames;
-		std::vector<Frame> m_Frames;
+		std::vector<CropRect> m_Frames;
+	};
+
+	struct SpriteTile {
+	public:
+		struct TileRect {
+			int left;
+			int top;
+			int width;
+			int height;
+		};
+
+		SpriteTile(Texture tileset, int size, int x, int y);
+
+	private:
+		Texture m_Tileset;
+		TileRect m_Rect;
 	};
 
 	class Factory
@@ -76,7 +92,7 @@ namespace Assets {
 			Texture m_Data;
 		};
 
-		static std::vector<SpriteAnimation::Frame> GetFramesFromFile(const char *filename);
+		static std::vector<CropRect> GetFramesFromFile(const char *filename);
 
 		std::map<const char*, std::unique_ptr<LoadedTexture>> m_Textures;
 

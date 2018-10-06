@@ -1,8 +1,10 @@
 #include "pch.h"
-#include "RenderTarget.h"
+#include "RenderTargetSprite.h"
 
 RenderTargetSprite::RenderTargetSprite(Assets::SpriteShader &shader) : m_Shader(shader)
 {
+	m_Requests.reserve(static_cast<size_t>(1000));
+
 	float vertexBuffer[] = {
 		-0.5f, -1.0f, 1.0f, 0.f, 0.f,
 		0.5f, -1.0f, 1.0f, 1.f, 0.f,
@@ -42,7 +44,7 @@ RenderTargetSprite::~RenderTargetSprite()
 void RenderTargetSprite::QueueAnimatedSprite(
 	const Assets::Texture &texture,
 	glm::vec2 bottomCenter,
-	const Assets::SpriteAnimation::Frame &frame,
+	const Assets::CropRect &frame,
 	float scaleX,
 	float scaleY)
 {
@@ -51,8 +53,8 @@ void RenderTargetSprite::QueueAnimatedSprite(
 	auto translate = glm::translate(id, glm::vec3(bottomCenter.x, bottomCenter.y, 0));
 
 	request.bottomCenter = bottomCenter;
-	request.frame = frame;
-	float ratio = static_cast<float>(request.frame.width) / static_cast<float>(request.frame.height);
+	request.crop = frame;
+	float ratio = static_cast<float>(request.crop.width) / static_cast<float>(request.crop.height);
 	request.modelMatrix = glm::scale(translate,
 		glm::vec3(
 			scaleX * ratio,
@@ -78,10 +80,10 @@ void RenderTargetSprite::Draw(const glm::mat4 &vp) {
 		m_Shader.SetTextureClipRect(
 			iter->texture.Width(),
 			iter->texture.Height(),
-			iter->frame.left,
-			iter->frame.top,
-			iter->frame.width,
-			iter->frame.height);
+			iter->crop.left,
+			iter->crop.top,
+			iter->crop.width,
+			iter->crop.height);
 
 		m_Shader.SetMVP(vp * iter->modelMatrix);
 

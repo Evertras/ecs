@@ -9,13 +9,19 @@ Factory Factory::m_Instance;
 
 SpriteAnimation::SpriteAnimation(
 	Texture texture,
-	std::vector<SpriteAnimation::Frame> frames,
+	std::vector<CropRect> frames,
 	float fps,
 	bool isLooping)
 	: m_Texture(texture),
 	  m_Frames(std::move(frames)),
 	  m_FPS(fps),
 	  m_IsLooping(isLooping)
+{
+}
+
+SpriteTile::SpriteTile(Texture tileset, int size, int x, int y)
+	: m_Tileset(tileset),
+	  m_Rect({ x*size, y*size, size, size })
 {
 }
 
@@ -38,7 +44,7 @@ Texture Factory::GetTexture(const char* filename)
 
 SpriteAnimation Factory::CreateAnimation(Assets::ANIM anim) {
 	// Make this not terrible later with registration/init
-	std::vector<SpriteAnimation::Frame> frames;
+	std::vector<CropRect> frames;
 
 	switch (anim) {
 	case ANIM_FIRE:
@@ -72,8 +78,8 @@ SpriteAnimation Factory::CreateAnimation(Assets::ANIM anim) {
 	}
 }
 
-std::vector<SpriteAnimation::Frame> Factory::GetFramesFromFile(const char* filename) {
-	std::vector<SpriteAnimation::Frame> frames;
+std::vector<CropRect> Factory::GetFramesFromFile(const char* filename) {
+	std::vector<CropRect> frames;
 	std::ifstream in;
 
 	in.open(filename);

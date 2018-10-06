@@ -4,10 +4,10 @@
 #include "Assets.h"
 #include "Component.h"
 
-#include "RenderTarget.h"
+#include "RenderTargetSprite.h"
 
 #include "SystemInputMovement.h"
-#include "SystemSpriteRender.h"
+#include "SystemRenderSpriteAnimated.h"
 #include "SystemSpriteWobble.h"
 #include "SystemVelocity.h"
 
@@ -93,7 +93,7 @@ bool Game::Initialize() {
 	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemVelocity()));
 
 	// Draw systems
-	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteRender(*m_SpriteTargets[0].get())));
+	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTargets[0].get())));
 	m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteWobble()));
 
 	return true;

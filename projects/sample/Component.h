@@ -24,9 +24,8 @@ namespace Component {
 		float scaleY;
 	};
 
-	struct Size {
-		float x;
-		float y;
+	struct TileSprite {
+		Assets::SpriteTile tile;
 	};
 
 	struct Move {

@@ -12,14 +12,17 @@ public:
 	void QueueAnimatedSprite(
 		const Assets::Texture &texture,
 		glm::vec2 bottomCenter,
-		const Assets::SpriteAnimation::Frame &frame);
+		const Assets::CropRect &frame,
+		float scaleX,
+		float scaleY);
 
 	void QueueAnimatedSprite(
 		const Assets::Texture &texture,
 		glm::vec2 bottomCenter,
-		const Assets::SpriteAnimation::Frame &frame,
-		float scaleX,
-		float scaleY);
+		const Assets::CropRect &frame)
+	{
+		QueueAnimatedSprite(texture, bottomCenter, frame, 1.f, 1.f);
+	}
 
 	void Draw(const glm::mat4 &vp);
 
@@ -35,7 +38,7 @@ private:
 		Assets::Texture texture;
 		glm::vec2 bottomCenter;
 		glm::mat4 modelMatrix;
-		Assets::SpriteAnimation::Frame frame;
+		Assets::CropRect crop;
 	};
 
 	// Sorted by Z value
