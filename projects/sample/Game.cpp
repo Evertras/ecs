@@ -64,7 +64,7 @@ bool Game::Initialize() {
 		// Shaders
 		m_SpriteShader = std::make_unique<Assets::SpriteShader>();
 
-		if (!m_SpriteShader->Load("shaders/basic.vert", "shaders/basic.frag")) {
+		if (!m_SpriteShader->Load("assets/shaders/basic.vert", "assets/shaders/basic.frag")) {
 			return false;
 		}
 	}

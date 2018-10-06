@@ -36,20 +36,24 @@ function useGlew()
 
 	libdirs "libraries/glew/lib/%{cfg.system}/%{cfg.architecture}"
 
-  filter "system:windows"
-    links "glew32"
-    links "glew32s"
+	filter "system:windows"
+		links "glew32"
+		links "glew32s"
 
-  filter "system:linux"
-    links "GLEW"
+	filter "system:linux"
+		links "GLEW"
+
+	filter {}
 end
 
 function useOpenGL()
-  filter "system:windows"
-    links "OpenGL32"
+	filter "system:windows"
+		links "OpenGL32"
 
-  filter "system:linux"
-    links "GL"
+	filter "system:linux"
+		links "GL"
+
+    filter {}
 end
 
 workspace "ECS"
@@ -65,7 +69,7 @@ workspace "ECS"
   	optimize "On"
 
   filter {"system:windows", "action:vs*"}
-    --systemversion(os.winSdkVersion() .. ".0")
+    systemversion(os.winSdkVersion() .. ".0")
 
   filter { "action:gmake*" }
     buildoptions { "-std=c++17" }
@@ -114,15 +118,11 @@ project "Sample"
 
   includedirs "libraries/glm/include"
 
-  -- debugdir handles development in Windows, but we need to copy over our
-  -- assets in Linux/makefile land
-  filter { "action:gmake*" }
-    prebuildcommands {
-      '@echo Copying static assets',
-      'cp -R ../projects/sample/shaders %{cfg.buildtarget.directory}',
-      'cp -R ../projects/sample/assets %{cfg.buildtarget.directory}'
-    }
-
+  filter "action:gmake*"
+	  prebuildcommands {
+	    '@echo Copying static assets',
+	    'cp -R ../projects/sample/assets %{cfg.buildtarget.directory}'
+	  }
 
   --pchheader "pch.h"
   --pchsource "pch.cpp"
