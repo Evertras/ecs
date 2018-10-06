@@ -17,6 +17,7 @@ SpriteAnimation::SpriteAnimation(
 	  m_FPS(fps),
 	  m_IsLooping(isLooping)
 {
+	m_NumFrames = m_Frames.size();
 }
 
 SpriteTile::SpriteTile(Texture tileset, int size, int x, int y)
@@ -60,10 +61,6 @@ SpriteAnimation Factory::CreateAnimation(Assets::ANIM anim) {
 			{16, 24, 16, 24},
 			{32, 24, 16, 24},
 			{48, 24, 16, 24},
-		};
-
-		frames = {
-			{0, 0, 16, 24}
 		};
 
 		return SpriteAnimation(

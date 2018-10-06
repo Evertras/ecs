@@ -23,10 +23,26 @@ void SystemRenderSpriteAnimated::Run(ECS::EntityList &el, ECS::DeltaSeconds delt
 		const Component::Position &p = e.Data<Component::Position>();
 		Component::AnimatedSprite &sprite = e.Data<Component::AnimatedSprite>();
 
+		sprite.currentFrame += deltaSeconds * sprite.animation.FPS();
+
+		int displayFrame = static_cast<int>(sprite.currentFrame);
+
+		if (displayFrame > sprite.animation.NumFrames() && sprite.animation.IsLooping()) {
+			sprite.currentFrame -= sprite.animation.NumFrames();
+			displayFrame = 0;
+		}
+
+		if (displayFrame < 0) {
+			displayFrame = 0;
+		}
+		else if (displayFrame >= sprite.animation.NumFrames()) {
+			displayFrame = sprite.animation.NumFrames() - 1;
+		}
+
 		target.QueueSprite(
 			sprite.animation.GetTexture(),
 			p.pos,
-			sprite.animation.GetFrame(sprite.currentFrame),
+			sprite.animation.GetFrame(displayFrame),
 			sprite.scaleX,
 			sprite.scaleY);
 	};

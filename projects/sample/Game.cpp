@@ -75,11 +75,11 @@ bool Game::Initialize() {
 
 		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
 
-		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 0, 1.f, 1.f });
+		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 1.f, 1.f, 0 });
 		player->AddComponent(Component::Position{ glm::vec2(0.f, 0.f) });
 		player->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
 		player->AddComponent(Component::Move{ playerSpeed });
-		player->AddComponent(Component::WobbleSprite());
+		//player->AddComponent(Component::WobbleSprite());
 		player->AddComponent(Component::Player());
 
 		m_EntityList.Add(std::move(player));

@@ -19,9 +19,12 @@ namespace Component {
 
 	struct AnimatedSprite {
 		Assets::SpriteAnimation animation;
-		int currentFrame;
+
 		float scaleX;
 		float scaleY;
+
+		// Intended to be fractional, round down for index value
+		float currentFrame;
 	};
 
 	struct TileSprite {
