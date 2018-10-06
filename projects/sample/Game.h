@@ -22,7 +22,8 @@ private:
 
 	ECS::EntityList m_EntityList;
 	std::vector<std::unique_ptr<ECS::BaseSystem>> m_Systems;
-	std::vector<std::unique_ptr<class RenderTargetSprite>> m_SpriteTargets;
+	std::unique_ptr<class RenderTargetSprite> m_SpriteTarget;
+	std::unique_ptr<class RenderTargetTile> m_TileTarget;
 
 	glm::mat4 m_View;
 	glm::mat4 m_Projection;

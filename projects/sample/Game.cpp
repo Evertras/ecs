@@ -5,6 +5,7 @@
 #include "Component.h"
 
 #include "RenderTargetSprite.h"
+#include "RenderTargetTile.h"
 
 #include "SystemInputMovement.h"
 #include "SystemRenderSpriteAnimated.h"
@@ -86,7 +87,7 @@ bool Game::Initialize() {
 	}
 
 	// Render targets
-	m_SpriteTargets.push_back(std::make_unique<RenderTargetSprite>(*m_SpriteShader.get()));
+	m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
 
 	// Systems
 	{
@@ -95,7 +96,7 @@ bool Game::Initialize() {
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemVelocity()));
 
 		// Draw systems
-		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTargets[0].get())));
+		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteWobble()));
 	}
 
@@ -184,9 +185,7 @@ void Game::Draw() {
 
 	auto vp = m_Projection * m_View;
 
-	for (auto iter = m_SpriteTargets.begin(); iter != m_SpriteTargets.end(); ++iter) {
-		(*iter)->Draw(vp);
-	}
+	m_SpriteTarget->Draw(vp);
 
 	SDL_GL_SwapWindow(m_Window);
 }
