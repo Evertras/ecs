@@ -1,6 +1,7 @@
 #include "RenderTargetTile.h"
 
-RenderTargetTile::RenderTargetTile(Assets::SpriteShader &shader) : m_Shader(shader) {
+template<size_t width, size_t height>
+RenderTargetTileSized<width, height>::RenderTargetTileSized(Assets::SpriteShader &shader) : m_Shader(shader) {
 	float vertexBuffer[] = {
 		0.f, -1.0f, 1.0f, 0.f, 0.f,
 		1.f, -1.0f, 1.0f, 1.f, 0.f,
@@ -30,16 +31,20 @@ RenderTargetTile::RenderTargetTile(Assets::SpriteShader &shader) : m_Shader(shad
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, reinterpret_cast<void*>(sizeof(float) * 3));
 }
 
-void RenderTargetTile::QueueTile(
-	const Assets::Texture &texture,
-	int x,
-	int y,
-	const Assets::CropRect &frame)
-{
-}
-
-RenderTargetTile::~RenderTargetTile() {
+template<size_t width, size_t height>
+RenderTargetTileSized<width, height>::~RenderTargetTileSized() {
 	glDeleteBuffers(1, &m_VertexBuffer);
 	glDeleteBuffers(1, &m_IndexBuffer);
 	glDeleteVertexArrays(1, &m_VertexArray);
+}
+
+template<size_t width, size_t height>
+void RenderTargetTileSized<width, height>::SetTile(
+	int x,
+	int y,
+	const Assets::Texture &texture,
+	const Assets::CropRect &frame)
+{
+	auto tile = m_Tiles[width*x + y];
+
 }
