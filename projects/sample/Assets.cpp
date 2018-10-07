@@ -159,6 +159,9 @@ bool SpriteShader::Load(const char* vertName, const char* fragName) {
 	m_TextureRect = glGetUniformLocation(m_ShaderProgram, "uTextureRect");
 	SDL_Log("Shader Texture Rect ID = %d", m_TextureRect);
 
+	m_SpriteColor = glGetUniformLocation(m_ShaderProgram, "spriteColor");
+	SDL_Log("Shader Sprite Color ID = %d", m_SpriteColor);
+
 	return IsValidProgram();
 }
 
@@ -222,6 +225,8 @@ bool SpriteShader::IsValidProgram() {
 
 void SpriteShader::SetActive() {
 	glUseProgram(m_ShaderProgram);
+
+	SetSpriteBrightness(1.f);
 }
 
 void SpriteShader::Unload() {

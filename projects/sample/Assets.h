@@ -112,6 +112,8 @@ namespace Assets {
 		GLuint GetProgramId() const { return m_ShaderProgram; }
 
 		void SetMVP(const glm::mat4& mvp) { glUniformMatrix4fv(m_MVP, 1, GL_FALSE, glm::value_ptr(mvp)); }
+		void SetSpriteBrightness(float brightness) { glUniform4f(m_SpriteColor, brightness, brightness, brightness, 1.f); }
+		void SetSpriteColor(const glm::vec4& color) { glUniform4f(m_SpriteColor, color.r, color.g, color.b, color.a); }
 
 		void SetTextureClipRect(int texWidth, int texHeight, int x, int y, int width, int height);
 		void ResetTextureClipRect();
@@ -127,7 +129,6 @@ namespace Assets {
 
 		GLuint m_MVP;
 		GLuint m_TextureRect;
+		GLuint m_SpriteColor;
 	};
-
-
 }
