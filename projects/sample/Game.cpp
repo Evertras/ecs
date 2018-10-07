@@ -7,6 +7,7 @@
 #include "RenderTargetSprite.h"
 #include "RenderTargetTile.h"
 
+#include "SystemCamera.h"
 #include "SystemInputMovement.h"
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemSpriteWobble.h"
@@ -82,6 +83,7 @@ bool Game::Initialize() {
 		player->AddComponent(Component::Move{ playerSpeed });
 		//player->AddComponent(Component::WobbleSprite());
 		player->AddComponent(Component::Player());
+		player->AddComponent(Component::CameraTarget());
 
 		m_EntityList.Add(std::move(player));
 	}
@@ -128,8 +130,12 @@ bool Game::Initialize() {
 	// Systems
 	{
 		// Mechanical systems
-		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemInputMovement(m_InputState)));
-		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemVelocity()));
+		m_Systems.push_back(std::make_unique<SystemInputMovement>(m_InputState));
+		m_Systems.push_back(std::make_unique<SystemVelocity>());
+
+		std::unique_ptr<SystemCamera> camera = std::make_unique<SystemCamera>();
+		m_SystemCamera = camera.get();
+		m_Systems.push_back(std::move(camera));
 
 		// Draw systems
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
@@ -161,8 +167,7 @@ void Game::UpdateViewProjection() {
 
 	m_Projection = glm::ortho(0.f, width, height, 0.f, -100.f, 100.f);
 
-	// TODO: Make camera more interesting
-	glm::vec2 cameraPos = { 0, 0 };
+	const glm::vec2& cameraPos = m_SystemCamera->GetPosition();
 	float zoom = 1.f;
 
 	m_View =

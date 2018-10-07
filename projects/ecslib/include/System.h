@@ -3,6 +3,8 @@
 #include "EntityList.h"
 
 namespace ECS {
+	typedef std::function<void(DeltaSeconds, Entity&)> SystemFunction;
+
 	class BaseSystem {
 	public:
 		virtual void Run(EntityList &list, DeltaSeconds deltaSeconds) = 0;
@@ -19,9 +21,9 @@ namespace ECS {
 		}
 
 	protected:
-		System(std::function<void(DeltaSeconds, Entity&)> f) : m_F(f) {}
+		System(SystemFunction f) : m_F(f) {}
 		System() {}
 
-		std::function<void(DeltaSeconds, Entity&)> m_F;
+		SystemFunction m_F;
 	};
 }

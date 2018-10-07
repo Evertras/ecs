@@ -8,6 +8,7 @@ namespace Component {
 	// Tags
 	struct WobbleSprite {};
 	struct Player {};
+	struct CameraTarget {};
 
 	struct Position {
 		glm::vec2 pos;

@@ -10,7 +10,7 @@ void SystemInputMovement::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 	bool moveRight = m_InputState.MoveRight();
 	bool moveLeft = m_InputState.MoveLeft();
 
-	std::function<void(ECS::DeltaSeconds, ECS::Entity&)> f = [&](ECS::DeltaSeconds d, ECS::Entity &e) {
+	ECS::SystemFunction f = [&](ECS::DeltaSeconds d, ECS::Entity &e) {
 		glm::vec2 &vel = e.Data<Component::Velocity>().vel;
 		Component::Move &move = e.Data<Component::Move>();
 
