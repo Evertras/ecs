@@ -10,7 +10,7 @@ void SystemCamera::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 		auto diff = e.Data<Component::Position>().pos - cameraPos;
 
 		// Cheap but effective
-		diff *= 0.1f;
+		diff *= d * 5.f;
 
 		cameraPos = cameraPos + glm::vec2 { diff.x, diff.y };
 	};

@@ -12,8 +12,13 @@ public:
 		int tileX,
 		int tileY) = 0;
 
+	virtual void SetColor(
+		int worldX,
+		int worldY,
+		glm::vec4 color
+	) = 0;
 
-	virtual void SetAll(int tileX, int tileY) = 0;
+	virtual void SetAll(int tileX, int tileY, const glm::vec4 &color = { 1.f, 1.f, 1.f, 1.f }) = 0;
 
 	virtual void Draw(const glm::mat4x4 &vp) = 0;
 };
@@ -31,9 +36,15 @@ public:
 		int tileX,
 		int tileY) override;
 
-	void SetAll(int tileX, int tileY) override {
+	void SetColor(
+		int worldX,
+		int worldY,
+		glm::vec4 color) override;
+
+	void SetAll(int tileX, int tileY, const glm::vec4 &color = { 1.f, 1.f, 1.f, 1.f }) override {
 		for (int i = 0; i < width*height; ++i) {
 			m_Tiles[i].tile = { tileX*m_TileSize, tileY*m_TileSize, m_TileSize, m_TileSize };
+			m_Tiles[i].color = color;
 		}
 	}
 
@@ -47,6 +58,7 @@ private:
 	struct TileRenderData {
 		Assets::CropRect tile;
 		glm::mat4x4 modelMatrix;
+		glm::vec4 color;
 	};
 
 	std::array<TileRenderData, width*height> m_Tiles;
@@ -122,6 +134,16 @@ void RenderTargetTileSized<width, height>::SetTile(
 }
 
 template<size_t width, size_t height>
+void RenderTargetTileSized<width, height>::SetColor(
+	int worldX,
+	int worldY,
+	glm::vec4 color)
+{
+	auto i = height * worldX + worldY;
+	m_Tiles[i].color = color;
+}
+
+template<size_t width, size_t height>
 void RenderTargetTileSized<width, height>::Draw(const glm::mat4x4 &vp) {
 	glBindVertexArray(m_VertexArray);
 	glBindTexture(GL_TEXTURE_2D, m_Tileset.ID());
@@ -138,6 +160,7 @@ void RenderTargetTileSized<width, height>::Draw(const glm::mat4x4 &vp) {
 			tile.tile.width,
 			tile.tile.height);
 
+		m_Shader.SetSpriteColor(tile.color);
 		m_Shader.SetMVP(vp * tile.modelMatrix);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);

@@ -95,7 +95,7 @@ bool Game::Initialize() {
 
 		// Actual render targets
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
-		m_TileTarget = std::make_unique<RenderTargetTileSized<10, 10>>(*m_SpriteShader.get(), *m_DungeonTileset.get(), 16);
+		m_TileTarget = std::make_unique<RenderTargetTileSized<30, 30>>(*m_SpriteShader.get(), *m_DungeonTileset.get(), 16);
 
 		// Temporary
 		m_TileTarget->SetAll(2, 3);

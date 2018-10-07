@@ -25,6 +25,30 @@ namespace ECS {
 			return m_IDCounter;
 		}
 
+		Entity* Get(EntityID id) {
+			auto iter = m_Entities.find(id);
+
+			if (iter != m_Entities.end()) {
+				return iter->second.get();
+			}
+			else {
+				return nullptr;
+			}
+		}
+
+		template<typename ...T>
+		typename std::enable_if<sizeof...(T) != 0, Entity*>::type
+		First()
+		{
+			for (auto i = m_Entities.begin(); i != m_Entities.end(); ++i) {
+				if (i->second->Has<T...>()) {
+					return i->second.get();
+				}
+			}
+
+			return nullptr;
+		}
+
 		bool Delete(EntityID id) { return m_Entities.erase(id) != 0; }
 
 		template<typename ...T>

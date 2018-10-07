@@ -3,14 +3,20 @@
 
 #include "MockComponents.h"
 
-SCENARIO("EntityList can add and remove entities", "[entityList]") {
+SCENARIO("EntityList general functionality", "[entityList]") {
 	GIVEN("an empty entity list") {
 		ECS::EntityList el;
 
 		REQUIRE(el.Size() == 0);
 
-		WHEN("an entity is added") {
-			auto id = el.Add(std::make_unique<ECS::Entity>());
+		WHEN("an entity is added with a Position component") {
+			ECS::EntityID id;
+
+			{
+				auto entity = std::make_unique<ECS::Entity>();
+				entity->AddComponent<Position>({ 3, 4 });
+				id = el.Add(std::move(entity));
+			}
 
 			THEN("the entity list contains a single entity") {
 				REQUIRE(el.Size() == 1);
@@ -27,6 +33,31 @@ SCENARIO("EntityList can add and remove entities", "[entityList]") {
 				el.RunAll(checkID, 0.f);
 
 				REQUIRE(foundID);
+			}
+
+			THEN("the entity can be retrieved by its id") {
+				ECS::Entity* e = el.Get(id);
+
+				REQUIRE(e != nullptr);
+			}
+
+			THEN("the list returns null when trying to retrieve a different id") {
+				ECS::Entity *e = el.Get(id + 1);
+
+				REQUIRE(e == nullptr);
+			}
+
+			THEN("the list returns the entity as the first with a position") {
+				ECS::Entity *e = el.First<Position>();
+
+				REQUIRE(e != nullptr);
+				REQUIRE(e->ID() == id);
+			}
+
+			THEN("the list returns null as the first with a velocity") {
+				ECS::Entity *e = el.First<Velocity>();
+
+				REQUIRE(e == nullptr);
 			}
 		}
 
@@ -57,6 +88,47 @@ SCENARIO("EntityList can add and remove entities", "[entityList]") {
 
 			THEN("the entity list simply remains empty") {
 				REQUIRE(el.Size() == 0);
+			}
+		}
+	}
+
+	GIVEN("an entity list with an entity that has both Position and Velocity") {
+		ECS::EntityList el;
+		ECS::EntityID id;
+
+		{
+			auto entity = std::make_unique<ECS::Entity>();
+
+			entity->AddComponent<Position>({ 1, 2 });
+			entity->AddComponent<Velocity>({ 3, 4 });
+
+			id = el.Add(std::move(entity));
+		}
+
+		WHEN("the list is asked for the first entity with a position") {
+			ECS::Entity *e = el.First<Position>();
+
+			THEN("the list returns the entity") {
+				REQUIRE(e != nullptr);
+				REQUIRE(e->ID() == id);
+			}
+		}
+
+		WHEN("the list is asked for the first entity with a velocity") {
+			ECS::Entity *e = el.First<Velocity>();
+
+			THEN("the list returns the entity") {
+				REQUIRE(e != nullptr);
+				REQUIRE(e->ID() == id);
+			}
+		}
+
+		WHEN("the list is asked for the first entity with both a position and a velocity") {
+			ECS::Entity *e = el.First<Velocity, Position>();
+
+			THEN("the list returns the entity") {
+				REQUIRE(e != nullptr);
+				REQUIRE(e->ID() == id);
 			}
 		}
 	}
@@ -128,24 +200,26 @@ SCENARIO("EntityList can add and remove entities", "[entityList]") {
 
 			el.Run<Position>(positionDoubler, 0.f);
 
-			bool doubledFirst = false;
-			bool doubledSecond = false;
+			THEN("the positions are both doubled correctly") {
+				bool doubledFirst = false;
+				bool doubledSecond = false;
 
-			std::function<void(ECS::DeltaSeconds, ECS::Entity&)> doubleChecker = [&doubledFirst, &doubledSecond, firstPosition, secondPosition](ECS::DeltaSeconds d, ECS::Entity &entity) {
-				Position &pos = entity.Data<Position>();
-				if (pos.x == Approx(firstPosition.x * 2) && pos.y == Approx(firstPosition.y*2)) {
-					doubledFirst = true;
-				}
+				std::function<void(ECS::DeltaSeconds, ECS::Entity&)> doubleChecker = [&doubledFirst, &doubledSecond, firstPosition, secondPosition](ECS::DeltaSeconds d, ECS::Entity &entity) {
+					Position &pos = entity.Data<Position>();
+					if (pos.x == Approx(firstPosition.x * 2) && pos.y == Approx(firstPosition.y * 2)) {
+						doubledFirst = true;
+					}
 
-				if (pos.x == Approx(secondPosition.x * 2) && pos.y == Approx(secondPosition.y*2)) {
-					doubledSecond = true;
-				}
-			};
+					if (pos.x == Approx(secondPosition.x * 2) && pos.y == Approx(secondPosition.y * 2)) {
+						doubledSecond = true;
+					}
+				};
 
-			el.Run<Position>(doubleChecker, 0.f);
+				el.Run<Position>(doubleChecker, 0.f);
 
-			REQUIRE(doubledFirst);
-			REQUIRE(doubledSecond);
+				REQUIRE(doubledFirst);
+				REQUIRE(doubledSecond);
+			}
 		}
 	}
 }
