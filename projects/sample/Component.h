@@ -32,7 +32,13 @@ namespace Component {
 		Assets::SpriteTile tile;
 	};
 
-	struct Move {
+	struct InputMove {
 		float unitsPerSecond;
+	};
+
+	struct LevelEditCursorTracked {
+		ECS::EntityID trackID;
+		int x;
+		int y;
 	};
 }

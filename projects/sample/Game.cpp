@@ -9,6 +9,7 @@
 
 #include "SystemCamera.h"
 #include "SystemInputMovement.h"
+#include "SystemLevelEditCursor.h"
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemSpriteWobble.h"
 #include "SystemVelocity.h"
@@ -71,23 +72,6 @@ bool Game::Initialize() {
 		}
 	}
 
-	// Sandbox for initial entities
-	{
-		const float playerSpeed = 5.f;
-
-		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
-
-		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 1.f, 1.f, 0 });
-		player->AddComponent(Component::Position{ glm::vec2(2.f, 1.9f) });
-		player->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
-		player->AddComponent(Component::Move{ playerSpeed });
-		//player->AddComponent(Component::WobbleSprite());
-		player->AddComponent(Component::Player());
-		player->AddComponent(Component::CameraTarget());
-
-		m_EntityList.Add(std::move(player));
-	}
-
 	// Render targets
 	{
 		// Temporary
@@ -137,9 +121,35 @@ bool Game::Initialize() {
 		m_SystemCamera = camera.get();
 		m_Systems.push_back(std::move(camera));
 
+		m_Systems.push_back(std::make_unique<SystemLevelEditCursor>(*m_TileTarget.get()));
+
 		// Draw systems
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteWobble()));
+	}
+
+	// Sandbox for initial entities
+	{
+		const float playerSpeed = 5.f;
+
+		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
+
+		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 1.f, 1.f, 0 });
+		player->AddComponent(Component::Position{ glm::vec2(2.f, 1.9f) });
+		player->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
+		player->AddComponent(Component::InputMove{ playerSpeed });
+		//player->AddComponent(Component::WobbleSprite());
+		player->AddComponent(Component::Player());
+		player->AddComponent(Component::CameraTarget());
+
+		auto playerID = m_EntityList.Add(std::move(player));
+
+		std::unique_ptr<ECS::Entity> levelEditCursor = std::make_unique<ECS::Entity>();
+
+		auto trackComponent = Component::LevelEditCursorTracked{playerID, 0, 0};
+		levelEditCursor->AddComponent<Component::LevelEditCursorTracked>(trackComponent);
+
+		m_EntityList.Add(std::move(levelEditCursor));
 	}
 
 	return true;
