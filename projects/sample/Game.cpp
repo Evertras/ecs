@@ -87,7 +87,13 @@ bool Game::Initialize() {
 	}
 
 	// Render targets
-	m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
+	{
+		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
+		//m_TileTarget = std::make_unique<RenderTargetTileSized<10, 10>>(*m_SpriteShader.get());
+		//m_TileTarget = std::unique_ptr<RenderTargetTileSized<10, 10>>(new RenderTargetTileSized<10, 10>(*m_SpriteShader.get()));
+
+		auto target = RenderTargetTileSized<10, 10>(*m_SpriteShader.get());
+	}
 
 	// Systems
 	{
