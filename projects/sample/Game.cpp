@@ -77,7 +77,7 @@ bool Game::Initialize() {
 		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
 
 		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 1.f, 1.f, 0 });
-		player->AddComponent(Component::Position{ glm::vec2(0.f, 0.f) });
+		player->AddComponent(Component::Position{ glm::vec2(2.f, 1.9f) });
 		player->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
 		player->AddComponent(Component::Move{ playerSpeed });
 		//player->AddComponent(Component::WobbleSprite());
@@ -88,13 +88,41 @@ bool Game::Initialize() {
 
 	// Render targets
 	{
-		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
-		m_TileTarget = std::make_unique<RenderTargetTileSized<10, 10>>(*m_SpriteShader.get());
-
+		// Temporary
 		m_DungeonTileset = std::make_unique<Assets::Texture>(Assets::Factory::GetTexture("assets/tileset_dungeon.png"));
-		m_TileTarget->SetTile(0, 0, m_DungeonTileset.get(), {0, 32, 16, 16});
-		m_TileTarget->SetTile(0, 1, m_DungeonTileset.get(), {0, 32, 16, 16});
-		m_TileTarget->SetTile(0, 2, m_DungeonTileset.get(), {0, 32, 16, 16});
+
+		// Actual render targets
+		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
+		m_TileTarget = std::make_unique<RenderTargetTileSized<10, 10>>(*m_SpriteShader.get(), *m_DungeonTileset.get(), 16);
+
+		// Temporary
+		m_TileTarget->SetAll(2, 3);
+
+		m_TileTarget->SetTile(0, 0, 0, 0);
+		m_TileTarget->SetTile(1, 0, 0, 0);
+		m_TileTarget->SetTile(2, 0, 0, 0);
+		m_TileTarget->SetTile(3, 0, 0, 0);
+		m_TileTarget->SetTile(4, 0, 0, 0);
+
+		m_TileTarget->SetTile(0, 1, 0, 1);
+		m_TileTarget->SetTile(1, 1, 0, 1);
+		m_TileTarget->SetTile(2, 1, 0, 1);
+		m_TileTarget->SetTile(3, 1, 0, 1);
+		m_TileTarget->SetTile(4, 1, 0, 1);
+
+		m_TileTarget->SetTile(0, 2, 1, 2);
+		m_TileTarget->SetTile(1, 2, 1, 2);
+		m_TileTarget->SetTile(2, 2, 1, 2);
+		m_TileTarget->SetTile(3, 2, 1, 2);
+		m_TileTarget->SetTile(4, 2, 1, 2);
+
+		/*
+		m_TileTarget->SetTile(0, 3, {32, 48, 16, 16});
+		m_TileTarget->SetTile(1, 3, {32, 48, 16, 16});
+		m_TileTarget->SetTile(2, 3, {32, 48, 16, 16});
+		m_TileTarget->SetTile(3, 3, {32, 48, 16, 16});
+		m_TileTarget->SetTile(4, 3, {32, 48, 16, 16});
+		*/
 	}
 
 	// Systems
