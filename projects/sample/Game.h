@@ -25,6 +25,8 @@ private:
 	std::unique_ptr<class RenderTargetSprite> m_SpriteTarget;
 	std::unique_ptr<class RenderTargetTile> m_TileTarget;
 
+	std::unique_ptr<class Assets::Texture> m_DungeonTileset;
+
 	glm::mat4 m_View;
 	glm::mat4 m_Projection;
 

@@ -11,6 +11,8 @@ public:
 		int y,
 		const Assets::Texture *texture,
 		const Assets::CropRect &tile) = 0;
+
+	virtual void Draw(const glm::mat4x4 &vp) = 0;
 };
 
 template<size_t width, size_t height>
@@ -26,6 +28,8 @@ public:
 		const Assets::Texture *texture,
 		const Assets::CropRect &tile) override;
 
+	void Draw(const glm::mat4x4 &vp) override;
+
 private:
 	Assets::SpriteShader &m_Shader;
 
@@ -34,6 +38,7 @@ private:
 
 		const Assets::Texture *texture;
 		Assets::CropRect tile;
+		glm::mat4x4 modelMatrix;
 	};
 
 	std::array<TileRenderData, width*height> m_Tiles;
@@ -73,6 +78,12 @@ RenderTargetTileSized<width, height>::RenderTargetTileSized(Assets::SpriteShader
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, reinterpret_cast<void*>(sizeof(float) * 3));
+
+	for (int x = 0; x < width; ++x) {
+		for (int y = 0; y < height; ++y) {
+			m_Tiles[x*height + y].modelMatrix = glm::translate(glm::identity<glm::mat4x4>(), glm::vec3{ x, y, 0 });
+		}
+	}
 }
 
 template<size_t width, size_t height>
@@ -94,3 +105,30 @@ void RenderTargetTileSized<width, height>::SetTile(
 	m_Tiles[i].tile = tile;
 }
 
+template<size_t width, size_t height>
+void RenderTargetTileSized<width, height>::Draw(const glm::mat4x4 &vp) {
+	glBindVertexArray(m_VertexArray);
+	m_Shader.SetActive();
+
+	for (int x = 0; x < width; ++x) {
+		for (int y = 0; y < height; ++y) {
+			auto tile = m_Tiles[x*height + y];
+
+			if (tile.texture != nullptr) {
+				
+				m_Shader.SetTextureClipRect(
+					tile.texture->Width(),
+					tile.texture->Height(),
+					tile.tile.left,
+					tile.tile.top,
+					tile.tile.width,
+					tile.tile.height);
+
+				m_Shader.SetMVP(vp * tile.modelMatrix);
+
+				glBindTexture(GL_TEXTURE_2D, tile.texture->ID());
+				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+			}
+		}
+	}
+}

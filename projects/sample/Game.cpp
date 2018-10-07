@@ -89,10 +89,12 @@ bool Game::Initialize() {
 	// Render targets
 	{
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
-		//m_TileTarget = std::make_unique<RenderTargetTileSized<10, 10>>(*m_SpriteShader.get());
-		//m_TileTarget = std::unique_ptr<RenderTargetTileSized<10, 10>>(new RenderTargetTileSized<10, 10>(*m_SpriteShader.get()));
+		m_TileTarget = std::make_unique<RenderTargetTileSized<10, 10>>(*m_SpriteShader.get());
 
-		auto target = RenderTargetTileSized<10, 10>(*m_SpriteShader.get());
+		m_DungeonTileset = std::make_unique<Assets::Texture>(Assets::Factory::GetTexture("assets/tileset_dungeon.png"));
+		m_TileTarget->SetTile(0, 0, m_DungeonTileset.get(), {0, 32, 16, 16});
+		m_TileTarget->SetTile(0, 1, m_DungeonTileset.get(), {0, 32, 16, 16});
+		m_TileTarget->SetTile(0, 2, m_DungeonTileset.get(), {0, 32, 16, 16});
 	}
 
 	// Systems
@@ -191,6 +193,7 @@ void Game::Draw() {
 
 	auto vp = m_Projection * m_View;
 
+	m_TileTarget->Draw(vp);
 	m_SpriteTarget->Draw(vp);
 
 	SDL_GL_SwapWindow(m_Window);
