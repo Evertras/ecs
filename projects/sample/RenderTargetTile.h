@@ -111,6 +111,7 @@ RenderTargetTileSized<width, height>::RenderTargetTileSized(
 			auto i = x * height + y;
 			m_Tiles[i].modelMatrix = glm::translate(glm::identity<glm::mat4x4>(), glm::vec3{ x, y, 0 });
 			m_Tiles[i].tile = { 0, 0, m_TileSize, m_TileSize };
+			m_Tiles[i].color = glm::vec4(1.f, 1.f, 1.f, 1.f);
 		}
 	}
 }
@@ -140,6 +141,10 @@ void RenderTargetTileSized<width, height>::SetColor(
 	glm::vec4 color)
 {
 	auto i = height * worldX + worldY;
+	if (i > m_Tiles.size() || i < 0) {
+		return;
+	}
+
 	m_Tiles[i].color = color;
 }
 

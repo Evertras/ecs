@@ -8,6 +8,7 @@
 #include "RenderTargetTile.h"
 
 #include "SystemCamera.h"
+#include "SystemInputLevelEdit.h"
 #include "SystemInputMovement.h"
 #include "SystemLevelEditCursor.h"
 #include "SystemRenderSpriteAnimated.h"
@@ -75,40 +76,23 @@ bool Game::Initialize() {
 	// Render targets
 	{
 		// Temporary
+		const int width = 10;
+		const int height = 10;
 		m_DungeonTileset = std::make_unique<Assets::Texture>(Assets::Factory::GetTexture("assets/tileset_dungeon.png"));
+		auto level = std::make_unique<ECS::Entity>();
+		auto terrainComponent = Component::LevelTerrainData(width, height);
+		auto tileComponent = Component::LevelTileData(width, height);
+
+		level->AddComponent(terrainComponent);
+		level->AddComponent(tileComponent);
+
+		m_LevelData = level.get();
+
+		m_EntityList.Add(std::move(level));
 
 		// Actual render targets
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
-		m_TileTarget = std::make_unique<RenderTargetTileSized<30, 30>>(*m_SpriteShader.get(), *m_DungeonTileset.get(), 16);
-
-		// Temporary
-		m_TileTarget->SetAll(2, 3);
-
-		m_TileTarget->SetTile(0, 0, 0, 0);
-		m_TileTarget->SetTile(1, 0, 0, 0);
-		m_TileTarget->SetTile(2, 0, 0, 0);
-		m_TileTarget->SetTile(3, 0, 0, 0);
-		m_TileTarget->SetTile(4, 0, 0, 0);
-
-		m_TileTarget->SetTile(0, 1, 0, 1);
-		m_TileTarget->SetTile(1, 1, 0, 1);
-		m_TileTarget->SetTile(2, 1, 0, 1);
-		m_TileTarget->SetTile(3, 1, 0, 1);
-		m_TileTarget->SetTile(4, 1, 0, 1);
-
-		m_TileTarget->SetTile(0, 2, 1, 2);
-		m_TileTarget->SetTile(1, 2, 1, 2);
-		m_TileTarget->SetTile(2, 2, 1, 2);
-		m_TileTarget->SetTile(3, 2, 1, 2);
-		m_TileTarget->SetTile(4, 2, 1, 2);
-
-		/*
-		m_TileTarget->SetTile(0, 3, {32, 48, 16, 16});
-		m_TileTarget->SetTile(1, 3, {32, 48, 16, 16});
-		m_TileTarget->SetTile(2, 3, {32, 48, 16, 16});
-		m_TileTarget->SetTile(3, 3, {32, 48, 16, 16});
-		m_TileTarget->SetTile(4, 3, {32, 48, 16, 16});
-		*/
+		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>(*m_SpriteShader.get(), *m_DungeonTileset.get(), 16);
 	}
 
 	// Systems
@@ -122,6 +106,7 @@ bool Game::Initialize() {
 		m_Systems.push_back(std::move(camera));
 
 		m_Systems.push_back(std::make_unique<SystemLevelEditCursor>(*m_TileTarget.get()));
+		m_Systems.push_back(std::make_unique<SystemInputLevelEdit>(m_InputState, *m_TileTarget.get()));
 
 		// Draw systems
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));

@@ -3,8 +3,6 @@
 #include "InputState.h"
 
 void InputState::Update(const glm::mat4 &view) {
-	m_KeyboardState = SDL_GetKeyboardState(NULL);
-
 	auto state = SDL_GetMouseState(&m_MouseState.screenX, &m_MouseState.screenY);
 
 	m_MouseState.left = state & SDL_BUTTON_LEFT;

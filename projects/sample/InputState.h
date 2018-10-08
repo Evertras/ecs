@@ -5,7 +5,7 @@
 
 class InputState {
 public:
-	InputState() : m_MouseState({ 0, 0, 0.f, 0.f, false, false, false }) {}
+	InputState() : m_MouseState({ 0, 0, 0.f, 0.f, false, false, false }) { m_KeyboardState = SDL_GetKeyboardState(NULL); }
 
 	void Update(const glm::mat4 &vp);
 
@@ -13,6 +13,11 @@ public:
 	bool MoveDown() const { return m_KeyboardState[SDL_SCANCODE_D]; }
 	bool MoveRight() const { return m_KeyboardState[SDL_SCANCODE_F]; }
 	bool MoveLeft() const { return m_KeyboardState[SDL_SCANCODE_S]; }
+
+	bool EditTileUp() const { return m_KeyboardState[SDL_SCANCODE_UP]; }
+	bool EditTileDown() const { return m_KeyboardState[SDL_SCANCODE_DOWN]; }
+	bool EditTileRight() const { return m_KeyboardState[SDL_SCANCODE_RIGHT]; }
+	bool EditTileLeft() const { return m_KeyboardState[SDL_SCANCODE_LEFT]; }
 
 	bool Quit() const { return m_KeyboardState[SDL_SCANCODE_ESCAPE]; }
 

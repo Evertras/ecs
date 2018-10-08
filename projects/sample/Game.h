@@ -27,6 +27,8 @@ private:
 
 	std::unique_ptr<class Assets::Texture> m_DungeonTileset;
 
+	ECS::Entity* m_LevelData;
+
 	glm::mat4 m_View;
 	glm::mat4 m_Projection;
 
