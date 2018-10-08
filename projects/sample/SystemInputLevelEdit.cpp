@@ -23,29 +23,21 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 
 	auto tile = tiles.Get(cursorData.x, cursorData.y);
 
-	if (m_Cooldown < 0.f) {
-		if (m_InputState.EditTileUp()) {
-			--tile.y;
-			m_Cooldown = 0.5f;
-		}
-
-		if (m_InputState.EditTileDown()) {
-			++tile.y;
-			m_Cooldown = 0.5f;
-		}
-
-		if (m_InputState.EditTileRight()) {
-			++tile.x;
-			m_Cooldown = 0.5f;
-		}
-
-		if (m_InputState.EditTileLeft()) {
-			--tile.x;
-			m_Cooldown = 0.5f;
-		}
+	if (m_InputState.EditTileUp()) {
+		--tile.y;
 	}
 
-	m_Cooldown -= d;
+	if (m_InputState.EditTileDown()) {
+		++tile.y;
+	}
+
+	if (m_InputState.EditTileRight()) {
+		++tile.x;
+	}
+
+	if (m_InputState.EditTileLeft()) {
+		--tile.x;
+	}
 
 	tiles.Set(cursorData.x, cursorData.y, tile.x, tile.y);
 	m_RenderTarget.SetTile(cursorData.x, cursorData.y, tile.x, tile.y);

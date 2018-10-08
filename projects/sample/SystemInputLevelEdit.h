@@ -7,8 +7,7 @@ class SystemInputLevelEdit : public ECS::BaseSystem {
 public:
 	SystemInputLevelEdit(const InputState& inputState, RenderTargetTile& target)
 		: m_InputState(inputState),
-		  m_RenderTarget(target),
-		  m_Cooldown(0.f)
+		  m_RenderTarget(target)
 	{}
 	~SystemInputLevelEdit() {}
 
@@ -17,5 +16,4 @@ public:
 private:
 	const InputState& m_InputState;
 	RenderTargetTile& m_RenderTarget;
-	float m_Cooldown;
 };

@@ -148,6 +148,7 @@ void Game::Run() {
 		ProcessInput();
 		UpdateEntities();
 		Draw();
+		m_InputState.UpdateLastState();
 	}
 }
 
