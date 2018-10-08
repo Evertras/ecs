@@ -19,7 +19,7 @@ void SystemLevelEditCursor::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 			data.x = static_cast<int>(pos.pos.x);
 			data.y = static_cast<int>(pos.pos.y + 1);
 
-			m_RenderTarget.SetColor(data.x, data.y, glm::vec4(1.f, 0.f, 0.f, 1.f));
+			m_RenderTarget.SetColor(data.x, data.y, glm::vec4(0.5f, 0.5f, 1.0f, 1.f));
 		}
 	}
 }

@@ -19,15 +19,18 @@ public:
 	void Update(const glm::mat4 &vp);
 	void UpdateLastState() { memcpy(m_LastKeyboardState, m_KeyboardState, sizeof(Uint8)*m_KeyboardStateLen); }
 
-	bool MoveUp() const { return m_KeyboardState[SDL_SCANCODE_E]; }
-	bool MoveDown() const { return m_KeyboardState[SDL_SCANCODE_D]; }
-	bool MoveRight() const { return m_KeyboardState[SDL_SCANCODE_F]; }
-	bool MoveLeft() const { return m_KeyboardState[SDL_SCANCODE_S]; }
+	bool MoveUpHeld() const { return m_KeyboardState[SDL_SCANCODE_E]; }
+	bool MoveDownHeld() const { return m_KeyboardState[SDL_SCANCODE_D]; }
+	bool MoveRightHeld() const { return m_KeyboardState[SDL_SCANCODE_F]; }
+	bool MoveLeftHeld() const { return m_KeyboardState[SDL_SCANCODE_S]; }
 
-	bool EditTileUp() const { return !m_LastKeyboardState[SDL_SCANCODE_UP] && m_KeyboardState[SDL_SCANCODE_UP]; }
-	bool EditTileDown() const { return !m_LastKeyboardState[SDL_SCANCODE_DOWN] && m_KeyboardState[SDL_SCANCODE_DOWN]; }
-	bool EditTileRight() const { return !m_LastKeyboardState[SDL_SCANCODE_RIGHT] && m_KeyboardState[SDL_SCANCODE_RIGHT]; }
-	bool EditTileLeft() const { return !m_LastKeyboardState[SDL_SCANCODE_LEFT] && m_KeyboardState[SDL_SCANCODE_LEFT]; }
+	bool EditTileUpPressed() const { return !m_LastKeyboardState[SDL_SCANCODE_UP] && m_KeyboardState[SDL_SCANCODE_UP]; }
+	bool EditTileDownPressed() const { return !m_LastKeyboardState[SDL_SCANCODE_DOWN] && m_KeyboardState[SDL_SCANCODE_DOWN]; }
+	bool EditTileRightPressed() const { return !m_LastKeyboardState[SDL_SCANCODE_RIGHT] && m_KeyboardState[SDL_SCANCODE_RIGHT]; }
+	bool EditTileLeftPressed() const { return !m_LastKeyboardState[SDL_SCANCODE_LEFT] && m_KeyboardState[SDL_SCANCODE_LEFT]; }
+
+	bool EditTileWallHeld() const { return m_KeyboardState[SDL_SCANCODE_Q]; }
+	bool EditTileFloorHeld() const { return m_KeyboardState[SDL_SCANCODE_A]; }
 
 	bool Quit() const { return m_KeyboardState[SDL_SCANCODE_ESCAPE]; }
 

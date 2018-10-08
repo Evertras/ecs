@@ -5,10 +5,10 @@
 #include "Component.h"
 
 void SystemInputMovement::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
-	bool moveUp = m_InputState.MoveUp();
-	bool moveDown = m_InputState.MoveDown();
-	bool moveRight = m_InputState.MoveRight();
-	bool moveLeft = m_InputState.MoveLeft();
+	bool moveUp = m_InputState.MoveUpHeld();
+	bool moveDown = m_InputState.MoveDownHeld();
+	bool moveRight = m_InputState.MoveRightHeld();
+	bool moveLeft = m_InputState.MoveLeftHeld();
 
 	ECS::SystemFunction f = [&](ECS::DeltaSeconds d, ECS::Entity &e) {
 		glm::vec2 &vel = e.Data<Component::Velocity>().vel;

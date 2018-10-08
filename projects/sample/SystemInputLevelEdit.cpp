@@ -22,21 +22,30 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	const Component::LevelEditCursorTracked& cursorData = cursor->Data<Component::LevelEditCursorTracked>();
 
 	auto tile = tiles.Get(cursorData.x, cursorData.y);
+	auto terrain = terrain.Get(cursorData.x, cursorData.y);
 
-	if (m_InputState.EditTileUp()) {
+	if (m_InputState.EditTileUpPressed()) {
 		--tile.y;
 	}
 
-	if (m_InputState.EditTileDown()) {
+	if (m_InputState.EditTileDownPressed()) {
 		++tile.y;
 	}
 
-	if (m_InputState.EditTileRight()) {
+	if (m_InputState.EditTileRightPressed()) {
 		++tile.x;
 	}
 
-	if (m_InputState.EditTileLeft()) {
+	if (m_InputState.EditTileLeftPressed()) {
 		--tile.x;
+	}
+
+	if (m_InputState.EditTileWallHeld()) {
+		tile = { 0, 1 };
+	}
+
+	if (m_InputState.EditTileFloorHeld()) {
+		tile = { 2, 3 };
 	}
 
 	tiles.Set(cursorData.x, cursorData.y, tile.x, tile.y);
