@@ -22,7 +22,7 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	const Component::LevelEditCursorTracked& cursorData = cursor->Data<Component::LevelEditCursorTracked>();
 
 	auto tile = tiles.Get(cursorData.x, cursorData.y);
-	auto terrain = terrain.Get(cursorData.x, cursorData.y);
+	auto terrainType = terrain.Get(cursorData.x, cursorData.y);
 
 	if (m_InputState.EditTileUpPressed()) {
 		--tile.y;
