@@ -18,7 +18,7 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	}
 
 	Component::LevelTileData& tiles = level->Data<Component::LevelTileData>();
-	const Component::LevelTerrainData& terrain = level->Data<Component::LevelTerrainData>();
+	Component::LevelTerrainData& terrain = level->Data<Component::LevelTerrainData>();
 	const Component::LevelEditCursorTracked& cursorData = cursor->Data<Component::LevelEditCursorTracked>();
 
 	auto tile = tiles.Get(cursorData.x, cursorData.y);
@@ -42,12 +42,15 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 
 	if (m_InputState.EditTileWallHeld()) {
 		tile = { 0, 1 };
+		terrainType = Component::LevelTerrainData::WALL;
 	}
 
 	if (m_InputState.EditTileFloorHeld()) {
 		tile = { 2, 3 };
+		terrainType = Component::LevelTerrainData::OPEN;
 	}
 
 	tiles.Set(cursorData.x, cursorData.y, tile.x, tile.y);
 	m_RenderTarget.SetTile(cursorData.x, cursorData.y, tile.x, tile.y);
+	terrain.Set(cursorData.x, cursorData.y, terrainType);
 }

@@ -42,6 +42,10 @@ namespace Component {
 		int y;
 	};
 
+	struct LevelEditTerrainColorize {
+		bool on;
+	};
+
 	struct LevelTerrainData {
 		LevelTerrainData() : width(0), height(0) {}
 		LevelTerrainData(int w, int h) : width(w), height(h) { terrain.resize(w*h); SetAll(OPEN); }
@@ -57,7 +61,6 @@ namespace Component {
 		int width;
 		int height;
 
-		// Data convenience access only, no behavior!
 		void Set(int x, int y, Type type) { terrain[x*height + y] = type; }
 		void SetAll(Type type) { for (int i = 0; i < terrain.size(); ++i) terrain[i] = type; }
 		Type Get(int x, int y) const { return terrain[x*height + y]; }

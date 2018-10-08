@@ -11,6 +11,7 @@
 #include "SystemInputLevelEdit.h"
 #include "SystemInputMovement.h"
 #include "SystemLevelEditCursor.h"
+#include "SystemLevelTerrainColorize.h"
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemSpriteWobble.h"
 #include "SystemVelocity.h"
@@ -85,6 +86,7 @@ bool Game::Initialize() {
 
 		level->AddComponent(terrainComponent);
 		level->AddComponent(tileComponent);
+		level->AddComponent(Component::LevelEditTerrainColorize{ true });
 
 		m_LevelData = level.get();
 
@@ -105,6 +107,8 @@ bool Game::Initialize() {
 		m_SystemCamera = camera.get();
 		m_Systems.push_back(std::move(camera));
 
+		// Level editing systems
+		m_Systems.push_back(std::make_unique<SystemLevelTerrainColorize>(m_InputState, *m_TileTarget.get()));
 		m_Systems.push_back(std::make_unique<SystemLevelEditCursor>(*m_TileTarget.get()));
 		m_Systems.push_back(std::make_unique<SystemInputLevelEdit>(m_InputState, *m_TileTarget.get()));
 
