@@ -81,11 +81,8 @@ bool Game::Initialize() {
 		const int height = 30;
 		m_DungeonTileset = std::make_unique<Assets::Texture>(Assets::Factory::GetTexture("assets/tileset_dungeon.png"));
 		auto level = std::make_unique<ECS::Entity>();
-		auto terrainComponent = Component::LevelTerrainData(width, height);
-		auto tileComponent = Component::LevelTileData(width, height);
 
-		level->AddComponent(terrainComponent);
-		level->AddComponent(tileComponent);
+		level->AddComponent(Component::LevelData(width, height));
 		level->AddComponent(Component::LevelEditTerrainColorize{ true });
 
 		m_LevelData = level.get();
