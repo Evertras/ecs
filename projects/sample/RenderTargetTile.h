@@ -130,6 +130,10 @@ void RenderTargetTileSized<width, height>::SetTile(
 	int tileX,
 	int tileY)
 {
+	if (worldX >= width || worldY >= height) {
+		return;
+	}
+
 	auto i = height * worldX + worldY;
 	m_Tiles[i].tile = { tileX*m_TileSize, tileY*m_TileSize, m_TileSize, m_TileSize };
 }
@@ -140,11 +144,11 @@ void RenderTargetTileSized<width, height>::SetColor(
 	int worldY,
 	glm::vec4 color)
 {
-	auto i = height * worldX + worldY;
-	if (i > m_Tiles.size() || i < 0) {
+	if (worldX >= width || worldY >= height) {
 		return;
 	}
 
+	auto i = height * worldX + worldY;
 	m_Tiles[i].color = color;
 }
 

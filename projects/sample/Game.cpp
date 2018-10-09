@@ -77,8 +77,8 @@ bool Game::Initialize() {
 	// Render targets
 	{
 		// Temporary
-		const int width = 10;
-		const int height = 10;
+		const int width = 30;
+		const int height = 30;
 		m_DungeonTileset = std::make_unique<Assets::Texture>(Assets::Factory::GetTexture("assets/tileset_dungeon.png"));
 		auto level = std::make_unique<ECS::Entity>();
 		auto terrainComponent = Component::LevelTerrainData(width, height);
@@ -200,7 +200,7 @@ void Game::ProcessInput() {
 }
 
 void Game::UpdateEntities() {
-	while (!SDL_TICKS_PASSED(SDL_GetTicks(), m_TickCount + 16));
+	while (!SDL_TICKS_PASSED(SDL_GetTicks(), m_TickCount + 1));
 
 	auto ticks = SDL_GetTicks();
 

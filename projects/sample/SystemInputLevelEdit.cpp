@@ -21,6 +21,14 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	Component::LevelTerrainData& terrain = level->Data<Component::LevelTerrainData>();
 	const Component::LevelEditCursorTracked& cursorData = cursor->Data<Component::LevelEditCursorTracked>();
 
+	if (cursorData.x >= tiles.width || cursorData.x < 0) {
+		return;
+	}
+
+	if (cursorData.y >= tiles.height || cursorData.y < 0) {
+		return;
+	}
+
 	auto tile = tiles.Get(cursorData.x, cursorData.y);
 	auto terrainType = terrain.Get(cursorData.x, cursorData.y);
 
