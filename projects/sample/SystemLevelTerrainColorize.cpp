@@ -4,7 +4,7 @@
 #include "SystemLevelTerrainColorize.h"
 
 void SystemLevelTerrainColorize::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
-	auto levelEntity = el.First<Component::LevelEditTerrainColorize, Component::LevelData>();
+	auto levelEntity = el.First<Component::LevelEditTerrainColorize, Component::Level>();
 
 	if (levelEntity == nullptr) {
 		SDL_Log("Did not find level with terrain and colorize data");
@@ -12,26 +12,26 @@ void SystemLevelTerrainColorize::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 	}
 
 	Component::LevelEditTerrainColorize& colorize = levelEntity->Data<Component::LevelEditTerrainColorize>();
-	const Component::LevelData& level = levelEntity->Data<Component::LevelData>();
+	const Component::Level& level = levelEntity->Data<Component::Level>();
 
 	if (m_InputState.EditTerrainColorizeTogglePressed()) {
 		colorize.on = !colorize.on;
 	}
 
-	for (int x = 0; x < level.terrain.width; ++x) {
-		for (int y = 0; y < level.terrain.height; ++y) {
+	for (int x = 0; x < level.data.terrain.width; ++x) {
+		for (int y = 0; y < level.data.terrain.height; ++y) {
 			if (!colorize.on) {
 				m_Target.SetColor(x, y, glm::vec4(1.f, 1.f, 1.f, 1.f));
 				continue;
 			}
 
 			glm::vec4 color;
-			switch (level.terrain.Get(x, y)) {
-			case Component::LevelData::TT_WALL:
+			switch (level.data.terrain.Get(x, y)) {
+			case Assets::LevelData::TT_WALL:
 				color = glm::vec4(1.f, 0.f, 0.f, 1.f);
 				break;
 
-			case Component::LevelData::TT_OPEN:
+			case Assets::LevelData::TT_OPEN:
 				color = glm::vec4(0.f, 1.f, 0.f, 1.f);
 				break;
 

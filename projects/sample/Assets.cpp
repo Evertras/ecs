@@ -1,5 +1,8 @@
 #include "pch.h"
+
 #include "Assets.h"
+#include "Component.h"
+
 #include <fstream>
 #include <sstream>
 
@@ -248,4 +251,13 @@ void SpriteShader::SetTextureClipRect(int texWidth, int texHeight, int x, int y,
 void SpriteShader::ResetTextureClipRect() {
 	const GLfloat val[4] = { 0.f, 0.f, 1.f, 1.f };
 	glUniform4fv(m_TextureRect, 1, val);
+}
+
+Assets::LevelData LoadLevel(std::string filename) {
+	Assets::LevelData level;
+
+	return level;
+}
+
+void SaveLevel(std::string filename) {
 }
