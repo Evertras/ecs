@@ -78,12 +78,12 @@ bool Game::Initialize() {
 		// Temporary
 		const int width = 30;
 		const int height = 30;
-		m_DungeonTileset = std::make_unique<Assets::Texture>(Assets::Factory::GetTexture("assets/tileset_dungeon.png"));
+		m_DungeonTileset = Assets::Factory::GetTexture("assets/tileset_dungeon.png");
 		m_LevelData = Assets::LevelData(width, height);
 
 		// Actual render targets
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
-		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>(*m_SpriteShader.get(), *m_DungeonTileset.get(), 16);
+		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>(*m_SpriteShader.get(), m_DungeonTileset, 16);
 	}
 
 	// Sandbox for initial entities

@@ -25,7 +25,7 @@ private:
 	std::unique_ptr<class RenderTargetSprite> m_SpriteTarget;
 	std::unique_ptr<class RenderTargetTile> m_TileTarget;
 
-	std::unique_ptr<class Assets::Texture> m_DungeonTileset;
+	class Assets::Texture m_DungeonTileset;
 
 	Assets::LevelData m_LevelData;
 	ECS::EntityID m_PlayerID;

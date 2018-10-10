@@ -13,6 +13,7 @@ namespace Assets {
 
 	class Texture {
 	public:
+		Texture() : m_ID(-1), m_Width(0), m_Height(0) {}
 		Texture(TextureID texID, int texWidth, int texHeight) : m_ID(texID), m_Width(texWidth), m_Height(texHeight) {}
 		Texture(const Texture &rhs) : m_ID(rhs.m_ID), m_Width(rhs.m_Width), m_Height(rhs.m_Height) {}
 		~Texture() = default;
@@ -23,8 +24,6 @@ namespace Assets {
 
 	private:
 		friend class Factory;
-
-		Texture() {}
 
 		TextureID m_ID;
 		int m_Width;
