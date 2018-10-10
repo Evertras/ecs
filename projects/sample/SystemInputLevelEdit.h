@@ -1,13 +1,16 @@
 #include <System.h>
 
+#include "Assets.h"
 #include "InputState.h"
 #include "RenderTargetTile.h"
 
 class SystemInputLevelEdit : public ECS::BaseSystem {
 public:
-	SystemInputLevelEdit(const InputState& inputState, RenderTargetTile& target)
+	SystemInputLevelEdit(const InputState& inputState, RenderTargetTile& target, Assets::LevelData& levelData, ECS::EntityID trackID)
 		: m_InputState(inputState),
-		  m_RenderTarget(target)
+		  m_RenderTarget(target),
+		  m_LevelData(levelData),
+		  m_TrackID(trackID)
 	{}
 	~SystemInputLevelEdit() {}
 
@@ -16,4 +19,6 @@ public:
 private:
 	const InputState& m_InputState;
 	RenderTargetTile& m_RenderTarget;
+	Assets::LevelData& m_LevelData;
+	ECS::EntityID m_TrackID;
 };

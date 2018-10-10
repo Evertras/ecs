@@ -4,32 +4,28 @@
 #include "Component.h"
 
 void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
-	auto levelEntity = el.First<Component::Level>();
+	auto tracked = el.Get(m_TrackID);
 
-	if (levelEntity == nullptr) {
-		SDL_Log("No level tiles found");
-	}
-
-	auto cursor = el.First<Component::LevelEditCursorTracked>();
-
-	if (cursor == nullptr) {
-		SDL_Log("Did not find cursor");
+	if (tracked == nullptr || !tracked->Has<Component::Position>()) {
+		SDL_Log("Did not find tracked entity with position comopnent for level cursor");
 		return;
 	}
 
-	Component::Level& level = levelEntity->Data<Component::Level>();
-	const Component::LevelEditCursorTracked& cursorData = cursor->Data<Component::LevelEditCursorTracked>();
+	auto trackPos = tracked->Data<Component::Position>();
 
-	if (cursorData.x >= level.data.tiles.width || cursorData.x < 0) {
+	int cursorX = static_cast<int>(trackPos.pos.x);
+	int cursorY = static_cast<int>(trackPos.pos.y);
+
+	if (cursorX >= m_LevelData.tiles.width || cursorX < 0) {
 		return;
 	}
 
-	if (cursorData.y >= level.data.tiles.height || cursorData.y < 0) {
+	if (cursorY >= m_LevelData.tiles.height || cursorY < 0) {
 		return;
 	}
 
-	auto tile = level.data.tiles.Get(cursorData.x, cursorData.y);
-	auto terrainType = level.data.terrain.Get(cursorData.x, cursorData.y);
+	auto tile = m_LevelData.tiles.Get(cursorX, cursorY);
+	auto terrainType = m_LevelData.terrain.Get(cursorX, cursorY);
 
 	if (m_InputState.EditTileUpPressed()) {
 		--tile.y;
@@ -59,7 +55,9 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 		terrainType = Assets::LevelData::TT_OPEN;
 	}
 
-	level.data.tiles.Set(cursorData.x, cursorData.y, tile.x, tile.y);
-	m_RenderTarget.SetTile(cursorData.x, cursorData.y, tile.x, tile.y);
-	level.data.terrain.Set(cursorData.x, cursorData.y, terrainType);
+	m_LevelData.tiles.Set(cursorX, cursorY, tile.x, tile.y);
+	m_RenderTarget.SetTile(cursorX, cursorY, tile.x, tile.y);
+	m_LevelData.terrain.Set(cursorX, cursorY, terrainType);
+
+	m_RenderTarget.SetColor(cursorX, cursorY, glm::vec4(0.5f, 0.5f, 1.0f, 1.f));
 }

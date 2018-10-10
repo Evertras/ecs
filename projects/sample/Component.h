@@ -35,21 +35,4 @@ namespace Component {
 	struct InputMove {
 		float unitsPerSecond;
 	};
-
-	struct LevelEditCursorTracked {
-		ECS::EntityID trackID;
-		int x;
-		int y;
-	};
-
-	struct LevelEditTerrainColorize {
-		bool on;
-	};
-
-	struct Level {
-		Level() {}
-		Level(int width, int height) : data(width, height) {}
-
-		Assets::LevelData data;
-	};
 }

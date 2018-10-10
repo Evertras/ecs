@@ -10,7 +10,6 @@
 #include "SystemCamera.h"
 #include "SystemInputLevelEdit.h"
 #include "SystemInputMovement.h"
-#include "SystemLevelEditCursor.h"
 #include "SystemLevelTerrainColorize.h"
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemSpriteWobble.h"
@@ -80,38 +79,11 @@ bool Game::Initialize() {
 		const int width = 30;
 		const int height = 30;
 		m_DungeonTileset = std::make_unique<Assets::Texture>(Assets::Factory::GetTexture("assets/tileset_dungeon.png"));
-		auto level = std::make_unique<ECS::Entity>();
-
-		level->AddComponent(Component::Level(width, height));
-		level->AddComponent(Component::LevelEditTerrainColorize{ true });
-
-		m_LevelData = level.get();
-
-		m_EntityList.Add(std::move(level));
+		m_LevelData = Assets::LevelData(width, height);
 
 		// Actual render targets
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
 		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>(*m_SpriteShader.get(), *m_DungeonTileset.get(), 16);
-	}
-
-	// Systems
-	{
-		// Mechanical systems
-		m_Systems.push_back(std::make_unique<SystemInputMovement>(m_InputState));
-		m_Systems.push_back(std::make_unique<SystemVelocity>());
-
-		std::unique_ptr<SystemCamera> camera = std::make_unique<SystemCamera>();
-		m_SystemCamera = camera.get();
-		m_Systems.push_back(std::move(camera));
-
-		// Level editing systems
-		m_Systems.push_back(std::make_unique<SystemLevelTerrainColorize>(m_InputState, *m_TileTarget.get()));
-		m_Systems.push_back(std::make_unique<SystemLevelEditCursor>(*m_TileTarget.get()));
-		m_Systems.push_back(std::make_unique<SystemInputLevelEdit>(m_InputState, *m_TileTarget.get()));
-
-		// Draw systems
-		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
-		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteWobble()));
 	}
 
 	// Sandbox for initial entities
@@ -128,14 +100,26 @@ bool Game::Initialize() {
 		player->AddComponent(Component::Player());
 		player->AddComponent(Component::CameraTarget());
 
-		auto playerID = m_EntityList.Add(std::move(player));
+		m_PlayerID = m_EntityList.Add(std::move(player));
+	}
 
-		std::unique_ptr<ECS::Entity> levelEditCursor = std::make_unique<ECS::Entity>();
+	// Systems
+	{
+		// Mechanical systems
+		m_Systems.push_back(std::make_unique<SystemInputMovement>(m_InputState));
+		m_Systems.push_back(std::make_unique<SystemVelocity>());
 
-		auto trackComponent = Component::LevelEditCursorTracked{playerID, 0, 0};
-		levelEditCursor->AddComponent<Component::LevelEditCursorTracked>(trackComponent);
+		std::unique_ptr<SystemCamera> camera = std::make_unique<SystemCamera>();
+		m_SystemCamera = camera.get();
+		m_Systems.push_back(std::move(camera));
 
-		m_EntityList.Add(std::move(levelEditCursor));
+		// Level editing systems
+		m_Systems.push_back(std::make_unique<SystemLevelTerrainColorize>(m_InputState, *m_TileTarget.get(), m_LevelData));
+		m_Systems.push_back(std::make_unique<SystemInputLevelEdit>(m_InputState, *m_TileTarget.get(), m_LevelData, m_PlayerID));
+
+		// Draw systems
+		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
+		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteWobble()));
 	}
 
 	return true;
