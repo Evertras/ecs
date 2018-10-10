@@ -68,7 +68,6 @@ private:
 	GLuint m_IndexBuffer;
 };
 
-
 template<size_t width, size_t height>
 RenderTargetTileSized<width, height>::RenderTargetTileSized(
 	Assets::SpriteShader &shader,
@@ -158,20 +157,37 @@ void RenderTargetTileSized<width, height>::Draw(const glm::mat4x4 &vp) {
 	glBindTexture(GL_TEXTURE_2D, m_Tileset.ID());
 	m_Shader.SetActive();
 
-	for (int i = 0; i < width*height; ++i) {
-		const TileRenderData& tile = m_Tiles[i];
+	auto inversed = glm::inverse(vp);
+	auto topLeftVec = inversed * glm::vec4(-1.5f, 1.5f, 0.f, 1.f);
+	auto bottomRightVec = inversed * glm::vec4(1.5f, -1.5f, 0.f, 1.f);
 
-		m_Shader.SetTextureClipRect(
-			m_Tileset.Width(),
-			m_Tileset.Height(),
-			tile.tile.left,
-			tile.tile.top,
-			tile.tile.width,
-			tile.tile.height);
+	auto topLeftX = static_cast<int>(topLeftVec.x);
+	auto topLeftY = static_cast<int>(topLeftVec.y);
+	auto bottomRightX = static_cast<int>(bottomRightVec.x);
+	auto bottomRightY = static_cast<int>(bottomRightVec.y);
 
-		m_Shader.SetSpriteColor(tile.color);
-		m_Shader.SetMVP(vp * tile.modelMatrix);
+	if (topLeftX < 0) { topLeftX = 0; }
+	if (topLeftY < 0) { topLeftY = 0; }
+	if (bottomRightX > width) { bottomRightX = width; }
+	if (bottomRightY > height) { bottomRightY = height; }
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	for (int x = topLeftX; x < bottomRightX; ++x) {
+		for (int y = topLeftY; y < bottomRightY; ++y) {
+			int i = height * x + y;
+			const TileRenderData& tile = m_Tiles[i];
+
+			m_Shader.SetTextureClipRect(
+				m_Tileset.Width(),
+				m_Tileset.Height(),
+				tile.tile.left,
+				tile.tile.top,
+				tile.tile.width,
+				tile.tile.height);
+
+			m_Shader.SetSpriteColor(tile.color);
+			m_Shader.SetMVP(vp * tile.modelMatrix);
+
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		}
 	}
 }
