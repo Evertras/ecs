@@ -27,7 +27,7 @@ private:
 
 	class Assets::Texture m_DungeonTileset;
 
-	Assets::LevelData m_LevelData;
+	Assets::Level m_LevelData;
 	ECS::EntityID m_PlayerID;
 
 	glm::mat4 m_View;

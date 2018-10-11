@@ -16,48 +16,47 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	int cursorX = static_cast<int>(trackPos.pos.x);
 	int cursorY = static_cast<int>(trackPos.pos.y);
 
-	if (cursorX >= m_LevelData.tiles.width || cursorX < 0) {
+	if (cursorX >= m_LevelData.width || cursorX < 0) {
 		return;
 	}
 
-	if (cursorY >= m_LevelData.tiles.height || cursorY < 0) {
+	if (cursorY >= m_LevelData.height || cursorY < 0) {
 		return;
 	}
 
-	auto tile = m_LevelData.tiles.Get(cursorX, cursorY);
-	auto terrainType = m_LevelData.terrain.Get(cursorX, cursorY);
+	auto tile = m_LevelData.Get(cursorX, cursorY);
 
 	if (m_InputState.EditTileUpPressed()) {
-		--tile.y;
+		--tile.tilemapY;
 	}
 
 	if (m_InputState.EditTileDownPressed()) {
-		++tile.y;
+		++tile.tilemapY;
 	}
 
 	if (m_InputState.EditTileRightPressed()) {
-		++tile.x;
+		++tile.tilemapX;
 	}
 
 	if (m_InputState.EditTileLeftPressed()) {
-		--tile.x;
+		--tile.tilemapX;
 	}
 
 	if (m_InputState.EditTileWallHeld()) {
 		// TODO: this is hardcoded to dungeon tileset, fix
 		tile = { 0, 1 };
-		terrainType = Assets::LevelData::TT_WALL;
+		tile.type = Assets::Level::TT_WALL;
 	}
 
 	if (m_InputState.EditTileFloorHeld()) {
 		// TODO: this is hardcoded to dungeon tileset, fix
 		tile = { 2, 3 };
-		terrainType = Assets::LevelData::TT_OPEN;
+		tile.type = Assets::Level::TT_OPEN;
 	}
 
-	m_LevelData.tiles.Set(cursorX, cursorY, tile.x, tile.y);
-	m_RenderTarget.SetTile(cursorX, cursorY, tile.x, tile.y);
-	m_LevelData.terrain.Set(cursorX, cursorY, terrainType);
+	m_LevelData.Set(cursorX, cursorY, tile.tilemapX, tile.tilemapY);
+	m_LevelData.Set(cursorX, cursorY, tile.type);
 
+	m_RenderTarget.SetTile(cursorX, cursorY, tile.tilemapX, tile.tilemapY);
 	m_RenderTarget.SetColor(cursorX, cursorY, glm::vec4(0.5f, 0.5f, 1.0f, 1.f));
 }

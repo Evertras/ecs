@@ -253,11 +253,26 @@ void SpriteShader::ResetTextureClipRect() {
 	glUniform4fv(m_TextureRect, 1, val);
 }
 
-Assets::LevelData LoadLevel(std::string filename) {
-	Assets::LevelData level;
+Assets::Level LoadLevel(std::string filename) {
+	Assets::Level level;
 
 	return level;
 }
 
-void SaveLevel(std::string filename) {
+void SaveLevel(std::string filename, const Level& level) {
+	std::ofstream out(filename, std::ofstream::out);
+
+	if (out.fail()) {
+		SDL_Log("Failed to save file %s", filename.c_str());
+		return;
+	}
+
+	out << level.width;
+	out << level.height;
+
+	for (int i = 0; i < level.tiles.size(); ++i) {
+		out << level.tiles[i].type << level.tiles[i].tilemapX << level.tiles[i].tilemapY;
+	}
+
+	out.close();
 }

@@ -79,7 +79,7 @@ bool Game::Initialize() {
 		const int width = 30;
 		const int height = 30;
 		m_DungeonTileset = Assets::Factory::GetTexture("assets/tileset_dungeon.png");
-		m_LevelData = Assets::LevelData(width, height);
+		m_LevelData = Assets::Level(width, height);
 
 		// Actual render targets
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());

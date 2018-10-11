@@ -11,7 +11,7 @@ public:
 	SystemLevelTerrainColorize(
 		const InputState &inputState,
 		RenderTargetTile &render,
-		Assets::LevelData &levelData)
+		Assets::Level &levelData)
 		: m_InputState(inputState),
 		  m_Target(render),
 		  m_LevelData(levelData),
@@ -23,6 +23,6 @@ public:
 private:
 	const InputState& m_InputState;
 	RenderTargetTile& m_Target;
-	Assets::LevelData& m_LevelData;
+	Assets::Level& m_LevelData;
 	bool m_On;
 };
