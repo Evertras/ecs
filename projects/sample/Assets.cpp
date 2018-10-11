@@ -253,25 +253,53 @@ void SpriteShader::ResetTextureClipRect() {
 	glUniform4fv(m_TextureRect, 1, val);
 }
 
-Assets::Level LoadLevel(std::string filename) {
-	Assets::Level level;
+void Assets::LevelLoad(std::string filename, Assets::Level &level) {
+	std::ifstream in(filename, std::ifstream::binary);
 
-	return level;
+	if (in.fail()) {
+		SDL_Log("Failed to open file %s", filename.c_str());
+
+		return;
+	}
+
+	try {
+		in.read((char*)&level.width, sizeof(level.width));
+		in.read((char*)&level.height, sizeof(level.height));
+
+		SDL_Log("Level loading with dimensions %d x %d", level.width, level.height);
+
+		level.Size(level.width, level.height);
+
+		for (int i = 0; i < level.tiles.size(); ++i) {
+			in.read((char*)&level.tiles[i], sizeof(level.tiles[i]));
+		}
+	}
+	catch(...)
+	{
+		SDL_Log("Error when loading level");
+	}
+
+	in.close();
 }
 
-void SaveLevel(std::string filename, const Level& level) {
-	std::ofstream out(filename, std::ofstream::out);
+void Assets::LevelSave(std::string filename, const Level& level) {
+	std::ofstream out(filename, std::ofstream::out | std::ofstream::binary);
 
 	if (out.fail()) {
 		SDL_Log("Failed to save file %s", filename.c_str());
 		return;
 	}
 
-	out << level.width;
-	out << level.height;
+	try {
+		out.write((char*)&level.width, sizeof(level.width));
+		out.write((char*)&level.height, sizeof(level.height));
 
-	for (int i = 0; i < level.tiles.size(); ++i) {
-		out << level.tiles[i].type << level.tiles[i].tilemapX << level.tiles[i].tilemapY;
+		for (int i = 0; i < level.tiles.size(); ++i) {
+			out.write((char*)&level.tiles[i], sizeof(level.tiles[i]));
+		}
+	}
+	catch (...) {
+		SDL_Log("Error when saving level");
 	}
 
 	out.close();

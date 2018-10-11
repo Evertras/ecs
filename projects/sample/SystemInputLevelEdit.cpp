@@ -3,7 +3,19 @@
 #include "SystemInputLevelEdit.h"
 #include "Component.h"
 
+const char* tempLevelName = "assets/temp.lev";
+
 void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
+	if (m_InputState.EditLevelLoadPressed()) {
+		Assets::LevelLoad(tempLevelName, m_LevelData);
+
+		for (int x = 0; x < m_LevelData.width; ++x) {
+			for (int y = 0; y < m_LevelData.height; ++y) {
+				m_RenderTarget.SetTile(x, y, m_LevelData.Get(x, y).tilemapX, m_LevelData.Get(x, y).tilemapY);
+			}
+		}
+	}
+
 	auto tracked = el.Get(m_TrackID);
 
 	if (tracked == nullptr || !tracked->Has<Component::Position>()) {
@@ -59,4 +71,13 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 
 	m_RenderTarget.SetTile(cursorX, cursorY, tile.tilemapX, tile.tilemapY);
 	m_RenderTarget.SetColor(cursorX, cursorY, glm::vec4(0.5f, 0.5f, 1.0f, 1.f));
+
+	if (m_InputState.EditLevelSavePressed()) {
+		try {
+			Assets::LevelSave(tempLevelName, m_LevelData);
+		}
+		catch (...) {
+			SDL_Log("Failed to save level");
+		}
+	}
 }

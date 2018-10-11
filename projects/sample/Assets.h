@@ -162,6 +162,6 @@ namespace Assets {
 		int height;
 	};
 
-	Level LevelLoad(std::string filename);
+	void LevelLoad(std::string filename, Level& level);
 	void LevelSave(std::string filename, const Level& level);
 }

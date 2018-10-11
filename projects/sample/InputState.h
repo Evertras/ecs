@@ -34,6 +34,9 @@ public:
 
 	bool EditTerrainColorizeTogglePressed() const { return KeyPressed(SDL_SCANCODE_T); }
 
+	bool EditLevelSavePressed() const { return KeyPressed(SDL_SCANCODE_K); }
+	bool EditLevelLoadPressed() const { return KeyPressed(SDL_SCANCODE_L); }
+
 	bool Quit() const { return m_KeyboardState[SDL_SCANCODE_ESCAPE]; }
 
 private:
