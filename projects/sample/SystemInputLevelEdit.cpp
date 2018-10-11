@@ -38,19 +38,19 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 
 	auto tile = m_LevelData.Get(cursorX, cursorY);
 
-	if (m_InputState.EditTileUpPressed()) {
+	if (m_InputState.EditTileUpPressed() && tile.tilemapY > 0) {
 		--tile.tilemapY;
 	}
 
-	if (m_InputState.EditTileDownPressed()) {
+	if (m_InputState.EditTileDownPressed() && tile.tilemapY < m_TilemapHeight - 1) {
 		++tile.tilemapY;
 	}
 
-	if (m_InputState.EditTileRightPressed()) {
+	if (m_InputState.EditTileRightPressed() && tile.tilemapX < m_TilemapWidth - 1) {
 		++tile.tilemapX;
 	}
 
-	if (m_InputState.EditTileLeftPressed()) {
+	if (m_InputState.EditTileLeftPressed() && tile.tilemapX > 0) {
 		--tile.tilemapX;
 	}
 

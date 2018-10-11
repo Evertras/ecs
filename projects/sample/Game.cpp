@@ -125,7 +125,7 @@ bool Game::Initialize() {
 
 		// Level editing systems
 		m_Systems.push_back(std::make_unique<SystemLevelTerrainColorize>(m_InputState, *m_TileTarget.get(), m_LevelData));
-		m_Systems.push_back(std::make_unique<SystemInputLevelEdit>(m_InputState, *m_TileTarget.get(), m_LevelData, m_PlayerID));
+		m_Systems.push_back(std::make_unique<SystemInputLevelEdit>(m_InputState, *m_TileTarget.get(), m_LevelData, m_PlayerID, 16, 16));
 
 		// Draw systems
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
