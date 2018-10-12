@@ -56,7 +56,7 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 
 	if (m_InputState.EditTileWallHeld()) {
 		// TODO: this is hardcoded to dungeon tileset, fix
-		tile = { 0, 1 };
+		tile = { 1, 1 };
 		tile.type = Assets::Level::TT_WALL;
 	}
 
