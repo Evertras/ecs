@@ -5,17 +5,7 @@
 #include "Component.h"
 
 #include "GameStateEdit.h"
-
-#include "RenderTargetSprite.h"
-#include "RenderTargetTile.h"
-
-#include "SystemCamera.h"
-#include "SystemInputLevelEdit.h"
-#include "SystemInputMovementEdit.h"
-#include "SystemLevelTerrainColorize.h"
-#include "SystemRenderSpriteAnimated.h"
-#include "SystemSpriteWobble.h"
-#include "SystemVelocity.h"
+#include "GameStatePlay.h"
 
 Game::Game() : m_Window(nullptr), m_IsRunning(false)
 {
@@ -65,7 +55,7 @@ bool Game::Initialize() {
 		glGetError();
 	}
 
-	m_GameState = std::unique_ptr<GameState>(new GameStateEdit(m_Window));
+	m_GameState = std::unique_ptr<GameState>(new GameStatePlay(m_Window));
 
 	return true;
 }
