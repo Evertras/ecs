@@ -105,7 +105,11 @@ void Game::AdvanceFrame() {
 		deltaSeconds = 0.05f;
 	}
 
-	m_GameState->Update(deltaSeconds);
+	auto next = m_GameState->Update(deltaSeconds);
+
+	if (next != nullptr) {
+		m_GameState = std::move(next);
+	}
 }
 
 void Game::Draw() {

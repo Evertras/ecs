@@ -51,17 +51,17 @@ GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window)
 	{
 		const float playerSpeed = 5.f;
 
-		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
+		std::unique_ptr<ECS::Entity> cursor = std::make_unique<ECS::Entity>();
 
 		//player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 1.f, 1.f, 0 });
-		player->AddComponent(Component::Position{ glm::vec2(2.f, 1.9f) });
-		player->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
-		player->AddComponent(Component::InputMove{ playerSpeed });
+		cursor->AddComponent(Component::Position{ glm::vec2(2.f, 1.9f) });
+		cursor->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
+		cursor->AddComponent(Component::InputMove{ playerSpeed });
 		//player->AddComponent(Component::WobbleSprite());
-		player->AddComponent(Component::Player());
-		player->AddComponent(Component::CameraTarget());
+		//cursor->AddComponent(Component::Player());
+		cursor->AddComponent(Component::CameraTarget());
 
-		m_PlayerID = m_EntityList.Add(std::move(player));
+		m_CursorID = m_EntityList.Add(std::move(cursor));
 	}
 
 	// Systems
@@ -79,7 +79,7 @@ GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window)
 
 		// Level editing systems
 		m_Systems.push_back(std::make_unique<SystemLevelTerrainColorize>(m_InputState, *m_TileTarget.get(), m_LevelData));
-		m_Systems.push_back(std::make_unique<SystemInputLevelEdit>(m_InputState, *m_TileTarget.get(), m_LevelData, m_PlayerID, 16, 16));
+		m_Systems.push_back(std::make_unique<SystemInputLevelEdit>(m_InputState, *m_TileTarget.get(), m_LevelData, m_CursorID, 16, 16));
 
 		// Draw systems
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
@@ -91,7 +91,7 @@ GameStateEdit::~GameStateEdit()
 {
 }
 
-void GameStateEdit::Update(ECS::DeltaSeconds d) {
+std::unique_ptr<GameState> GameStateEdit::Update(ECS::DeltaSeconds d) {
 	m_InputState.Update(m_SystemCamera->GetView());
 
 	for (auto iter = m_Systems.begin(); iter != m_Systems.end(); ++iter) {
@@ -108,6 +108,8 @@ void GameStateEdit::Update(ECS::DeltaSeconds d) {
 	}
 
 	m_InputState.UpdateLastState();
+
+	return nullptr;
 }
 
 void GameStateEdit::Draw() {

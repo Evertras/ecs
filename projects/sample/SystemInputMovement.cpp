@@ -34,5 +34,5 @@ void SystemInputMovement::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 		}
 	};
 
-	el.Run<Component::Player, Component::Velocity, Component::InputMove>(f, d);
+	el.Run<Component::Velocity, Component::InputMove>(f, d);
 }

@@ -13,7 +13,7 @@ public:
 	~GameStateEdit();
 	GameStateEdit(const GameStateEdit &rhs) = delete;
 
-	void Update(ECS::DeltaSeconds d) override;
+	std::unique_ptr<GameState> Update(ECS::DeltaSeconds d) override;
 	void Draw() override;
 	const glm::mat4& GetView() const { return m_SystemCamera->GetView(); }
 
@@ -30,7 +30,7 @@ private:
 	Assets::Texture m_DungeonTileset;
 
 	Assets::Level m_LevelData;
-	ECS::EntityID m_PlayerID;
+	ECS::EntityID m_CursorID;
 
 	const SystemCamera *m_SystemCamera;
 };
