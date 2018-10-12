@@ -6,6 +6,7 @@
 
 #include "Assets.h"
 #include "InputState.h"
+#include "GameState.h"
 
 class Game
 {
@@ -20,27 +21,12 @@ private:
 	SDL_Window *m_Window;
 	SDL_GLContext m_Context;
 
-	ECS::EntityList m_EntityList;
-	std::vector<std::unique_ptr<ECS::BaseSystem>> m_Systems;
-	std::unique_ptr<class RenderTargetSprite> m_SpriteTarget;
-	std::unique_ptr<class RenderTargetTile> m_TileTarget;
+	std::unique_ptr<GameState> m_GameState;
 
-	class Assets::Texture m_DungeonTileset;
-
-	Assets::Level m_LevelData;
-	ECS::EntityID m_PlayerID;
-
-	const class SystemCamera *m_SystemCamera;
-
-	std::unique_ptr<Assets::SpriteShader> m_SpriteShader;
-
-	void ProcessInput();
-	void UpdateEntities();
-	void UpdateViewProjection();
+	void ProcessSDLEvents();
+	void AdvanceFrame();
 	void Draw();
 
 	Uint64 m_TickCount;
 	bool m_IsRunning;
-
-	InputState m_InputState;
 };
