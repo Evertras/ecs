@@ -21,8 +21,8 @@ private:
 	glm::mat4 m_View;
 	glm::mat4 m_Projection;
 	glm::mat4 m_VP;
-	float m_ViewportWidth;
-	float m_ViewportHeight;
+	float m_WorldWidth;
+	float m_WorldHeight;
 
 	void UpdateView();
 	void UpdateProjection();

@@ -26,31 +26,27 @@ void SystemCamera::UpdateViewportSize(int viewportWidth, int viewportHeight)
 {
 	float ratio = static_cast<float>(viewportWidth) / static_cast<float>(viewportHeight);
 	float visibleSquares = 10.f;
-	m_ViewportWidth = visibleSquares * ratio;
-	m_ViewportHeight = visibleSquares;
+	m_WorldWidth = visibleSquares * ratio;
+	m_WorldHeight = visibleSquares;
 
 	UpdateView();
 	UpdateProjection();
 }
 
 void SystemCamera::UpdateView() {
-	float zoom = 1.f;
-
 	m_View =
-		glm::scale(
-			glm::translate(
-				glm::identity<glm::mat4>(),
-				glm::vec3(
-					-m_CameraPos.x + m_ViewportWidth*0.5f,
-					-m_CameraPos.y + m_ViewportHeight*0.5f,
-					0.0f)),
-			glm::vec3(zoom, zoom, 1.f));
+		glm::translate(
+			glm::identity<glm::mat4>(),
+			glm::vec3(
+				-m_CameraPos.x + m_WorldWidth * 0.5f,
+				-m_CameraPos.y + m_WorldHeight * 0.5f,
+				0.0f));
 
 	m_VP = m_Projection * m_View;
 }
 
 void SystemCamera::UpdateProjection() {
-	m_Projection = glm::ortho(0.f, m_ViewportWidth, m_ViewportHeight, 0.f, -100.f, 100.f);
+	m_Projection = glm::ortho(0.f, m_WorldWidth, m_WorldHeight, 0.f, -100.f, 100.f);
 
 	m_VP = m_Projection * m_View;
 }
