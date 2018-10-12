@@ -35,4 +35,8 @@ namespace Component {
 	struct InputMove {
 		float unitsPerSecond;
 	};
+
+	struct LevelCollision {
+		bool goesThroughWalls;
+	};
 }

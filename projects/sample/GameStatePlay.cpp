@@ -5,6 +5,7 @@
 #include "RenderTargetTile.h"
 
 #include "SystemInputMovementPlay.h"
+#include "SystemLevelCollision.h"
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemSpriteWobble.h"
 #include "SystemVelocity.h"
@@ -56,6 +57,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		//player->AddComponent(Component::WobbleSprite());
 		player->AddComponent(Component::Player());
 		player->AddComponent(Component::CameraTarget());
+		player->AddComponent(Component::LevelCollision{ false });
 
 		m_CursorID = m_EntityList.Add(std::move(player));
 	}
@@ -65,6 +67,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		// Mechanical systems
 		m_Systems.push_back(std::make_unique<SystemInputMovementPlay>(m_InputState));
 		m_Systems.push_back(std::make_unique<SystemVelocity>());
+		m_Systems.push_back(std::make_unique<SystemLevelCollision>(m_LevelData));
 
 		// TODO: Figure out how to handle resizes when resizing becomes a thing
 		int windowWidth, windowHeight;

@@ -78,8 +78,8 @@ RenderTargetTileSized<width, height>::RenderTargetTileSized(
 	  m_TileSize(size)
 {
 	float vertexBuffer[] = {
-		0.f, -1.0f, 1.0f, 0.f, 0.f,
-		1.f, -1.0f, 1.0f, 1.f, 0.f,
+		0.f, 1.0f, 1.0f, 0.f, 0.f,
+		1.f, 1.0f, 1.0f, 1.f, 0.f,
 		1.f, 0.f, 1.0f, 1.f, 1.f,
 		0.f, 0.f, 1.0f, 0.f, 1.f
 	};

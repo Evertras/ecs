@@ -55,7 +55,7 @@ bool Game::Initialize() {
 		glGetError();
 	}
 
-	m_GameState = std::unique_ptr<GameState>(new GameStatePlay(m_Window));
+	m_GameState = std::unique_ptr<GameState>(new GameStateEdit(m_Window));
 
 	return true;
 }
