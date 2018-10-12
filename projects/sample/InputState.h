@@ -14,32 +14,12 @@ public:
 		memset(m_LastKeyboardState, 0, sizeof(Uint8));
 	}
 
-	~InputState() { delete[] m_LastKeyboardState; }
+	virtual ~InputState() { delete[] m_LastKeyboardState; }
 
 	void Update(const glm::mat4 &vp);
 	void UpdateLastState() { memcpy(m_LastKeyboardState, m_KeyboardState, sizeof(Uint8)*m_KeyboardStateLen); }
 
-	bool MoveUpHeld() const { return KeyHeld(SDL_SCANCODE_E); }
-	bool MoveDownHeld() const { return KeyHeld(SDL_SCANCODE_D); }
-	bool MoveRightHeld() const { return KeyHeld(SDL_SCANCODE_F); }
-	bool MoveLeftHeld() const { return KeyHeld(SDL_SCANCODE_S); }
-
-	bool EditTileUpPressed() const { return KeyPressed(SDL_SCANCODE_UP); }
-	bool EditTileDownPressed() const { return KeyPressed(SDL_SCANCODE_DOWN); }
-	bool EditTileRightPressed() const { return KeyPressed(SDL_SCANCODE_RIGHT); }
-	bool EditTileLeftPressed() const { return KeyPressed(SDL_SCANCODE_LEFT); }
-
-	bool EditTileWallHeld() const { return KeyHeld(SDL_SCANCODE_Q); }
-	bool EditTileFloorHeld() const { return KeyHeld(SDL_SCANCODE_A); }
-
-	bool EditTerrainColorizeTogglePressed() const { return KeyPressed(SDL_SCANCODE_T); }
-
-	bool EditLevelSavePressed() const { return KeyPressed(SDL_SCANCODE_K); }
-	bool EditLevelLoadPressed() const { return KeyPressed(SDL_SCANCODE_L); }
-
-	bool Quit() const { return m_KeyboardState[SDL_SCANCODE_ESCAPE]; }
-
-private:
+protected:
 	const Uint8* m_KeyboardState;
 	Uint8* m_LastKeyboardState;
 	int m_KeyboardStateLen;

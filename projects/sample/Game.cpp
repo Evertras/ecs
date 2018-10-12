@@ -11,7 +11,7 @@
 
 #include "SystemCamera.h"
 #include "SystemInputLevelEdit.h"
-#include "SystemInputMovement.h"
+#include "SystemInputMovementEdit.h"
 #include "SystemLevelTerrainColorize.h"
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemSpriteWobble.h"

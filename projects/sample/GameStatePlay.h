@@ -1,24 +1,25 @@
 #pragma once
 
-#include "Assets.h"
 #include "GameState.h"
-#include "InputStateEdit.h"
+
+#include "Assets.h"
+#include "InputStatePlay.h"
 #include "SystemCamera.h"
+
 #include <SDL/SDL.h>
 
-class GameStateEdit : public GameState
-{
+class GameStatePlay : public GameState {
 public:
-	GameStateEdit(SDL_Window *window);
-	~GameStateEdit();
-	GameStateEdit(const GameStateEdit &rhs) = delete;
+	GameStatePlay(SDL_Window *window);
+	~GameStatePlay();
+	GameStatePlay(const GameStatePlay &rhs) = delete;
 
 	std::unique_ptr<GameState> Update(ECS::DeltaSeconds d) override;
 	void Draw() override;
 
 private:
 	SDL_Window* m_Window;
-	InputStateEdit m_InputState;
+	InputStatePlay m_InputState;
 
 	ECS::EntityList m_EntityList;
 	std::vector<std::unique_ptr<ECS::BaseSystem>> m_Systems;

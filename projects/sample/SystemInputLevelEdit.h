@@ -1,13 +1,13 @@
 #include <System.h>
 
 #include "Assets.h"
-#include "InputState.h"
+#include "InputStateEdit.h"
 #include "RenderTargetTile.h"
 
 class SystemInputLevelEdit : public ECS::BaseSystem {
 public:
 	SystemInputLevelEdit(
-		const InputState& inputState,
+		const InputStateEdit& inputState,
 		RenderTargetTile& target,
 		Assets::Level& levelData,
 		ECS::EntityID trackID,
@@ -25,7 +25,7 @@ public:
 	void Run(ECS::EntityList& el, ECS::DeltaSeconds d) override;
 
 private:
-	const InputState& m_InputState;
+	const InputStateEdit& m_InputState;
 	RenderTargetTile& m_RenderTarget;
 	Assets::Level& m_LevelData;
 	ECS::EntityID m_TrackID;

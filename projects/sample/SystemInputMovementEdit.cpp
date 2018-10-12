@@ -1,10 +1,10 @@
 #include "pch.h"
 
-#include "SystemInputMovement.h"
+#include "SystemInputMovementEdit.h"
 
 #include "Component.h"
 
-void SystemInputMovement::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
+void SystemInputMovementEdit::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 	bool moveUp = m_InputState.MoveUpHeld();
 	bool moveDown = m_InputState.MoveDownHeld();
 	bool moveRight = m_InputState.MoveRightHeld();

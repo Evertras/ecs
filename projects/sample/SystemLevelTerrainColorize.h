@@ -2,14 +2,14 @@
 
 #include <System.h>
 
-#include "InputState.h"
+#include "InputStateEdit.h"
 #include "RenderTargetTile.h"
 #include "Assets.h"
 
 class SystemLevelTerrainColorize : public ECS::BaseSystem {
 public:
 	SystemLevelTerrainColorize(
-		const InputState &inputState,
+		const InputStateEdit &inputState,
 		RenderTargetTile &render,
 		Assets::Level &levelData)
 		: m_InputState(inputState),
@@ -21,7 +21,7 @@ public:
 	void Run(ECS::EntityList &el, ECS::DeltaSeconds d) override;
 
 private:
-	const InputState& m_InputState;
+	const InputStateEdit& m_InputState;
 	RenderTargetTile& m_Target;
 	Assets::Level& m_LevelData;
 	bool m_On;
