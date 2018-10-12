@@ -82,7 +82,7 @@ bool Game::Initialize() {
 		m_LevelData = Assets::Level(width, height);
 
 		m_LevelData.SetAll(Assets::Level::TT_WALL);
-		m_LevelData.SetAll(0, 1);
+		m_LevelData.SetAll(1, 1);
 
 		// Actual render targets
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
