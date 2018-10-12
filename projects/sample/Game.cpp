@@ -119,7 +119,10 @@ bool Game::Initialize() {
 		m_Systems.push_back(std::make_unique<SystemInputMovement>(m_InputState));
 		m_Systems.push_back(std::make_unique<SystemVelocity>());
 
-		std::unique_ptr<SystemCamera> camera = std::make_unique<SystemCamera>();
+		// TODO: Figure out how to handle resizes when resizing becomes a thing
+		int windowWidth, windowHeight;
+		SDL_GetWindowSize(m_Window, &windowWidth, &windowHeight);
+		std::unique_ptr<SystemCamera> camera = std::make_unique<SystemCamera>(windowWidth, windowHeight);
 		m_SystemCamera = camera.get();
 		m_Systems.push_back(std::move(camera));
 
@@ -148,28 +151,6 @@ void Game::Run() {
 }
 
 void Game::UpdateViewProjection() {
-	int windowWidth, windowHeight;
-	SDL_GetWindowSize(m_Window, &windowWidth, &windowHeight);
-
-	float ratio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
-	float visibleSquares = 10.f;
-	float width = visibleSquares * ratio;
-	float height = visibleSquares;
-
-	m_Projection = glm::ortho(0.f, width, height, 0.f, -100.f, 100.f);
-
-	const glm::vec2& cameraPos = m_SystemCamera->GetPosition();
-	float zoom = 1.f;
-
-	m_View =
-		glm::scale(
-			glm::translate(
-				glm::identity<glm::mat4>(),
-				glm::vec3(
-					-cameraPos.x + (float)width*0.5f,
-					-cameraPos.y + (float)height*0.5f,
-					0.0f)),
-			glm::vec3(zoom, zoom, 1.f));
 }
 
 void Game::ProcessInput() {
@@ -183,7 +164,7 @@ void Game::ProcessInput() {
 		}
 	}
 
-	m_InputState.Update(m_View);
+	m_InputState.Update(m_SystemCamera->GetView());
 
 	if (m_InputState.Quit()) {
 		m_IsRunning = false;
@@ -215,10 +196,8 @@ void Game::Draw() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	auto vp = m_Projection * m_View;
-
-	m_TileTarget->Draw(vp);
-	m_SpriteTarget->Draw(vp);
+	m_TileTarget->Draw(m_SystemCamera->GetViewProjection());
+	m_SpriteTarget->Draw(m_SystemCamera->GetViewProjection());
 
 	SDL_GL_SwapWindow(m_Window);
 }

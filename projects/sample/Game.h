@@ -30,9 +30,6 @@ private:
 	Assets::Level m_LevelData;
 	ECS::EntityID m_PlayerID;
 
-	glm::mat4 m_View;
-	glm::mat4 m_Projection;
-
 	const class SystemCamera *m_SystemCamera;
 
 	std::unique_ptr<Assets::SpriteShader> m_SpriteShader;
