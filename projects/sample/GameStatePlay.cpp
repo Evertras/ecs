@@ -4,7 +4,7 @@
 #include "GameStatePlay.h"
 #include "RenderTargetTile.h"
 
-#include "SystemInputMovementEdit.h"
+#include "SystemInputMovementPlay.h"
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemSpriteWobble.h"
 #include "SystemVelocity.h"
@@ -63,7 +63,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 	// Systems
 	{
 		// Mechanical systems
-		//m_Systems.push_back(std::make_unique<SystemInputMovementEdit>(m_InputState));
+		m_Systems.push_back(std::make_unique<SystemInputMovementPlay>(m_InputState));
 		m_Systems.push_back(std::make_unique<SystemVelocity>());
 
 		// TODO: Figure out how to handle resizes when resizing becomes a thing

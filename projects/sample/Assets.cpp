@@ -20,7 +20,7 @@ SpriteAnimation::SpriteAnimation(
 	  m_FPS(fps),
 	  m_IsLooping(isLooping)
 {
-	m_NumFrames = m_Frames.size();
+	m_NumFrames = static_cast<int>(m_Frames.size());
 }
 
 SpriteTile::SpriteTile(Texture tileset, int size, int x, int y)
