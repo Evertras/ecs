@@ -38,5 +38,9 @@ namespace Component {
 
 	struct LevelCollision {
 		bool goesThroughWalls;
+		float boundingLeft;
+		float boundingRight;
+		float boundingTop;
+		float boundingBottom;
 	};
 }

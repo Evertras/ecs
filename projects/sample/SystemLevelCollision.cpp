@@ -10,24 +10,79 @@ void SystemLevelCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 		Component::Velocity &vel = e.Data<Component::Velocity>();
 		Component::LevelCollision &collisionProperties = e.Data<Component::LevelCollision>();
 
-		if (pos.pos.x < 0) {
-			pos.pos.x = 0;
+		if (pos.pos.x - collisionProperties.boundingLeft < 0) {
+			pos.pos.x = collisionProperties.boundingLeft;
 		}
 		else if (pos.pos.x >= m_Level.width) {
 			pos.pos.x = static_cast<float>(m_Level.width) - 0.01f;
 		}
 
-		if (pos.pos.y < 0) {
-			pos.pos.y = 0;
+		if (pos.pos.y - collisionProperties.boundingTop < 0) {
+			pos.pos.y = collisionProperties.boundingTop;
 		}
-		else if (pos.pos.y >= m_Level.height) {
-			pos.pos.y = static_cast<float>(m_Level.height) - 0.01f;
+		else if (pos.pos.y + collisionProperties.boundingBottom >= m_Level.height) {
+			pos.pos.y = static_cast<float>(m_Level.height) - collisionProperties.boundingBottom - 0.01f;
 		}
 
-		auto tile = m_Level.Get(static_cast<int>(pos.pos.x), static_cast<int>(pos.pos.y));
+		if (collisionProperties.goesThroughWalls) {
+			return;
+		}
 
-		if (tile.type == Assets::Level::TT_WALL && !collisionProperties.goesThroughWalls) {
-			pos.pos -= vel.vel * d;
+		auto xDiff = vel.vel.x * d;
+		auto yDiff = vel.vel.y * d;
+
+		if (vel.vel.x < 0) {
+			auto tileTopLeft = m_Level.Get(
+				static_cast<int>(pos.pos.x - collisionProperties.boundingLeft),
+				static_cast<int>(pos.pos.y - collisionProperties.boundingTop - yDiff));
+
+			auto tileBottomLeft = m_Level.Get(
+				static_cast<int>(pos.pos.x - collisionProperties.boundingLeft),
+				static_cast<int>(pos.pos.y + collisionProperties.boundingBottom - yDiff));
+
+			if (tileTopLeft.type == Assets::Level::TT_WALL || tileBottomLeft.type == Assets::Level::TT_WALL) {
+				pos.pos.x -= xDiff;
+			}
+		}
+		else if (vel.vel.x > 0) {
+			auto tileTopRight = m_Level.Get(
+				static_cast<int>(pos.pos.x + collisionProperties.boundingRight),
+				static_cast<int>(pos.pos.y - collisionProperties.boundingTop - yDiff));
+
+			auto tileBottomRight = m_Level.Get(
+				static_cast<int>(pos.pos.x + collisionProperties.boundingRight),
+				static_cast<int>(pos.pos.y + collisionProperties.boundingBottom - yDiff));
+
+			if (tileTopRight.type == Assets::Level::TT_WALL || tileBottomRight.type == Assets::Level::TT_WALL) {
+				pos.pos.x -= xDiff;
+			}
+		}
+
+		if (vel.vel.y < 0) {
+			auto tileTopLeft = m_Level.Get(
+				static_cast<int>(pos.pos.x - collisionProperties.boundingLeft - xDiff),
+				static_cast<int>(pos.pos.y - collisionProperties.boundingTop));
+
+			auto tileTopRight = m_Level.Get(
+				static_cast<int>(pos.pos.x + collisionProperties.boundingRight - xDiff),
+				static_cast<int>(pos.pos.y - collisionProperties.boundingTop));
+
+			if (tileTopLeft.type == Assets::Level::TT_WALL || tileTopRight.type == Assets::Level::TT_WALL) {
+				pos.pos.y -= yDiff;
+			}
+		}
+		else if (vel.vel.y > 0) {
+			auto tileBottomLeft = m_Level.Get(
+				static_cast<int>(pos.pos.x - collisionProperties.boundingLeft - xDiff),
+				static_cast<int>(pos.pos.y + collisionProperties.boundingBottom));
+
+			auto tileBottomRight = m_Level.Get(
+				static_cast<int>(pos.pos.x + collisionProperties.boundingRight - xDiff),
+				static_cast<int>(pos.pos.y + collisionProperties.boundingBottom));
+
+			if (tileBottomLeft.type == Assets::Level::TT_WALL || tileBottomRight.type == Assets::Level::TT_WALL) {
+				pos.pos.y -= yDiff;
+			}
 		}
 	};
 

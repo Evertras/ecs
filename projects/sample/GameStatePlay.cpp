@@ -57,7 +57,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		//player->AddComponent(Component::WobbleSprite());
 		player->AddComponent(Component::Player());
 		player->AddComponent(Component::CameraTarget());
-		player->AddComponent(Component::LevelCollision{ false });
+		player->AddComponent(Component::LevelCollision{ false, 0.2, 0.2, 0.3, 0 });
 
 		m_CursorID = m_EntityList.Add(std::move(player));
 	}
