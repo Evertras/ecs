@@ -26,6 +26,8 @@ namespace Component {
 
 		// Intended to be fractional, round down for index value
 		float currentFrame;
+
+		bool flipped;
 	};
 
 	struct TileSprite {

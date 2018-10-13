@@ -51,7 +51,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
 
 		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 1.f, 1.f, 0 });
-		player->AddComponent(Component::Position{ glm::vec2(2.f, 1.9f) });
+		player->AddComponent(Component::Position{ glm::vec2(2.f, 2.0f) });
 		player->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
 		player->AddComponent(Component::InputMove{ playerSpeed });
 		//player->AddComponent(Component::WobbleSprite());

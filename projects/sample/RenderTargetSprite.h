@@ -14,14 +14,15 @@ public:
 		glm::vec2 bottomCenter,
 		const Assets::CropRect &frame,
 		float scaleX,
-		float scaleY);
+		float scaleY,
+		bool flipX);
 
 	void QueueSprite(
 		const Assets::Texture &texture,
 		glm::vec2 bottomCenter,
 		const Assets::CropRect &frame)
 	{
-		QueueSprite(texture, bottomCenter, frame, 1.f, 1.f);
+		QueueSprite(texture, bottomCenter, frame, 1.f, 1.f, false);
 	}
 
 	void Draw(const glm::mat4 &vp);

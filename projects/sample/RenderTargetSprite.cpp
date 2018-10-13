@@ -46,7 +46,8 @@ void RenderTargetSprite::QueueSprite(
 	glm::vec2 bottomCenter,
 	const Assets::CropRect &frame,
 	float scaleX,
-	float scaleY)
+	float scaleY,
+	bool flipX)
 {
 	PendingDrawRequest request(texture);
 	auto id = glm::identity<glm::mat4>();
@@ -57,10 +58,11 @@ void RenderTargetSprite::QueueSprite(
 	float ratio = static_cast<float>(request.crop.width) / static_cast<float>(request.crop.height);
 	request.modelMatrix = glm::scale(translate,
 		glm::vec3(
-			scaleX * ratio,
+			scaleX * ratio * (flipX ? -1 : 1),
 			scaleY,
 			1.f
 		));
+
 
 	for (auto iter = m_Requests.begin(); iter != m_Requests.end(); ++iter) {
 		if (iter->bottomCenter.y < bottomCenter.y) {
