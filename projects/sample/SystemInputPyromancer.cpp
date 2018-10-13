@@ -16,10 +16,35 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	abilities.gcd -= d;
 	abilities.cooldownFireStream -= d;
 
+	// TODO: Handle this over lower frame rates better
+	const float cooldownFirestream = 0.02f;
+	const int firestreamsPerShot = 2;
+	const float firestreamSpeed = 6.f;
+	const float firestreamSpread = .5f;
+
 	if (abilities.gcd <= 0.f) {
 		if (abilities.cooldownFireStream <= 0.f && m_InputState.Ability1Held()) {
-			SDL_Log("Pew pew pew");
-			abilities.cooldownFireStream = 0.5f;
+			auto playerPos = player->Data<Component::Position>();
+
+			for (int i = 0; i < firestreamsPerShot; ++i) {
+				auto firestreamProjectile = std::make_unique<ECS::Entity>();
+
+				firestreamProjectile->AddComponent<Component::AnimatedSprite>(
+					Component::AnimatedSprite{ m_FirestreamAnimation, 1.f, 1.f, 0.f, false });
+
+				firestreamProjectile->AddComponent<Component::Position>(playerPos);
+				firestreamProjectile->AddComponent<Component::Projectile>({ (47.f / 60.f) });
+
+				glm::vec2 vel = { firestreamSpeed, 0 };
+				float thetaModifier = glm::linearRand(-firestreamSpread*0.5f, firestreamSpread*0.5f);
+				vel = glm::rotate(vel, thetaModifier);
+
+				firestreamProjectile->AddComponent<Component::Velocity>({ vel });
+
+				el.Add(std::move(firestreamProjectile));
+
+				abilities.gcd = abilities.cooldownFireStream = cooldownFirestream;
+			}
 		}
 	}
 }

@@ -118,6 +118,8 @@ project "Sample"
 
   includedirs "libraries/glm/include"
 
+  defines { "GLM_ENABLE_EXPERIMENTAL" }
+
   filter "action:gmake*"
 	  prebuildcommands {
 	    '@echo Copying static assets',

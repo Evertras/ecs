@@ -7,6 +7,7 @@
 #include "SystemInputMovementPlay.h"
 #include "SystemInputPyromancer.h"
 #include "SystemLevelCollision.h"
+#include "SystemProjectile.h"
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemSpriteWobble.h"
 #include "SystemVelocity.h"
@@ -47,7 +48,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 
 	// Sandbox for initial entities
 	{
-		const float playerSpeed = 5.f;
+		const float playerSpeed = 3.f;
 
 		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
 
@@ -73,6 +74,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		// Mechanical systems
 		m_Systems.push_back(std::make_unique<SystemVelocity>());
 		m_Systems.push_back(std::make_unique<SystemLevelCollision>(m_LevelData));
+		m_Systems.push_back(std::make_unique<SystemProjectile>());
 
 		// TODO: Figure out how to handle resizes when resizing becomes a thing
 		int windowWidth, windowHeight;
@@ -107,6 +109,7 @@ std::unique_ptr<GameState> GameStatePlay::Update(ECS::DeltaSeconds d) {
 	}
 
 	m_InputState.UpdateLastState();
+	m_EntityList.RemoveAllDeleted();
 
 	return nullptr;
 }

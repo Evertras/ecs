@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_map>
+#include <unordered_set>
 #include <typeindex>
 #include <memory>
 #include <functional>
@@ -49,7 +50,13 @@ namespace ECS {
 			return nullptr;
 		}
 
-		bool Delete(EntityID id) { return m_Entities.erase(id) != 0; }
+		// Marks an entity to be deleted in batch, but does not remove it from the list yet
+		void MarkDeleted(EntityID id) { m_Deleted.insert(id); }
+
+		void RemoveAllDeleted() {
+			for (auto id : m_Deleted) { m_Entities.erase(id); }
+			m_Deleted.clear();
+		}
 
 		template<typename ...T>
 		typename std::enable_if<sizeof...(T) != 0, void>::type
@@ -70,6 +77,7 @@ namespace ECS {
 
 	private:
 		std::unordered_map<EntityID, std::unique_ptr<Entity>> m_Entities;
+		std::unordered_set<EntityID> m_Deleted;
 
 		EntityID m_IDCounter;
 	};

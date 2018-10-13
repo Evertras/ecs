@@ -73,10 +73,21 @@ SCENARIO("EntityList general functionality", "[entityList]") {
 			}
 		}
 
+		WHEN("an entity is only marked to be deleted") {
+			auto id = el.Add(std::make_unique<ECS::Entity>());
+
+			el.MarkDeleted(id);
+
+			THEN("the entity list stil contains the marked entity") {
+				REQUIRE(el.Size() == 1);
+			}
+		}
+
 		WHEN("an entity is added and removed") {
 			auto id = el.Add(std::make_unique<ECS::Entity>());
 
-			el.Delete(id);
+			el.MarkDeleted(id);
+			el.RemoveAllDeleted();
 
 			THEN("the entity list is empty again") {
 				REQUIRE(el.Size() == 0);
@@ -84,7 +95,8 @@ SCENARIO("EntityList general functionality", "[entityList]") {
 		}
 
 		WHEN("an entity that doesn't exist is removed") {
-			el.Delete(ECS::EntityID(231842));
+			el.MarkDeleted(ECS::EntityID(231842));
+			el.RemoveAllDeleted();
 
 			THEN("the entity list simply remains empty") {
 				REQUIRE(el.Size() == 0);
@@ -148,7 +160,8 @@ SCENARIO("EntityList general functionality", "[entityList]") {
 		auto secondID = el.Add(std::move(second));
 
 		WHEN("the first entity is removed") {
-			el.Delete(firstID);
+			el.MarkDeleted(firstID);
+			el.RemoveAllDeleted();
 
 			THEN("the entity list only contains the second") {
 				REQUIRE(el.Size() == 1);
@@ -166,7 +179,8 @@ SCENARIO("EntityList general functionality", "[entityList]") {
 		}
 
 		WHEN("the second entity is removed") {
-			el.Delete(secondID);
+			el.MarkDeleted(secondID);
+			el.RemoveAllDeleted();
 
 			THEN("the entity list only contains the first") {
 				REQUIRE(el.Size() == 1);
@@ -184,7 +198,8 @@ SCENARIO("EntityList general functionality", "[entityList]") {
 		}
 
 		WHEN("an entity that doesn't exist is removed") {
-			el.Delete(ECS::EntityID(secondID + 100));
+			el.MarkDeleted(ECS::EntityID(secondID + 100));
+			el.RemoveAllDeleted();
 
 			THEN("the entity list is unchanged") {
 				REQUIRE(el.Size() == 2);

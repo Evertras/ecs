@@ -52,4 +52,8 @@ namespace Component {
 		float gcd;
 		float cooldownFireStream;
 	};
+
+	struct Projectile {
+		float lifetime;
+	};
 }
