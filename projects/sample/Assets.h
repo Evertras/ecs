@@ -33,6 +33,8 @@ namespace Assets {
 	enum ANIM {
 		ANIM_FIRE,
 		ANIM_WIZARD_IDLE,
+
+		NUM_ANIMS
 	};
 
 	struct SpriteAnimation {

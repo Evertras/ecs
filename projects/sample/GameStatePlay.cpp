@@ -5,6 +5,7 @@
 #include "RenderTargetTile.h"
 
 #include "SystemInputMovementPlay.h"
+#include "SystemInputPyromancer.h"
 #include "SystemLevelCollision.h"
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemSpriteWobble.h"
@@ -58,14 +59,18 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		player->AddComponent(Component::Player());
 		player->AddComponent(Component::CameraTarget());
 		player->AddComponent(Component::LevelCollision{ false, 0.2, 0.2, 0.3, 0 });
+		player->AddComponent(Component::AbilitiesPyromancer());
 
 		m_CursorID = m_EntityList.Add(std::move(player));
 	}
 
 	// Systems
 	{
-		// Mechanical systems
+		// Input systems
 		m_Systems.push_back(std::make_unique<SystemInputMovementPlay>(m_InputState));
+		m_Systems.push_back(std::make_unique<SystemInputPyromancer>(m_InputState));
+
+		// Mechanical systems
 		m_Systems.push_back(std::make_unique<SystemVelocity>());
 		m_Systems.push_back(std::make_unique<SystemLevelCollision>(m_LevelData));
 

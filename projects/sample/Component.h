@@ -45,4 +45,11 @@ namespace Component {
 		float boundingTop;
 		float boundingBottom;
 	};
+
+	struct AbilitiesPyromancer {
+		AbilitiesPyromancer() : gcd(0.f), cooldownFireStream(0.f) {}
+
+		float gcd;
+		float cooldownFireStream;
+	};
 }
