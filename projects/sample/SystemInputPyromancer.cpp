@@ -24,7 +24,7 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 
 	if (abilities.gcd <= 0.f) {
 		if (abilities.cooldownFireStream <= 0.f && m_InputState.Ability1Held()) {
-			auto playerPos = player->Data<Component::Position>();
+			auto spawnPos = player->Data<Component::Position>().pos + glm::vec2{ 0.4f, 0.f };
 
 			for (int i = 0; i < firestreamsPerShot; ++i) {
 				auto firestreamProjectile = std::make_unique<ECS::Entity>();
@@ -32,7 +32,7 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 				firestreamProjectile->AddComponent<Component::AnimatedSprite>(
 					Component::AnimatedSprite{ m_FirestreamAnimation, 1.f, 1.f, 0.f, false });
 
-				firestreamProjectile->AddComponent<Component::Position>(playerPos);
+				firestreamProjectile->AddComponent<Component::Position>({ spawnPos });
 				firestreamProjectile->AddComponent<Component::Projectile>({ (47.f / 60.f) });
 
 				glm::vec2 vel = { firestreamSpeed, 0 };
