@@ -13,15 +13,15 @@ void SystemLevelCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 		if (pos.pos.x - collisionProperties.boundingLeft < 0) {
 			pos.pos.x = collisionProperties.boundingLeft;
 		}
-		else if (pos.pos.x >= m_Level.width) {
-			pos.pos.x = static_cast<float>(m_Level.width) - 0.01f;
+		else if (pos.pos.x > m_Level.width) {
+			pos.pos.x = static_cast<float>(m_Level.width);
 		}
 
 		if (pos.pos.y - collisionProperties.boundingTop < 0) {
 			pos.pos.y = collisionProperties.boundingTop;
 		}
-		else if (pos.pos.y + collisionProperties.boundingBottom >= m_Level.height) {
-			pos.pos.y = static_cast<float>(m_Level.height) - collisionProperties.boundingBottom - 0.01f;
+		else if (pos.pos.y + collisionProperties.boundingBottom > m_Level.height) {
+			pos.pos.y = static_cast<float>(m_Level.height) - collisionProperties.boundingBottom;
 		}
 
 		if (collisionProperties.goesThroughWalls) {

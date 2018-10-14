@@ -6,7 +6,7 @@
 SCENARIO("SystemCollisionLevel") {
 	GIVEN("a totally open level with an empty entity list") {
 		const int width = 3;
-		const int height = 3;
+		const int height = 6;
 
 		Assets::Level level(width, height);
 
@@ -16,29 +16,45 @@ SCENARIO("SystemCollisionLevel") {
 
 		SystemLevelCollision system(level);
 
-		AND_GIVEN("an entity that has moved out the top") {
-			auto entity = std::make_unique<ECS::Entity>();
+		{
+			auto entityToAdd = std::make_unique<ECS::Entity>();
 
-			entity->AddComponent<Component::Position>({ {1.f, -1.f} });
-			entity->AddComponent<Component::Velocity>({ {0.f, -1.f} });
-			entity->AddComponent<Component::LevelCollision>({});
+			entityToAdd->AddComponent<Component::Position>({ {0.f, 0.f} });
+			entityToAdd->AddComponent<Component::Velocity>({ {0.f, 0.f} });
+			entityToAdd->AddComponent<Component::LevelCollision>({});
 
-			el.Add(std::move(entity));
+			el.Add(std::move(entityToAdd));
+		}
 
-			auto e = el.First<Component::LevelCollision>();
+		auto entity = el.First<Component::LevelCollision>();
+		glm::vec2& pos = entity->Data<Component::Position>().pos;
 
-			REQUIRE(e != nullptr);
+		REQUIRE(entity != nullptr);
 
-			auto oldPos = e->Data<Component::Position>();
+		AND_GIVEN("the entity has moved out the top left") {
+			pos.x = -1.f;
+			pos.y = -2.f;
 
-			REQUIRE(oldPos.pos.y == Approx(-1.f));
+			REQUIRE(entity->Data<Component::Position>().pos.x == Approx(-1.f));
+			REQUIRE(entity->Data<Component::Position>().pos.y == Approx(-2.f));
 
 			system.Run(el, 1.f);
 
-			THEN("the entity is clamped to the top of the level") {
-				auto newPos = e->Data<Component::Position>();
+			THEN("the entity is clamped to the top left corner of the level") {
+				REQUIRE(pos.x == Approx(0));
+				REQUIRE(pos.y == Approx(0));
+			}
+		}
 
-				REQUIRE(newPos.pos.y == Approx(0));
+		AND_GIVEN("the entity has moved out to the bottom right") {
+			pos.x = width + 1;
+			pos.y = height + 1;
+
+			system.Run(el, 1.f);
+
+			THEN("the entity is clamped tot he bottom right corner of the level") {
+				REQUIRE(pos.x == Approx(width));
+				REQUIRE(pos.y == Approx(height));
 			}
 		}
 	}
