@@ -6,7 +6,7 @@
 void SystemCamera::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 	glm::vec2 cameraPos = m_CameraPos;
 
-	ECS::SystemFunction f = [&cameraPos](ECS::DeltaSeconds d, ECS::Entity &e) {
+	ECS::EntityListFunction f = [&cameraPos](ECS::Entity &e, ECS::DeltaSeconds d) {
 		auto diff = e.Data<Component::Position>().pos - cameraPos;
 
 		// Cheap but effective

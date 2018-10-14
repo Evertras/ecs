@@ -16,7 +16,7 @@ public:
 		float scaleX = 1.f + glm::sin(m_TimePassed * 8.f)*0.05f;
 		float scaleY = 1.f + glm::cos(m_TimePassed * 8.f)*0.1f;
 
-		std::function<void(ECS::DeltaSeconds, ECS::Entity&)> f = [&scaleX, &scaleY](ECS::DeltaSeconds d, ECS::Entity &e) {
+		ECS::EntityListFunction f = [&scaleX, &scaleY](ECS::Entity &e, ECS::DeltaSeconds d) {
 			Component::AnimatedSprite &sprite = e.Data<Component::AnimatedSprite>();
 
 			sprite.scaleX = scaleX;

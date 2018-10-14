@@ -5,7 +5,7 @@
 #include "Component.h"
 
 void SystemProjectile::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
-	ECS::SystemFunction f = [this, &el](ECS::DeltaSeconds d, ECS::Entity& e) {
+	ECS::EntityListFunction f = [this, &el](ECS::Entity& e, ECS::DeltaSeconds d) {
 	};
 
 	//el.Run<Component::Projectile>(f, d);

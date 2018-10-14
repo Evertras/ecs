@@ -39,10 +39,10 @@ namespace Component {
 		float unitsPerSecond;
 	};
 
-	struct LevelCollision {
-		LevelCollision() : goesThroughWalls(false), boundingLeft(0.f), boundingRight(0.f), boundingTop(0.f), boundingBottom(0.f) {}
+	struct Collision {
+		Collision() : goesThroughWalls(false), boundingLeft(0.f), boundingRight(0.f), boundingTop(0.f), boundingBottom(0.f) {}
 
-		LevelCollision(float boundLeft, float boundRight, float boundTop, float boundBottom, bool goThroughWalls = false) :
+		Collision(float boundLeft, float boundRight, float boundTop, float boundBottom, bool goThroughWalls = false) :
 			goesThroughWalls(goThroughWalls),
 			boundingLeft(boundLeft),
 			boundingRight(boundRight),
@@ -55,6 +55,8 @@ namespace Component {
 		float boundingRight;
 		float boundingTop;
 		float boundingBottom;
+
+		std::vector<ECS::EntityID> collidingWith;
 	};
 
 	struct AbilitiesPyromancer {

@@ -13,9 +13,9 @@ SystemRenderSpriteAnimated::~SystemRenderSpriteAnimated()
 void SystemRenderSpriteAnimated::Run(ECS::EntityList &el, ECS::DeltaSeconds deltaSeconds) {
 	m_TimePassed += deltaSeconds;
 
-	std::function<void(ECS::DeltaSeconds, ECS::Entity&)> f = [this](
-		ECS::DeltaSeconds deltaSeconds,
-		ECS::Entity &e)
+	ECS::EntityListFunction f = [this](
+		ECS::Entity &e,
+		ECS::DeltaSeconds deltaSeconds)
 	{
 		const Component::Position &p = e.Data<Component::Position>();
 		Component::AnimatedSprite &sprite = e.Data<Component::AnimatedSprite>();

@@ -5,10 +5,10 @@
 
 void SystemLevelCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 {
-	std::function<void(ECS::DeltaSeconds, ECS::Entity&)> f = [this](ECS::DeltaSeconds d, ECS::Entity &e) {
+	ECS::EntityListFunction f = [this](ECS::Entity &e, ECS::DeltaSeconds d) {
 		Component::Position &pos = e.Data<Component::Position>();
 		Component::Velocity &vel = e.Data<Component::Velocity>();
-		Component::LevelCollision &collisionProperties = e.Data<Component::LevelCollision>();
+		Component::Collision &collisionProperties = e.Data<Component::Collision>();
 
 		if (pos.pos.x - collisionProperties.boundingLeft < 0) {
 			pos.pos.x = collisionProperties.boundingLeft;
@@ -86,5 +86,5 @@ void SystemLevelCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 		}
 	};
 
-	el.Run<Component::Position, Component::Velocity, Component::LevelCollision>(f, d);
+	el.Run<Component::Position, Component::Velocity, Component::Collision>(f, d);
 }

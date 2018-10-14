@@ -5,7 +5,7 @@
 
 void SystemLifetime::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 {
-	ECS::SystemFunction f = [this, &el](ECS::DeltaSeconds d, ECS::Entity& e) {
+	ECS::EntityListFunction f = [this, &el](ECS::Entity& e, ECS::DeltaSeconds d) {
 		Component::LifetimeTimer& timed = e.Data<Component::LifetimeTimer>();
 
 		timed.lifetime -= d;

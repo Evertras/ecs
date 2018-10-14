@@ -9,6 +9,7 @@
 
 namespace ECS {
 	typedef float DeltaSeconds;
+	typedef std::function<void(ECS::Entity&, ECS::DeltaSeconds)> EntityListFunction;
 
 	class EntityList
 	{
@@ -60,18 +61,18 @@ namespace ECS {
 
 		template<typename ...T>
 		typename std::enable_if<sizeof...(T) != 0, void>::type
-		Run(std::function<void(DeltaSeconds, Entity&)> f, DeltaSeconds deltaSeconds) {
+		Run(EntityListFunction f, DeltaSeconds deltaSeconds) {
 			for (auto i = m_Entities.begin(); i != m_Entities.end(); ++i) {
 				if (i->second->Has<T...>()) {
-					f(deltaSeconds, *i->second);
+					f(*i->second, deltaSeconds);
 				}
 			}
 		}
 
 		// Use sparingly
-		void RunAll(std::function<void(DeltaSeconds, Entity&)> f, DeltaSeconds deltaSeconds) {
+		void RunAll(EntityListFunction f, DeltaSeconds deltaSeconds) {
 			for (auto i = m_Entities.begin(); i != m_Entities.end(); ++i) {
-				f(deltaSeconds, *i->second);
+				f(*i->second, deltaSeconds);
 			}
 		}
 

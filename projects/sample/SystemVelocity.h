@@ -9,8 +9,8 @@ class SystemVelocity : public ECS::System<Component::Position, Component::Veloci
 public:
 	SystemVelocity() : System<Component::Position, Component::Velocity>
 		([](
-			ECS::DeltaSeconds t,
-			ECS::Entity &e
+			ECS::Entity &e,
+			ECS::DeltaSeconds t
 		) {
 		glm::vec2 &pos = e.Data<Component::Position>().pos;
 		const glm::vec2 &vel = e.Data<Component::Velocity>().vel;

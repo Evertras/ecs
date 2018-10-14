@@ -21,12 +21,12 @@ SCENARIO("SystemCollisionLevel") {
 
 			entityToAdd->AddComponent<Component::Position>({ {0.f, 0.f} });
 			entityToAdd->AddComponent<Component::Velocity>({ {0.f, 0.f} });
-			entityToAdd->AddComponent<Component::LevelCollision>({});
+			entityToAdd->AddComponent<Component::Collision>({});
 
 			el.Add(std::move(entityToAdd));
 		}
 
-		auto entity = el.First<Component::LevelCollision>();
+		auto entity = el.First<Component::Collision>();
 		glm::vec2& pos = entity->Data<Component::Position>().pos;
 
 		REQUIRE(entity != nullptr);
@@ -52,7 +52,7 @@ SCENARIO("SystemCollisionLevel") {
 
 			system.Run(el, 1.f);
 
-			THEN("the entity is clamped tot he bottom right corner of the level") {
+			THEN("the entity is clamped to the bottom right corner of the level") {
 				REQUIRE(pos.x == Approx(width));
 				REQUIRE(pos.y == Approx(height));
 			}
@@ -64,8 +64,7 @@ SCENARIO("SystemCollisionLevel") {
 
 			system.Run(el, 1.f);
 
-
-			THEN("the entity is not affected") {
+			THEN("the entity is not affected by level collision") {
 				REQUIRE(pos.x == Approx(1.1f));
 				REQUIRE(pos.y == Approx(0.9f));
 			}
