@@ -57,5 +57,18 @@ SCENARIO("SystemCollisionLevel") {
 				REQUIRE(pos.y == Approx(height));
 			}
 		}
+
+		AND_GIVEN("the entity is moving upwards through an open square") {
+			pos.x = 1.1f;
+			pos.y = 0.9f;
+
+			system.Run(el, 1.f);
+
+
+			THEN("the entity is not affected") {
+				REQUIRE(pos.x == Approx(1.1f));
+				REQUIRE(pos.y == Approx(0.9f));
+			}
+		}
 	}
 }
