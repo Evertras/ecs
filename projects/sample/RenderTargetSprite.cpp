@@ -65,7 +65,7 @@ void RenderTargetSprite::QueueSprite(
 
 
 	for (auto iter = m_Requests.begin(); iter != m_Requests.end(); ++iter) {
-		if (iter->bottomCenter.y < bottomCenter.y) {
+		if (iter->bottomCenter.y > bottomCenter.y) {
 			m_Requests.insert(iter, request);
 			return;
 		}

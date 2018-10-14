@@ -30,7 +30,7 @@ private:
 	Assets::Texture m_DungeonTileset;
 
 	Assets::Level m_LevelData;
-	ECS::EntityID m_CursorID;
+	ECS::EntityID m_PlayerID;
 
 	const SystemCamera *m_SystemCamera;
 };

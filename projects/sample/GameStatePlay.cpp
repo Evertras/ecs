@@ -50,9 +50,9 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 	{
 		const float playerSpeed = 3.f;
 
-		std::unique_ptr<ECS::Entity> player = std::make_unique<ECS::Entity>();
+		auto player = std::make_unique<ECS::Entity>();
 
-		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 1.f, 1.f, 0 });
+		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 1.f, 1.f, 0.f });
 		player->AddComponent(Component::Position{ glm::vec2(2.f, 2.0f) });
 		player->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
 		player->AddComponent(Component::InputMove{ playerSpeed });
@@ -62,7 +62,14 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		player->AddComponent(Component::LevelCollision{ false, 0.2, 0.2, 0.3, 0 });
 		player->AddComponent(Component::AbilitiesPyromancer());
 
-		m_CursorID = m_EntityList.Add(std::move(player));
+		m_PlayerID = m_EntityList.Add(std::move(player));
+
+		auto enemy = std::make_unique<ECS::Entity>();
+
+		enemy->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_SKELETON_IDLE), 1.f, 1.f, 0.f });
+		enemy->AddComponent(Component::Position{ {4.f, 2.f} });
+
+		m_EntityList.Add(std::move(enemy));
 	}
 
 	// Systems

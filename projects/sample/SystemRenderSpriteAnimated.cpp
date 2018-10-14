@@ -12,9 +12,7 @@ SystemRenderSpriteAnimated::~SystemRenderSpriteAnimated()
 
 void SystemRenderSpriteAnimated::Run(ECS::EntityList &el, ECS::DeltaSeconds deltaSeconds) {
 	m_TimePassed += deltaSeconds;
-	float scale = 4.f + glm::sin(m_TimePassed * 8)*0.1f;
 
-	// TOOD: this is probably awful but works for now... make this class a functor maybe?
 	std::function<void(ECS::DeltaSeconds, ECS::Entity&)> f = [this](
 		ECS::DeltaSeconds deltaSeconds,
 		ECS::Entity &e)
@@ -30,8 +28,7 @@ void SystemRenderSpriteAnimated::Run(ECS::EntityList &el, ECS::DeltaSeconds delt
 			sprite.currentFrame -= sprite.animation.NumFrames();
 			displayFrame = 0;
 		}
-
-		if (displayFrame < 0) {
+		else if (displayFrame < 0) {
 			displayFrame = 0;
 		}
 		else if (displayFrame >= sprite.animation.NumFrames()) {

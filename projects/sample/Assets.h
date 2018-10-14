@@ -31,8 +31,14 @@ namespace Assets {
 	};
 
 	enum ANIM {
+		// Spell effects
 		ANIM_FIRE,
+
+		// Player animations
 		ANIM_WIZARD_IDLE,
+
+		// Enemy animations
+		ANIM_SKELETON_IDLE,
 
 		NUM_ANIMS
 	};

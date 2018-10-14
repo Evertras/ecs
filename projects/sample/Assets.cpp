@@ -72,6 +72,17 @@ SpriteAnimation Factory::CreateAnimation(Assets::ANIM anim) {
 			12,
 			true);
 
+	case ANIM_SKELETON_IDLE:
+		frames = {
+			{32, 12*16, 16, 16},
+		};
+
+		return SpriteAnimation(
+			m_Instance.GetTexture("assets/tileset_dungeon.png"),
+			frames,
+			1,
+			false);
+
 	default:
 		SDL_Log("Unexpected animation request: %d", anim);
 		throw std::invalid_argument("Texture undefined");
