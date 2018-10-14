@@ -74,7 +74,7 @@ SpriteAnimation Factory::CreateAnimation(Assets::ANIM anim) {
 
 	case ANIM_SKELETON_IDLE:
 		frames = {
-			{32, 12*16, 16, 16},
+			{16, 9*16, 16, 16},
 		};
 
 		return SpriteAnimation(

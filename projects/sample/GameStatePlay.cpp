@@ -52,7 +52,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 
 		auto player = std::make_unique<ECS::Entity>();
 
-		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 1.f, 1.f, 0.f });
+		player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 16.f/24.f, 1.f, 0.f });
 		player->AddComponent(Component::Position{ glm::vec2(2.f, 2.0f) });
 		player->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
 		player->AddComponent(Component::InputMove{ playerSpeed });
@@ -66,7 +66,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 
 		auto enemy = std::make_unique<ECS::Entity>();
 
-		enemy->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_SKELETON_IDLE), 1.f, 1.f, 0.f });
+		enemy->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_SKELETON_IDLE), 0.5f, 0.5f, 0.f });
 		enemy->AddComponent(Component::Position{ {4.f, 2.f} });
 
 		m_EntityList.Add(std::move(enemy));
