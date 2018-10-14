@@ -96,7 +96,6 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteWobble()));
 	}
-
 }
 
 GameStatePlay::~GameStatePlay() {}
