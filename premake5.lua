@@ -56,6 +56,11 @@ function useOpenGL()
     filter {}
 end
 
+function useGLM()
+  includedirs "libraries/glm/include"
+  defines { "GLM_ENABLE_EXPERIMENTAL" }
+end
+
 workspace "ECS"
   location "generated"
   language "C++"
@@ -115,10 +120,7 @@ project "Sample"
   useSOIL()
   useGlew()
   useOpenGL()
-
-  includedirs "libraries/glm/include"
-
-  defines { "GLM_ENABLE_EXPERIMENTAL" }
+  useGLM()
 
   filter "action:gmake*"
 	  prebuildcommands {
@@ -130,3 +132,26 @@ project "Sample"
   --pchsource "pch.cpp"
   --includedirs "projects/sample"
 
+project "SampleTest"
+  kind "ConsoleApp"
+  files "projects/sampletest/**"
+  includeCatch()
+  useECSLib()
+  useSDL()
+  useSOIL()
+  useGlew()
+  useOpenGL()
+  useGLM()
+
+  includedirs "projects/sample/"
+  links "Sample"
+
+  filter "action:gmake*"
+    --prebuildcommands {
+      --"@echo BEFORE"
+    --}
+
+    postbuildcommands {
+      -- Run the tests
+      "@%{cfg.buildtarget.relpath}"
+    }

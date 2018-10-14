@@ -1,6 +1,6 @@
 #pragma once
 #include <System.h>
-#include "Component.h"
+#include "Components.h"
 #include "RenderTargetSprite.h"
 
 class SystemRenderSpriteAnimated : public ECS::System<Component::AnimatedSprite, Component::Position>

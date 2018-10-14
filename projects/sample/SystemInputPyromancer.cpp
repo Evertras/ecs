@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "Component.h"
+#include "Components.h"
 #include "SystemInputPyromancer.h"
 
 void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {

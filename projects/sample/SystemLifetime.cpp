@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "SystemLifetime.h"
 
-#include "Component.h"
+#include "Components.h"
 
 void SystemLifetime::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 {

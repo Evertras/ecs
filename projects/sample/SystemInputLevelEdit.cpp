@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "SystemInputLevelEdit.h"
-#include "Component.h"
+#include "Components.h"
 
 const char* tempLevelName = "assets/temp.lev";
 

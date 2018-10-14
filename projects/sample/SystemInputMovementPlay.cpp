@@ -2,7 +2,7 @@
 
 #include "SystemInputMovementPlay.h"
 
-#include "Component.h"
+#include "Components.h"
 
 void SystemInputMovementPlay::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 	bool moveUp = m_InputState.MoveUpHeld();

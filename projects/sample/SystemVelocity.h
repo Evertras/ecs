@@ -2,7 +2,7 @@
 
 #include <System.h>
 
-#include "Component.h"
+#include "Components.h"
 
 class SystemVelocity : public ECS::System<Component::Position, Component::Velocity>
 {

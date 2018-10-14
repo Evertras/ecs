@@ -40,6 +40,16 @@ namespace Component {
 	};
 
 	struct LevelCollision {
+		LevelCollision() : goesThroughWalls(false), boundingLeft(0.f), boundingRight(0.f), boundingTop(0.f), boundingBottom(0.f) {}
+
+		LevelCollision(float boundLeft, float boundRight, float boundTop, float boundBottom, bool goThroughWalls = false) :
+			goesThroughWalls(goThroughWalls),
+			boundingLeft(boundLeft),
+			boundingRight(boundRight),
+			boundingTop(boundTop),
+			boundingBottom(boundBottom)
+		{}
+
 		bool goesThroughWalls;
 		float boundingLeft;
 		float boundingRight;

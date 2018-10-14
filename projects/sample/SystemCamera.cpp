@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "Component.h"
+#include "Components.h"
 #include "SystemCamera.h"
 
 void SystemCamera::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {

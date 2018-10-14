@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "SystemLevelCollision.h"
-#include "Component.h"
+#include "Components.h"
 
 void SystemLevelCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 {

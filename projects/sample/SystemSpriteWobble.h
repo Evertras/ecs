@@ -2,7 +2,7 @@
 
 #include <System.h>
 
-#include "Component.h"
+#include "Components.h"
 
 class SystemSpriteWobble : public ECS::BaseSystem
 {
