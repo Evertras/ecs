@@ -35,7 +35,8 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 				firestreamProjectile->AddComponent<Component::AnimatedSprite>(
 					Component::AnimatedSprite(m_FirestreamAnimation, 0.8f, 0.8f));
 
-				firestreamProjectile->AddComponent<Component::Projectile>({ (47.f / 60.f) });
+				firestreamProjectile->AddComponent<Component::LifetimeTimer>({ (47.f / 60.f) });
+				firestreamProjectile->AddComponent<Component::Projectile>({});
 
 				float thetaModifier = glm::linearRand(-firestreamSpread*0.5f, firestreamSpread*0.5f);
 				auto vel = glm::rotate(velBase, thetaModifier);

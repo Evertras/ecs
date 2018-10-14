@@ -5,7 +5,6 @@
 #include "Assets.h"
 
 namespace Component {
-	// Tags
 	struct WobbleSprite {};
 	struct Player {};
 	struct CameraTarget {};
@@ -55,7 +54,11 @@ namespace Component {
 		float cooldownFireStream;
 	};
 
-	struct Projectile {
+	struct Projectile {};
+
+	struct LifetimeTimer {
 		float lifetime;
 	};
+
+	struct LifetimeAnimation {};
 }

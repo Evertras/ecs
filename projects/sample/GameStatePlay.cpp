@@ -7,6 +7,7 @@
 #include "SystemInputMovementPlay.h"
 #include "SystemInputPyromancer.h"
 #include "SystemLevelCollision.h"
+#include "SystemLifetime.h"
 #include "SystemProjectile.h"
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemSpriteWobble.h"
@@ -82,6 +83,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		m_Systems.push_back(std::make_unique<SystemVelocity>());
 		m_Systems.push_back(std::make_unique<SystemLevelCollision>(m_LevelData));
 		m_Systems.push_back(std::make_unique<SystemProjectile>());
+		m_Systems.push_back(std::make_unique<SystemLifetime>());
 
 		// TODO: Figure out how to handle resizes when resizing becomes a thing
 		int windowWidth, windowHeight;
