@@ -45,6 +45,7 @@ namespace Assets {
 
 	struct SpriteAnimation {
 	public:
+		SpriteAnimation() {}
 		SpriteAnimation(Texture texture, std::vector<CropRect> frames, float fps, bool isLooping);
 		
 		float FPS() const { return m_FPS; }

@@ -26,8 +26,12 @@ void SystemCamera::UpdateViewportSize(int viewportWidth, int viewportHeight)
 {
 	float ratio = static_cast<float>(viewportWidth) / static_cast<float>(viewportHeight);
 	float visibleSquares = 10.f;
+
+	m_ViewportWidth = viewportWidth;
+	m_ViewportHeight = viewportHeight;
 	m_WorldWidth = visibleSquares * ratio;
 	m_WorldHeight = visibleSquares;
+	m_WorldZoom = m_ViewportWidth / m_WorldWidth;
 
 	UpdateView();
 	UpdateProjection();
@@ -36,7 +40,9 @@ void SystemCamera::UpdateViewportSize(int viewportWidth, int viewportHeight)
 void SystemCamera::UpdateView() {
 	m_View =
 		glm::translate(
-			glm::identity<glm::mat4>(),
+			glm::scale(
+				glm::identity<glm::mat4>(),
+				glm::vec3(m_WorldZoom, m_WorldZoom, 1.f)),
 			glm::vec3(
 				-m_CameraPos.x + m_WorldWidth * 0.5f,
 				-m_CameraPos.y + m_WorldHeight * 0.5f,
@@ -46,7 +52,7 @@ void SystemCamera::UpdateView() {
 }
 
 void SystemCamera::UpdateProjection() {
-	m_Projection = glm::ortho(0.f, m_WorldWidth, m_WorldHeight, 0.f, -100.f, 100.f);
+	m_Projection = glm::ortho(0.f, m_ViewportWidth, m_ViewportHeight, 0.f, -100.f, 100.f);
 
 	m_VP = m_Projection * m_View;
 }
