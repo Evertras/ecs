@@ -65,11 +65,32 @@ namespace Component {
 		float cooldownFireStream;
 	};
 
-	struct Projectile {};
-
 	struct LifetimeTimer {
 		float lifetime;
 	};
 
 	struct LifetimeAnimation {};
+
+	struct Ability {
+		enum ABILITY_TYPE {
+			ABILITY_FIRESTREAM,
+
+			NUM_ABILITIES,
+			ABILITY_NONE
+		};
+
+		Ability() : type(ABILITY_NONE), friendly(false) {}
+		Ability(ABILITY_TYPE t, ECS::EntityID s, bool f) : type(t), source(s), friendly(f) {}
+
+		ABILITY_TYPE type;
+
+		ECS::EntityID source;
+		bool friendly;
+	};
+
+	struct EffectBurn {
+		float dps;
+		float secondsRemaining;
+		float tickRemaining;
+	};
 }

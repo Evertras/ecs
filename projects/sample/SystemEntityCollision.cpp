@@ -6,7 +6,7 @@
 void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	typedef unsigned long CollisionBucket;
 
-	std::unordered_map<CollisionBucket, std::vector<ECS::Entity*>> bucketsFriendlyProjectiles;
+	std::unordered_map<CollisionBucket, std::vector<ECS::Entity*>> bucketsAbilities;
 	std::unordered_map<CollisionBucket, std::vector<ECS::Entity*>> bucketsPlayer;
 	std::unordered_map<CollisionBucket, std::vector<ECS::Entity*>> bucketsEnemies;
 	std::unordered_map<CollisionBucket, std::vector<ECS::Entity*>> bucketsOther;
@@ -17,22 +17,30 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 		// Look for potential collisions up to two units away
 		CollisionBucket bucket = static_cast<unsigned short int>(pos.x * 0.5f) + (static_cast<unsigned short int>(pos.y * 0.5f) << 16);
 
-		if (e.Has<Component::Projectile>()) {
-			bucketsFriendlyProjectiles[bucket].push_back(&e);
+		if (e.Has<Component::Ability>()) {
+			bucketsAbilities[bucket].push_back(&e);
+		}
+		else if (e.Has<Component::Enemy>()) {
+			bucketsEnemies[bucket].push_back(&e);
+		}
+		else if (e.Has<Component::Player>()) {
+			bucketsPlayer[bucket].push_back(&e);
+		}
+		else {
+			bucketsOther[bucket].push_back(&e);
 		}
 	};
 
 	el.Run<Component::Collision, Component::Position>(f, d);
 
-	// This has a LOT of potential optimization work if needed, but going with relative simplicity for now
-	for (auto kv : bucketsFriendlyProjectiles) {
-		for (auto projectile : kv.second) {
+	for (auto kv : bucketsAbilities) {
+		for (auto ability : kv.second) {
 			if (bucketsEnemies.find(kv.first) == bucketsEnemies.end()) { continue; }
-			Component::Collision& collision = projectile->Data<Component::Collision>();
-			glm::vec2& pos = projectile->Data<Component::Position>().pos;
+			Component::Collision& collision = ability->Data<Component::Collision>();
+			glm::vec2& pos = ability->Data<Component::Position>().pos;
 
-			glm::vec2 projectileTopLeft = { pos.x - collision.boundingLeft, pos.y - collision.boundingTop };
-			glm::vec2 projectileBottomRight = { pos.x + collision.boundingRight, pos.y + collision.boundingBottom };
+			glm::vec2 abilityTopLeft = { pos.x - collision.boundingLeft, pos.y - collision.boundingTop };
+			glm::vec2 abilityBottomRight = { pos.x + collision.boundingRight, pos.y + collision.boundingBottom };
 
 			for (auto enemy : bucketsEnemies[kv.first]) {
 				Component::Collision& otherCollision = enemy->Data<Component::Collision>();
@@ -41,10 +49,33 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 				glm::vec2 enemyTopLeft = { enemyPos.x - otherCollision.boundingLeft, enemyPos.y - otherCollision.boundingTop };
 				glm::vec2 enemyBottomRight = { enemyPos.x + otherCollision.boundingRight, enemyPos.y + otherCollision.boundingBottom };
 
-				if (projectileTopLeft.x <= enemyBottomRight.x && projectileTopLeft.y <= enemyBottomRight.y
-					&& projectileBottomRight.x >= enemyTopLeft.x && projectileBottomRight.y >= enemyTopLeft.y)
+				if (abilityTopLeft.x <= enemyBottomRight.x && abilityTopLeft.y <= enemyBottomRight.y
+					&& abilityBottomRight.x >= enemyTopLeft.x && abilityBottomRight.y >= enemyTopLeft.y)
 				{
-					// Do collision stuff
+					auto abilityType = ability->Data<Component::Ability>().type;
+
+					switch (abilityType) {
+					case Component::Ability::ABILITY_FIRESTREAM:
+						if (enemy->Has<Component::EffectBurn>()) {
+							Component::EffectBurn& burn = enemy->Data<Component::EffectBurn>();
+
+							burn.dps += 0.1f;
+							burn.secondsRemaining = 4.f;
+						}
+						else {
+							Component::EffectBurn burn;
+
+							burn.dps = 10.f;
+							burn.secondsRemaining = 4.f;
+							burn.tickRemaining = 0.5f;
+
+							enemy->AddComponent(burn);
+						}
+						break;
+
+					default:
+						throw "Unknown ability type";
+					}
 				}
 			}
 		}
