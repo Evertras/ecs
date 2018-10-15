@@ -12,6 +12,7 @@
 #include "SystemInputPyromancer.h"
 #include "SystemLevelCollision.h"
 #include "SystemLifetime.h"
+#include "SystemRenderDamageNumbers.h"
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemSpriteWobble.h"
 #include "SystemVelocity.h"
@@ -78,6 +79,20 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		enemy->AddComponent(Component::InputMove{ playerSpeed });
 
 		m_EntityList.Add(std::move(enemy));
+
+		auto number = std::make_unique<ECS::Entity>();
+
+		number->AddComponent(Component::Position{ {4.f, 0.f} });
+		number->AddComponent(Component::DamageNumber{ 43210 });
+
+		m_EntityList.Add(std::move(number));
+
+		auto numbers = std::make_unique<ECS::Entity>();
+
+		numbers->AddComponent(Component::Position{ {4.f, 5.f} });
+		numbers->AddComponent(Component::DamageNumber{ 1234567890 });
+
+		//m_EntityList.Add(std::move(numbers));
 	}
 
 	// Systems
@@ -102,7 +117,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 
 		// Draw systems
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
-		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteWobble()));
+		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderDamageNumbers(*m_DamageTarget.get())));
 	}
 }
 
@@ -137,7 +152,7 @@ void GameStatePlay::Draw() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	m_TileTarget->Draw(m_SystemCamera->GetViewProjection());
-	m_SpriteTarget->Draw(m_SystemCamera->GetViewProjection());
+	//m_TileTarget->Draw(m_SystemCamera->GetViewProjection());
+	//m_SpriteTarget->Draw(m_SystemCamera->GetViewProjection());
 	m_DamageTarget->Draw(m_SystemCamera->GetViewProjection());
 }

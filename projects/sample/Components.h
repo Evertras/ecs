@@ -93,4 +93,8 @@ namespace Component {
 		float secondsRemaining;
 		float tickRemaining;
 	};
+
+	struct DamageNumber {
+		int amount;
+	};
 }

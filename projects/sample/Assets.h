@@ -69,8 +69,8 @@ namespace Assets {
 		SpriteFont() {}
 		SpriteFont(Texture texture, std::unordered_map<char, CropRect> letters) : m_Texture(texture), m_Characters(letters) {}
 
-		Texture GetTexture() const { return m_Texture; }
-		const CropRect& GetCharacter(char c) const { auto iter = m_Characters.find(c); return iter == m_Characters.end() ? CropRect() : iter->second; }
+		const Texture& GetTexture() const { return m_Texture; }
+		const CropRect& GetCharacter(char c) { return m_Characters[c]; }
 
 	private:
 		Texture m_Texture;

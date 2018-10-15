@@ -78,6 +78,7 @@ void RenderTargetSprite::Draw(const glm::mat4 &vp) {
 	glBindVertexArray(m_VertexArray);
 	m_Shader.SetActive();
 
+
 	for (auto iter = m_Requests.begin(); iter != m_Requests.end(); ++iter) {
 		m_Shader.SetTextureClipRect(
 			iter->texture.Width(),

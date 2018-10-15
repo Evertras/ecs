@@ -166,6 +166,8 @@ Factory::LoadedTexture::LoadedTexture(const char *filename) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	m_Data = Texture(id, width, height);
+
+	SDL_Log("Loaded texture %s: %d", filename, id);
 }
 
 Factory::LoadedTexture::~LoadedTexture() {
