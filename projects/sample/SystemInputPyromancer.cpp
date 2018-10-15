@@ -24,10 +24,11 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 
 	if (abilities.gcd <= 0.f) {
 		if (abilities.cooldownFireStream <= 0.f && m_InputState.Ability1Held()) {
-			auto playerPos = player->Data<Component::Position>().pos;
+			glm::vec2 playerPos = player->Data<Component::Position>().pos;
+			playerPos.y -= 0.2f;
 			glm::vec2 direction = glm::normalize(m_InputState.MouseWorld() - playerPos);
 			glm::vec2 velBase = firestreamSpeed * direction;
-			glm::vec2 spawnPos = direction * 0.4f + playerPos;
+			glm::vec2 spawnPos = direction * 0.2f + playerPos;
 
 			for (int i = 0; i < firestreamsPerShot; ++i) {
 				auto firestreamProjectile = std::make_unique<ECS::Entity>();
@@ -43,6 +44,7 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 
 				firestreamProjectile->AddComponent<Component::Position>({ spawnPos });
 				firestreamProjectile->AddComponent<Component::Velocity>({ vel });
+				firestreamProjectile->AddComponent(Component::Collision(0.2f, 0.2f, 0.5f, 0.f, false));
 
 				el.Add(std::move(firestreamProjectile));
 

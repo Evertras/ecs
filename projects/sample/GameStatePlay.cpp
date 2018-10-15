@@ -60,7 +60,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		//player->AddComponent(Component::WobbleSprite());
 		player->AddComponent(Component::Player());
 		player->AddComponent(Component::CameraTarget());
-		player->AddComponent(Component::Collision{ false, 0.2, 0.2, 0.3, 0 });
+		player->AddComponent(Component::Collision(0.2f, 0.2f, 0.3f, 0.f));
 		player->AddComponent(Component::AbilitiesPyromancer());
 
 		m_PlayerID = m_EntityList.Add(std::move(player));
