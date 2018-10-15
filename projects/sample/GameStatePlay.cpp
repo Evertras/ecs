@@ -2,6 +2,8 @@
 
 #include "Component.h"
 #include "GameStatePlay.h"
+#include "RenderTargetDamage.h"
+#include "RenderTargetSprite.h"
 #include "RenderTargetTile.h"
 
 #include "SystemEffects.h"
@@ -39,6 +41,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		// Actual render targets
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
 		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>(*m_SpriteShader.get(), m_DungeonTileset, 16);
+		m_DamageTarget = std::make_unique<RenderTargetDamage>(*m_SpriteShader.get(), Assets::Factory::CreateSpriteFont());
 
 		for (int x = 0; x < m_LevelData.width; ++x) {
 			for (int y = 0; y < m_LevelData.height; ++y) {
@@ -136,4 +139,5 @@ void GameStatePlay::Draw() {
 
 	m_TileTarget->Draw(m_SystemCamera->GetViewProjection());
 	m_SpriteTarget->Draw(m_SystemCamera->GetViewProjection());
+	m_DamageTarget->Draw(m_SystemCamera->GetViewProjection());
 }

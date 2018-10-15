@@ -25,6 +25,7 @@ private:
 	std::vector<std::unique_ptr<ECS::BaseSystem>> m_Systems;
 	std::unique_ptr<class RenderTargetSprite> m_SpriteTarget;
 	std::unique_ptr<class RenderTargetTile> m_TileTarget;
+	std::unique_ptr<class RenderTargetDamage> m_DamageTarget;
 
 	std::unique_ptr<Assets::SpriteShader> m_SpriteShader;
 	Assets::Texture m_DungeonTileset;

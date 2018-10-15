@@ -89,6 +89,34 @@ SpriteAnimation Factory::CreateAnimation(Assets::ANIM anim) {
 	}
 }
 
+SpriteFont Factory::CreateSpriteFont() {
+	Texture tex = m_Instance.GetTexture("assets/font_large.png");
+	std::unordered_map<char, CropRect> characters;
+
+	std::ifstream in;
+
+	const char* letterFramesFilename = "assets/font_large.txt";
+	in.open(letterFramesFilename);
+
+	if (!in.is_open()) {
+		SDL_Log("Could not open file %s to read frames", letterFramesFilename);
+		return {};
+	}
+
+	char c;
+	int frameX, frameY, width, height;
+
+	while (in >> c >> frameX >> frameY >> width >> height) {
+		characters[c] = { frameX, frameY, width, height };
+	}
+
+	in.close();
+
+	SDL_Log("Loaded character frame information from %s, found %d characters", letterFramesFilename, characters.size());
+
+	return SpriteFont(tex, characters);
+}
+
 std::vector<CropRect> Factory::GetFramesFromFile(const char* filename) {
 	std::vector<CropRect> frames;
 	std::ifstream in;

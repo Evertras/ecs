@@ -43,7 +43,7 @@ namespace Assets {
 		NUM_ANIMS
 	};
 
-	struct SpriteAnimation {
+	class SpriteAnimation {
 	public:
 		SpriteAnimation() {}
 		SpriteAnimation(Texture texture, std::vector<CropRect> frames, float fps, bool isLooping);
@@ -64,7 +64,20 @@ namespace Assets {
 		std::vector<CropRect> m_Frames;
 	};
 
-	struct SpriteTile {
+	class SpriteFont {
+	public:
+		SpriteFont() {}
+		SpriteFont(Texture texture, std::unordered_map<char, CropRect> letters) : m_Texture(texture), m_Characters(letters) {}
+
+		Texture GetTexture() const { return m_Texture; }
+		const CropRect& GetCharacter(char c) const { auto iter = m_Characters.find(c); return iter == m_Characters.end() ? CropRect() : iter->second; }
+
+	private:
+		Texture m_Texture;
+		std::unordered_map<char, CropRect> m_Characters;
+	};
+
+	class SpriteTile {
 	public:
 		struct TileRect {
 			int left;
@@ -85,6 +98,7 @@ namespace Assets {
 	public:
 		static Texture GetTexture(const char* filename);
 		static SpriteAnimation CreateAnimation(ANIM anim);
+		static SpriteFont CreateSpriteFont();
 
 	private:
 		Factory() {}
