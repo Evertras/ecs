@@ -15,7 +15,7 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 		auto pos = e.Data<Component::Position>().pos;
 
 		// Look for potential collisions up to two units away
-		CollisionBucket bucket = static_cast<unsigned short int>(pos.x * 0.5f) + (static_cast<unsigned short int>(pos.y * 0.5f) << 16);
+		CollisionBucket bucket = static_cast<unsigned short int>(pos.x * 0.25f) + (static_cast<unsigned short int>(pos.y * 0.25f) << 16);
 
 		if (e.Has<Component::Ability>()) {
 			bucketsAbilities[bucket].push_back(&e);
@@ -59,7 +59,7 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 						if (enemy->Has<Component::EffectBurn>()) {
 							Component::EffectBurn& burn = enemy->Data<Component::EffectBurn>();
 
-							burn.dps += 0.1f;
+							burn.dps += 1.f * d;
 							burn.secondsRemaining = 4.f;
 						}
 						else {
