@@ -22,9 +22,9 @@ void SystemCamera::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 	UpdateView();
 }
 
-void SystemCamera::UpdateViewportSize(int viewportWidth, int viewportHeight)
+void SystemCamera::UpdateViewportSize(float viewportWidth, float viewportHeight)
 {
-	float ratio = static_cast<float>(viewportWidth) / static_cast<float>(viewportHeight);
+	float ratio = viewportWidth / viewportHeight;
 	float visibleSquares = 10.f;
 
 	m_ViewportWidth = viewportWidth;

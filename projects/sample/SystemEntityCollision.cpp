@@ -6,47 +6,45 @@
 void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	typedef unsigned long CollisionBucket;
 
-	std::unordered_map<CollisionBucket, std::vector<ECS::EntityID>> buckets;
+	std::unordered_map<CollisionBucket, std::vector<ECS::Entity*>> bucketsFriendlyProjectiles;
+	std::unordered_map<CollisionBucket, std::vector<ECS::Entity*>> bucketsPlayer;
+	std::unordered_map<CollisionBucket, std::vector<ECS::Entity*>> bucketsEnemies;
+	std::unordered_map<CollisionBucket, std::vector<ECS::Entity*>> bucketsOther;
 
-	ECS::EntityListFunction f = [&buckets](ECS::Entity& e, ECS::DeltaSeconds d) {
+	ECS::EntityListFunction f = [&](ECS::Entity& e, ECS::DeltaSeconds d) {
 		auto pos = e.Data<Component::Position>().pos;
 
 		// Look for potential collisions up to two units away
 		CollisionBucket bucket = static_cast<unsigned short int>(pos.x * 0.5f) + (static_cast<unsigned short int>(pos.y * 0.5f) << 16);
-		buckets[bucket].push_back(e.ID());
+
+		if (e.Has<Component::Projectile>()) {
+			bucketsFriendlyProjectiles[bucket].push_back(&e);
+		}
 	};
 
 	el.Run<Component::Collision, Component::Position>(f, d);
 
 	// This has a LOT of potential optimization work if needed, but going with relative simplicity for now
-	for (auto kv : buckets) {
-		for (auto id : kv.second) {
-			ECS::Entity* e = el.Get(id);
-			Component::Collision& collision = e->Data<Component::Collision>();
-			glm::vec2& pos = e->Data<Component::Position>().pos;
+	for (auto kv : bucketsFriendlyProjectiles) {
+		for (auto projectile : kv.second) {
+			if (bucketsEnemies.find(kv.first) == bucketsEnemies.end()) { continue; }
+			Component::Collision& collision = projectile->Data<Component::Collision>();
+			glm::vec2& pos = projectile->Data<Component::Position>().pos;
 
-			collision.collidingWith.clear();
+			glm::vec2 projectileTopLeft = { pos.x - collision.boundingLeft, pos.y - collision.boundingTop };
+			glm::vec2 projectileBottomRight = { pos.x + collision.boundingRight, pos.y + collision.boundingBottom };
 
-			glm::vec2 topLeft = { pos.x - collision.boundingLeft, pos.y - collision.boundingTop };
-			glm::vec2 bottomRight = { pos.x + collision.boundingRight, pos.y + collision.boundingBottom };
+			for (auto enemy : bucketsEnemies[kv.first]) {
+				Component::Collision& otherCollision = enemy->Data<Component::Collision>();
+				glm::vec2& enemyPos = enemy->Data<Component::Position>().pos;
 
-			for (auto collidingWithID : kv.second) {
-				if (collidingWithID == id) {
-					continue;
-				}
+				glm::vec2 enemyTopLeft = { enemyPos.x - otherCollision.boundingLeft, enemyPos.y - otherCollision.boundingTop };
+				glm::vec2 enemyBottomRight = { enemyPos.x + otherCollision.boundingRight, enemyPos.y + otherCollision.boundingBottom };
 
-				ECS::Entity* other = el.Get(collidingWithID);
-
-				Component::Collision& otherCollision = other->Data<Component::Collision>();
-				glm::vec2& otherPos = other->Data<Component::Position>().pos;
-
-				glm::vec2 otherTopLeft = { otherPos.x - otherCollision.boundingLeft, otherPos.y - otherCollision.boundingTop };
-				glm::vec2 otherBottomRight = { otherPos.x + otherCollision.boundingRight, otherPos.y + otherCollision.boundingBottom };
-
-				if (topLeft.x <= otherBottomRight.x && topLeft.y <= otherBottomRight.y
-					&& bottomRight.x >= otherTopLeft.x && bottomRight.y >= otherTopLeft.y)
+				if (projectileTopLeft.x <= enemyBottomRight.x && projectileTopLeft.y <= enemyBottomRight.y
+					&& projectileBottomRight.x >= enemyTopLeft.x && projectileBottomRight.y >= enemyTopLeft.y)
 				{
-					collision.collidingWith.push_back(collidingWithID);
+					// Do collision stuff
 				}
 			}
 		}

@@ -4,7 +4,7 @@
 
 class SystemCamera : public ECS::BaseSystem {
 public:
-	SystemCamera(int viewportWidth, int viewportHeight) : m_CameraPos({ 0,0 }) { UpdateViewportSize(viewportWidth, viewportHeight); }
+	SystemCamera(float viewportWidth, float viewportHeight) : m_CameraPos({ 0,0 }) { UpdateViewportSize(viewportWidth, viewportHeight); }
 	~SystemCamera() {}
 
 	void Run(ECS::EntityList &el, ECS::DeltaSeconds d) override;
@@ -14,7 +14,7 @@ public:
 	const glm::mat4& GetProjection() const { return m_Projection; }
 	const glm::mat4& GetViewProjection() const { return m_VP; }
 
-	void UpdateViewportSize(int viewportWidth, int viewportHeight);
+	void UpdateViewportSize(float viewportWidth, float viewportHeight);
 
 private:
 	glm::vec2 m_CameraPos;

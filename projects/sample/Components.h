@@ -7,6 +7,7 @@
 namespace Component {
 	struct WobbleSprite {};
 	struct Player {};
+	struct Enemy {};
 	struct CameraTarget {};
 
 	struct Position {
@@ -55,8 +56,6 @@ namespace Component {
 		float boundingRight;
 		float boundingTop;
 		float boundingBottom;
-
-		std::vector<ECS::EntityID> collidingWith;
 	};
 
 	struct AbilitiesPyromancer {
