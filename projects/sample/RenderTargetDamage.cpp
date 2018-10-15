@@ -5,10 +5,10 @@
 void RenderTargetDamage::QueueDamage(int amount, glm::vec2 bottomCenter) {
 	auto str = std::to_string(amount);
 
-	float scale = static_cast<float>(amount) * 0.01f + 0.1f;
+	float scale = static_cast<float>(amount) * 0.001f + 0.2f;
 
-	if (scale > 0.6f) {
-		scale = 0.6f;
+	if (scale > 0.3f) {
+		scale = 0.3f;
 	}
 
 	glm::vec2 offset = { -static_cast<float>(str.length()) * 0.25f * 0.8f * scale, 0.f };

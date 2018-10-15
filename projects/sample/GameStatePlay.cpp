@@ -100,7 +100,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		// TODO: Figure out how to handle resizes when resizing becomes a thing
 		int windowWidth, windowHeight;
 		SDL_GetWindowSize(m_Window, &windowWidth, &windowHeight);
-		std::unique_ptr<SystemCamera> camera = std::make_unique<SystemCamera>(windowWidth, windowHeight);
+		std::unique_ptr<SystemCamera> camera = std::make_unique<SystemCamera>(static_cast<float>(windowWidth), static_cast<float>(windowHeight));
 		m_SystemCamera = camera.get();
 		m_Systems.push_back(std::move(camera));
 
