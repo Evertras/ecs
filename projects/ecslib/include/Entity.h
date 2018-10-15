@@ -26,6 +26,11 @@ namespace ECS {
 		}
 
 		template<typename T>
+		void RemoveComponent() {
+			m_Components.erase(typeid(T));
+		}
+
+		template<typename T>
 		bool Has() const { return m_Components.find(typeid(T)) != m_Components.end(); }
 
 		template<typename T, typename ...Components>

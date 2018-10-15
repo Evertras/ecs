@@ -14,7 +14,8 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	ECS::EntityListFunction f = [&](ECS::Entity& e, ECS::DeltaSeconds d) {
 		auto pos = e.Data<Component::Position>().pos;
 
-		// Look for potential collisions up to two units away
+		// TODO: this doesn't work like I think it works, need to check surrounding buckets efficiently... leaving this as-is for testing
+		// effects though
 		CollisionBucket bucket = static_cast<unsigned short int>(pos.x * 0.25f) + (static_cast<unsigned short int>(pos.y * 0.25f) << 16);
 
 		if (e.Has<Component::Ability>()) {

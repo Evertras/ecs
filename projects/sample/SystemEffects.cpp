@@ -15,6 +15,10 @@ void SystemEffects::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 			burn.tickRemaining += 0.5f;
 			SDL_Log("Burning: %f %f %f", burn.dps, burn.secondsRemaining, burn.tickRemaining);
 		}
+
+		if (burn.secondsRemaining <= 0.f) {
+			e.RemoveComponent<Component::EffectBurn>();
+		}
 	};
 
 	el.Run<Component::EffectBurn>(f, d);
