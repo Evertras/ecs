@@ -69,22 +69,19 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 
 		m_PlayerID = m_EntityList.Add(std::move(player));
 
-		auto enemy = std::make_unique<ECS::Entity>();
+		for (int x = 0; x < 5; ++x) {
+			for (int y = 0; y < 3; ++y) {
+				auto enemy = std::make_unique<ECS::Entity>();
 
-		enemy->AddComponent(Component::AnimatedSprite(Assets::Factory::CreateAnimation(Assets::ANIM_SKELETON_IDLE), 0.5f, 0.5f));
-		enemy->AddComponent(Component::Position{ {4.f, 2.f} });
-		enemy->AddComponent<Component::Enemy>({});
-		enemy->AddComponent(Component::Collision(0.2f, 0.2f, 0.6f, 0.f, false));
-		enemy->AddComponent(Component::InputMove{ playerSpeed });
+				enemy->AddComponent(Component::AnimatedSprite(Assets::Factory::CreateAnimation(Assets::ANIM_SKELETON_IDLE), 0.5f, 0.5f));
+				enemy->AddComponent(Component::Position{ {x + 4.f, y + 1.5f} });
+				enemy->AddComponent<Component::Enemy>({});
+				enemy->AddComponent(Component::Collision(0.2f, 0.2f, 0.6f, 0.f, false));
+				enemy->AddComponent(Component::InputMove{ playerSpeed });
 
-		m_EntityList.Add(std::move(enemy));
-
-		auto numbers = std::make_unique<ECS::Entity>();
-
-		numbers->AddComponent(Component::Position{ {4.f, 5.f} });
-		numbers->AddComponent(Component::DamageNumber{ 1234567890 });
-
-		m_EntityList.Add(std::move(numbers));
+				m_EntityList.Add(std::move(enemy));
+			}
+		}
 	}
 
 	// Systems

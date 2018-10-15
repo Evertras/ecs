@@ -14,9 +14,11 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	ECS::EntityListFunction f = [&](ECS::Entity& e, ECS::DeltaSeconds d) {
 		auto pos = e.Data<Component::Position>().pos;
 
-		// TODO: this doesn't work like I think it works, need to check surrounding buckets efficiently... leaving this as-is for testing
-		// effects though
-		CollisionBucket bucket = static_cast<unsigned short int>(pos.x * 0.25f) + (static_cast<unsigned short int>(pos.y * 0.25f) << 16);
+		// TODO: this doesn't work like I think it works, need to check surrounding buckets efficiently...
+		//CollisionBucket bucket = static_cast<unsigned short int>(pos.x * 0.25f) + (static_cast<unsigned short int>(pos.y * 0.25f) << 16);
+
+		// Everything in the same bucket until this algorithm is fixed
+		CollisionBucket bucket = 1;
 
 		if (e.Has<Component::Ability>()) {
 			bucketsAbilities[bucket].push_back(&e);
