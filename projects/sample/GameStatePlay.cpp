@@ -62,7 +62,6 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		player->AddComponent(Component::Position{ glm::vec2(2.f, 2.0f) });
 		player->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
 		player->AddComponent(Component::InputMove{ playerSpeed });
-		//player->AddComponent(Component::WobbleSprite());
 		player->AddComponent(Component::Player());
 		player->AddComponent(Component::CameraTarget());
 		player->AddComponent(Component::Collision(0.2f, 0.2f, 0.3f, 0.f));
@@ -80,19 +79,12 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 
 		m_EntityList.Add(std::move(enemy));
 
-		auto number = std::make_unique<ECS::Entity>();
-
-		number->AddComponent(Component::Position{ {4.f, 0.f} });
-		number->AddComponent(Component::DamageNumber{ 43210 });
-
-		m_EntityList.Add(std::move(number));
-
 		auto numbers = std::make_unique<ECS::Entity>();
 
 		numbers->AddComponent(Component::Position{ {4.f, 5.f} });
 		numbers->AddComponent(Component::DamageNumber{ 1234567890 });
 
-		//m_EntityList.Add(std::move(numbers));
+		m_EntityList.Add(std::move(numbers));
 	}
 
 	// Systems
@@ -152,7 +144,7 @@ void GameStatePlay::Draw() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	//m_TileTarget->Draw(m_SystemCamera->GetViewProjection());
-	//m_SpriteTarget->Draw(m_SystemCamera->GetViewProjection());
+	m_TileTarget->Draw(m_SystemCamera->GetViewProjection());
+	m_SpriteTarget->Draw(m_SystemCamera->GetViewProjection());
 	m_DamageTarget->Draw(m_SystemCamera->GetViewProjection());
 }
