@@ -50,8 +50,7 @@ void SystemRenderSpriteAnimated::Run(ECS::EntityList &el, ECS::DeltaSeconds delt
 			sprite.animation.GetTexture(),
 			p.pos,
 			sprite.animation.GetFrame(displayFrame),
-			sprite.scaleX,
-			sprite.scaleY,
+			sprite.scale,
 			sprite.flipped);
 	};
 

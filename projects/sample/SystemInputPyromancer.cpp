@@ -34,7 +34,7 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 				auto firestreamProjectile = std::make_unique<ECS::Entity>();
 
 				firestreamProjectile->AddComponent<Component::AnimatedSprite>(
-					Component::AnimatedSprite(m_FirestreamAnimation, 0.8f, 0.8f));
+					Component::AnimatedSprite(m_FirestreamAnimation, 0.8f));
 
 				firestreamProjectile->AddComponent<Component::LifetimeTimer>({ (47.f / 60.f) });
 				firestreamProjectile->AddComponent(Component::Ability(Component::Ability::ABILITY_FIRESTREAM, player->ID(), true));

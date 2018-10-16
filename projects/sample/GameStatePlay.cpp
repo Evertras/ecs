@@ -16,8 +16,8 @@
 #include "SystemLevelCollision.h"
 #include "SystemLifetime.h"
 #include "SystemRenderDamageNumbers.h"
+#include "SystemRenderHealthBars.h"
 #include "SystemRenderSpriteAnimated.h"
-#include "SystemSpriteWobble.h"
 #include "SystemVelocity.h"
 
 GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
@@ -46,6 +46,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
 		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>(*m_SpriteShader.get(), m_DungeonTileset, 16);
 		m_DamageTarget = std::make_unique<RenderTargetDamage>(*m_SpriteShader.get(), Assets::Factory::CreateSpriteFont());
+		m_HealthBarTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
 
 		for (int x = 0; x < m_LevelData.width; ++x) {
 			for (int y = 0; y < m_LevelData.height; ++y) {
@@ -59,12 +60,15 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 	{
 		m_PlayerID = m_EntityList.Add(EntityFactory::PlayerPyromancer({ 2.f, 2.f }));
 
+		m_EntityList.Add(std::move(EntityFactory::EnemySkeleton({4.f, 1.5f})));
+		/*
 		for (int x = 0; x < 5; ++x) {
 			for (int y = 0; y < 3; ++y) {
 				glm::vec2 pos = {x + 4.f, y + 1.5f};
 				m_EntityList.Add(std::move(EntityFactory::EnemySkeleton(pos)));
 			}
 		}
+		*/
 	}
 
 	// Systems
@@ -90,6 +94,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		// Draw systems
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderDamageNumbers(*m_DamageTarget.get())));
+		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderHealthBars(*m_HealthBarTarget.get(), Assets::Factory::GetTexture("assets/bar.png"))));
 	}
 }
 
@@ -126,5 +131,6 @@ void GameStatePlay::Draw() {
 
 	m_TileTarget->Draw(m_SystemCamera->GetViewProjection());
 	m_SpriteTarget->Draw(m_SystemCamera->GetViewProjection());
+	m_HealthBarTarget->Draw(m_SystemCamera->GetViewProjection());
 	m_DamageTarget->Draw(m_SystemCamera->GetViewProjection());
 }

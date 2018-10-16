@@ -20,9 +20,18 @@ public:
 	void QueueSprite(
 		const Assets::Texture &texture,
 		glm::vec2 bottomCenter,
-		const Assets::CropRect &frame)
+		const Assets::CropRect &frame,
+		float scale,
+		bool flipX)
 	{
-		QueueSprite(texture, bottomCenter, frame, 1.f, 1.f, false);
+		float ratio = static_cast<float>(frame.width) / static_cast<float>(frame.height);
+
+		if (ratio > 1.f) {
+			QueueSprite(texture, bottomCenter, frame, scale, scale / ratio, false);
+		}
+		else {
+			QueueSprite(texture, bottomCenter, frame, scale * ratio, scale, false);
+		}
 	}
 
 	void Draw(const glm::mat4 &vp);

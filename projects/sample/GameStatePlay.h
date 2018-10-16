@@ -24,6 +24,7 @@ private:
 	ECS::EntityList m_EntityList;
 	std::vector<std::unique_ptr<ECS::BaseSystem>> m_Systems;
 	std::unique_ptr<class RenderTargetSprite> m_SpriteTarget;
+	std::unique_ptr<class RenderTargetSprite> m_HealthBarTarget;
 	std::unique_ptr<class RenderTargetTile> m_TileTarget;
 	std::unique_ptr<class RenderTargetDamage> m_DamageTarget;
 

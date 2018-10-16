@@ -19,12 +19,11 @@ namespace Component {
 	};
 
 	struct AnimatedSprite {
-		AnimatedSprite() : currentFrame(0.f), scaleX(1.f), scaleY(1.f), flipped(false) {}
-		AnimatedSprite(const Assets::SpriteAnimation& anim, float sizeX = 1.f, float sizeY = 1.f) : currentFrame(0.f), scaleX(sizeX), scaleY(sizeY), flipped(false), animation(anim) {}
+		AnimatedSprite() : currentFrame(0.f), scale(1.f), flipped(false) {}
+		AnimatedSprite(const Assets::SpriteAnimation& anim, float size = 1.f) : currentFrame(0.f), scale(size), flipped(false), animation(anim) {}
 		Assets::SpriteAnimation animation;
 
-		float scaleX;
-		float scaleY;
+		float scale;
 
 		// Intended to be fractional, round down for index value
 		float currentFrame;

@@ -10,7 +10,6 @@
 #include "SystemInputMovementEdit.h"
 #include "SystemLevelTerrainColorize.h"
 #include "SystemRenderSpriteAnimated.h"
-#include "SystemSpriteWobble.h"
 #include "SystemVelocity.h"
 
 GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window)
@@ -58,7 +57,6 @@ GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window)
 		cursor->AddComponent(Component::Position{ glm::vec2(2.f, 1.9f) });
 		cursor->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
 		cursor->AddComponent(Component::InputMove{ playerSpeed });
-		//player->AddComponent(Component::WobbleSprite());
 		//cursor->AddComponent(Component::Player());
 		cursor->AddComponent(Component::CameraTarget());
 
@@ -84,7 +82,6 @@ GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window)
 
 		// Draw systems
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
-		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemSpriteWobble()));
 	}
 }
 

@@ -55,10 +55,9 @@ void RenderTargetSprite::QueueSprite(
 
 	request.bottomCenter = bottomCenter;
 	request.crop = frame;
-	float ratio = static_cast<float>(request.crop.width) / static_cast<float>(request.crop.height);
 	request.modelMatrix = glm::scale(translate,
 		glm::vec3(
-			scaleX * ratio * (flipX ? -1 : 1),
+			scaleX * (flipX ? -1 : 1),
 			scaleY,
 			1.f
 		));
