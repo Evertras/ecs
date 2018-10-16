@@ -47,7 +47,8 @@ void RenderTargetSprite::QueueSprite(
 	const Assets::CropRect &frame,
 	float scaleX,
 	float scaleY,
-	bool flipX)
+	bool flipX,
+	glm::vec4 color)
 {
 	PendingDrawRequest request(texture);
 	auto id = glm::identity<glm::mat4>();
@@ -61,6 +62,7 @@ void RenderTargetSprite::QueueSprite(
 			scaleY,
 			1.f
 		));
+	request.color = color;
 
 
 	for (auto iter = m_Requests.begin(); iter != m_Requests.end(); ++iter) {
@@ -77,7 +79,6 @@ void RenderTargetSprite::Draw(const glm::mat4 &vp) {
 	glBindVertexArray(m_VertexArray);
 	m_Shader.SetActive();
 
-
 	for (auto iter = m_Requests.begin(); iter != m_Requests.end(); ++iter) {
 		m_Shader.SetTextureClipRect(
 			iter->texture.Width(),
@@ -88,6 +89,7 @@ void RenderTargetSprite::Draw(const glm::mat4 &vp) {
 			iter->crop.height);
 
 		m_Shader.SetMVP(vp * iter->modelMatrix);
+		m_Shader.SetSpriteColor(iter->color);
 
 		glBindTexture(GL_TEXTURE_2D, iter->texture.ID());
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);

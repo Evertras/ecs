@@ -60,15 +60,14 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 	{
 		m_PlayerID = m_EntityList.Add(EntityFactory::PlayerPyromancer({ 2.f, 2.f }));
 
-		m_EntityList.Add(std::move(EntityFactory::EnemySkeleton({4.f, 1.5f})));
-		/*
+		//m_EntityList.Add(std::move(EntityFactory::EnemySkeleton({4.f, 1.5f})));
+
 		for (int x = 0; x < 5; ++x) {
 			for (int y = 0; y < 3; ++y) {
 				glm::vec2 pos = {x + 4.f, y + 1.5f};
 				m_EntityList.Add(std::move(EntityFactory::EnemySkeleton(pos)));
 			}
 		}
-		*/
 	}
 
 	// Systems

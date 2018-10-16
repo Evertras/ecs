@@ -2,7 +2,7 @@
 
 #include "EntityFactory.h"
 
-const float PlayerSpeed = 2.f;
+const float PlayerSpeed = 3.f;
 
 std::unique_ptr<ECS::Entity> EntityFactory::PlayerPyromancer(glm::vec2 pos) {
 	auto player = std::make_unique<ECS::Entity>();
