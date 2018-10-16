@@ -20,10 +20,10 @@ public:
 		float ratio = static_cast<float>(frame.width) / static_cast<float>(frame.height);
 
 		if (ratio > 1.f) {
-			QueueSprite(texture, bottomCenter, frame, scale, scale / ratio, false, color);
+			QueueSprite(texture, bottomCenter, frame, scale, scale / ratio, flipX, color);
 		}
 		else {
-			QueueSprite(texture, bottomCenter, frame, scale * ratio, scale, false, color);
+			QueueSprite(texture, bottomCenter, frame, scale * ratio, scale, flipX, color);
 		}
 	}
 
