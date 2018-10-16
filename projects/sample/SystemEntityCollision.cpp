@@ -70,7 +70,7 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 
 							burn.dps = 10.f;
 							burn.secondsRemaining = 4.f;
-							burn.tickRemaining = 0.5f;
+							burn.tickRemaining = 0.f;
 
 							enemy->AddComponent(burn);
 						}

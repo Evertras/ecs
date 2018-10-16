@@ -97,4 +97,12 @@ namespace Component {
 	struct DamageNumber {
 		int amount;
 	};
+
+	struct Health {
+		Health() : max(0.f), remaining(0.f) {}
+		Health(float m) : max(m), remaining(m) {}
+
+		float max;
+		float remaining;
+	};
 }

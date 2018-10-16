@@ -1,7 +1,10 @@
 #include "pch.h"
 
-#include "Component.h"
+#include "Components.h"
 #include "GameStatePlay.h"
+
+#include "EntityFactory.h"
+
 #include "RenderTargetDamage.h"
 #include "RenderTargetSprite.h"
 #include "RenderTargetTile.h"
@@ -54,32 +57,12 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 
 	// Sandbox for initial entities
 	{
-		const float playerSpeed = 3.f;
-
-		auto player = std::make_unique<ECS::Entity>();
-
-		player->AddComponent(Component::AnimatedSprite(Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 16.f/24.f, 1.f));
-		player->AddComponent(Component::Position{ glm::vec2(2.f, 2.0f) });
-		player->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
-		player->AddComponent(Component::InputMove{ playerSpeed });
-		player->AddComponent(Component::Player());
-		player->AddComponent(Component::CameraTarget());
-		player->AddComponent(Component::Collision(0.2f, 0.2f, 0.3f, 0.f));
-		player->AddComponent(Component::AbilitiesPyromancer());
-
-		m_PlayerID = m_EntityList.Add(std::move(player));
+		m_PlayerID = m_EntityList.Add(EntityFactory::PlayerPyromancer({ 2.f, 2.f }));
 
 		for (int x = 0; x < 5; ++x) {
 			for (int y = 0; y < 3; ++y) {
-				auto enemy = std::make_unique<ECS::Entity>();
-
-				enemy->AddComponent(Component::AnimatedSprite(Assets::Factory::CreateAnimation(Assets::ANIM_SKELETON_IDLE), 0.5f, 0.5f));
-				enemy->AddComponent(Component::Position{ {x + 4.f, y + 1.5f} });
-				enemy->AddComponent<Component::Enemy>({});
-				enemy->AddComponent(Component::Collision(0.2f, 0.2f, 0.6f, 0.f, false));
-				enemy->AddComponent(Component::InputMove{ playerSpeed });
-
-				m_EntityList.Add(std::move(enemy));
+				glm::vec2 pos = {x + 4.f, y + 1.5f};
+				m_EntityList.Add(std::move(EntityFactory::EnemySkeleton(pos)));
 			}
 		}
 	}
