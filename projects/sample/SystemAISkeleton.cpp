@@ -13,6 +13,16 @@ void SystemAISkeleton::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	auto playerPos = player->Data<Component::Position>().pos;
 
 	ECS::EntityListFunction idleFunc = [&playerPos](ECS::Entity& e, ECS::DeltaSeconds d) {
+		if (e.Has<Component::Health>()) {
+			auto health = e.Data<Component::Health>();
+
+			if (health.remaining != health.max) {
+				e.RemoveComponent<Component::AISkeletonIdle>();
+				e.AddComponent(Component::AISkeletonActive());
+				return;
+			}
+		}
+
 		auto skelePos = e.Data<Component::Position>().pos;
 		float diffX = playerPos.x - skelePos.x;
 		float diffY = playerPos.y - skelePos.y;
@@ -21,7 +31,6 @@ void SystemAISkeleton::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 		if (diffX * diffX + diffY * diffY < alertRange * alertRange) {
 			e.RemoveComponent<Component::AISkeletonIdle>();
 			e.AddComponent(Component::AISkeletonActive());
-			SDL_Log("ALerted");
 		}
 	};
 
