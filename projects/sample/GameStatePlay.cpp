@@ -9,6 +9,7 @@
 #include "RenderTargetSprite.h"
 #include "RenderTargetTile.h"
 
+#include "SystemAISkeleton.h"
 #include "SystemEffects.h"
 #include "SystemEntityCollision.h"
 #include "SystemInputMovementPlay.h"
@@ -75,6 +76,9 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		// Input systems
 		m_Systems.push_back(std::make_unique<SystemInputMovementPlay>(m_InputState));
 		m_Systems.push_back(std::make_unique<SystemInputPyromancer>(m_InputState));
+
+		// AI systems
+		m_Systems.push_back(std::make_unique<SystemAISkeleton>());
 
 		// Mechanical systems
 		m_Systems.push_back(std::make_unique<SystemVelocity>());

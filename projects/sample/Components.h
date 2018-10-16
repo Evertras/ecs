@@ -35,7 +35,9 @@ namespace Component {
 		Assets::SpriteTile tile;
 	};
 
-	struct InputMove {
+	struct InputMove { };
+
+	struct Move {
 		float unitsPerSecond;
 	};
 
@@ -103,5 +105,12 @@ namespace Component {
 
 		float max;
 		float remaining;
+	};
+
+	struct AISkeletonIdle {
+		float alertRange;
+	};
+
+	struct AISkeletonActive {
 	};
 }

@@ -12,7 +12,7 @@ void SystemInputMovementPlay::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 
 	ECS::EntityListFunction f = [&](ECS::Entity &e, ECS::DeltaSeconds d) {
 		glm::vec2 &vel = e.Data<Component::Velocity>().vel;
-		Component::InputMove &move = e.Data<Component::InputMove>();
+		Component::Move &move = e.Data<Component::Move>();
 
 		vel.x = 0.f;
 		vel.y = 0.f;
@@ -34,5 +34,5 @@ void SystemInputMovementPlay::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 		}
 	};
 
-	el.Run<Component::Velocity, Component::InputMove>(f, d);
+	el.Run<Component::Velocity, Component::InputMove, Component::Move>(f, d);
 }
