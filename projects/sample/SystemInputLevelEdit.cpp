@@ -54,20 +54,37 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 		--tile.tilemapX;
 	}
 
-	if (m_InputState.EditTileWallHeld()) {
+	if (m_InputState.EditTileDefaultWallHeld()) {
 		// TODO: this is hardcoded to dungeon tileset, fix
 		tile = { 1, 1 };
-		tile.type = Assets::Level::TT_WALL;
+		tile.terrain = Assets::Level::TT_WALL;
 	}
 
-	if (m_InputState.EditTileFloorHeld()) {
+	if (m_InputState.EditTileDefaultFloorHeld()) {
 		// TODO: this is hardcoded to dungeon tileset, fix
 		tile = { 2, 3 };
-		tile.type = Assets::Level::TT_OPEN;
+		tile.terrain = Assets::Level::TT_OPEN;
+	}
+
+	if (m_InputState.EditTileTerrainOpenHeld()) {
+		tile.terrain = Assets::Level::TT_OPEN;
+	}
+
+	if (m_InputState.EditTileTerrainWallHeld()) {
+		tile.terrain = Assets::Level::TT_WALL;
+	}
+
+	if (m_InputState.EditContainsSkeletonHeld()) {
+		tile.contains = Assets::Level::CT_SKELETON;
+	}
+
+	if (m_InputState.EditContainsNothingHeld()) {
+		tile.contains = Assets::Level::CT_NONE;
 	}
 
 	m_LevelData.Set(cursorX, cursorY, tile.tilemapX, tile.tilemapY);
-	m_LevelData.Set(cursorX, cursorY, tile.type);
+	m_LevelData.Set(cursorX, cursorY, tile.terrain);
+	m_LevelData.Set(cursorX, cursorY, tile.contains);
 
 	m_RenderTarget.SetTile(cursorX, cursorY, tile.tilemapX, tile.tilemapY);
 	m_RenderTarget.SetColor(cursorX, cursorY, glm::vec4(0.5f, 0.5f, 1.0f, 1.f));

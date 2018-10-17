@@ -12,7 +12,6 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	}
 
 	Component::AbilitiesPyromancer& abilities = player->Data<Component::AbilitiesPyromancer>();
-
 	abilities.gcd -= d;
 	abilities.cooldownFireStream -= d;
 

@@ -8,6 +8,7 @@
 #include "SystemCamera.h"
 #include "SystemInputLevelEdit.h"
 #include "SystemInputMovementEdit.h"
+#include "SystemLevelContainsOverlay.h"
 #include "SystemLevelTerrainColorize.h"
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemVelocity.h"
@@ -79,6 +80,7 @@ GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window)
 
 		// Level editing systems
 		m_Systems.push_back(std::make_unique<SystemLevelTerrainColorize>(m_InputState, *m_TileTarget.get(), m_LevelData));
+		m_Systems.push_back(std::make_unique<SystemLevelContainsOverlay>(m_InputState, *m_SpriteTarget.get(), m_LevelData));
 		m_Systems.push_back(std::make_unique<SystemInputLevelEdit>(m_InputState, *m_TileTarget.get(), m_LevelData, m_CursorID, 16, 16));
 
 		// Draw systems

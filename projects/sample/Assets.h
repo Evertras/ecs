@@ -163,19 +163,29 @@ namespace Assets {
 			TT_NUM_TYPES
 		};
 
+		enum ContainsType {
+			CT_NONE,
+			CT_SKELETON,
+
+			CT_NUM_TYPES
+		};
+
 		struct Tile {
 			int tilemapX;
 			int tilemapY;
-			TerrainType type;
+			TerrainType terrain;
+			ContainsType contains;
 		};
 
 		Level() {}
-		Level(int w, int h) : width(w), height(h) { tiles.resize(w*h); }
+		Level(int w, int h) : width(w), height(h) { tiles.resize(w*h); SetAll(TT_OPEN); SetAll(CT_NONE); }
 
 		void Set(int worldX, int worldY, int tileX, int tileY) { int i = worldX * height + worldY; tiles[i].tilemapX = tileX; tiles[i].tilemapY = tileY; }
-		void Set(int worldX, int worldY, TerrainType type) { tiles[worldX*height + worldY].type = type; }
+		void Set(int worldX, int worldY, TerrainType type) { tiles[worldX*height + worldY].terrain = type; }
+		void Set(int worldX, int worldY, ContainsType type) { tiles[worldX*height + worldY].contains = type; }
 		void SetAll(int tileX, int tileY) { for (int i = 0; i < tiles.size(); ++i) { tiles[i].tilemapX = tileX; tiles[i].tilemapY = tileY; } }
-		void SetAll(TerrainType type) { for (int i = 0; i < tiles.size(); ++i) tiles[i].type = type; }
+		void SetAll(TerrainType type) { for (int i = 0; i < tiles.size(); ++i) tiles[i].terrain = type; }
+		void SetAll(ContainsType type) { for (int i = 0; i < tiles.size(); ++i) tiles[i].contains = type; }
 		Tile Get(int x, int y) const { return tiles[x*height + y]; }
 		void Size(int w, int h) { width = w; height = h; tiles.resize(w*h); }
 

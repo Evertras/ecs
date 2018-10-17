@@ -40,7 +40,7 @@ void SystemLevelCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 				static_cast<int>(pos.pos.x - collisionProperties.boundingLeft),
 				static_cast<int>(pos.pos.y + collisionProperties.boundingBottom - yDiff));
 
-			if (tileTopLeft.type == Assets::Level::TT_WALL || tileBottomLeft.type == Assets::Level::TT_WALL) {
+			if (tileTopLeft.terrain == Assets::Level::TT_WALL || tileBottomLeft.terrain == Assets::Level::TT_WALL) {
 				pos.pos.x -= xDiff;
 			}
 		}
@@ -53,7 +53,7 @@ void SystemLevelCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 				static_cast<int>(pos.pos.x + collisionProperties.boundingRight),
 				static_cast<int>(pos.pos.y + collisionProperties.boundingBottom - yDiff));
 
-			if (tileTopRight.type == Assets::Level::TT_WALL || tileBottomRight.type == Assets::Level::TT_WALL) {
+			if (tileTopRight.terrain == Assets::Level::TT_WALL || tileBottomRight.terrain == Assets::Level::TT_WALL) {
 				pos.pos.x -= xDiff;
 			}
 		}
@@ -67,7 +67,7 @@ void SystemLevelCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 				static_cast<int>(pos.pos.x + collisionProperties.boundingRight - xDiff),
 				static_cast<int>(pos.pos.y - collisionProperties.boundingTop));
 
-			if (tileTopLeft.type == Assets::Level::TT_WALL || tileTopRight.type == Assets::Level::TT_WALL) {
+			if (tileTopLeft.terrain == Assets::Level::TT_WALL || tileTopRight.terrain == Assets::Level::TT_WALL) {
 				pos.pos.y -= yDiff;
 			}
 		}
@@ -80,7 +80,7 @@ void SystemLevelCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 				static_cast<int>(pos.pos.x + collisionProperties.boundingRight - xDiff),
 				static_cast<int>(pos.pos.y + collisionProperties.boundingBottom));
 
-			if (tileBottomLeft.type == Assets::Level::TT_WALL || tileBottomRight.type == Assets::Level::TT_WALL) {
+			if (tileBottomLeft.terrain == Assets::Level::TT_WALL || tileBottomRight.terrain == Assets::Level::TT_WALL) {
 				pos.pos.y -= yDiff;
 			}
 		}

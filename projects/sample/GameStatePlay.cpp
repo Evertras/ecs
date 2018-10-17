@@ -48,11 +48,18 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>(*m_SpriteShader.get(), m_DungeonTileset, 16);
 		m_DamageTarget = std::make_unique<RenderTargetDamage>(*m_SpriteShader.get(), Assets::Factory::CreateSpriteFont());
 		m_HealthBarTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
+	}
 
+	// Level loading
+	{
 		for (int x = 0; x < m_LevelData.width; ++x) {
 			for (int y = 0; y < m_LevelData.height; ++y) {
 				auto tile = m_LevelData.Get(x, y);
 				m_TileTarget->SetTile(x, y, tile.tilemapX, tile.tilemapY);
+
+				if (tile.contains != Assets::Level::CT_NONE) {
+					m_EntityList.Add(EntityFactory::Contains(tile.contains, { static_cast<float>(x) + 0.5f, static_cast<float>(y) + 0.9f }));
+				}
 			}
 		}
 	}
@@ -60,15 +67,6 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 	// Sandbox for initial entities
 	{
 		m_PlayerID = m_EntityList.Add(EntityFactory::PlayerPyromancer({ 2.f, 2.f }));
-
-		//m_EntityList.Add(std::move(EntityFactory::EnemySkeleton({4.f, 1.5f})));
-
-		for (int x = 0; x < 5; ++x) {
-			for (int y = 0; y < 3; ++y) {
-				glm::vec2 pos = {x + 4.f, y + 1.5f};
-				m_EntityList.Add(std::move(EntityFactory::EnemySkeleton(pos)));
-			}
-		}
 	}
 
 	// Systems

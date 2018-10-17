@@ -16,7 +16,7 @@ void SystemLevelTerrainColorize::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 			}
 
 			glm::vec4 color;
-			switch (m_LevelData.Get(x, y).type) {
+			switch (m_LevelData.Get(x, y).terrain) {
 			case Assets::Level::TT_WALL:
 				color = glm::vec4(1.f, 0.f, 0.f, 1.f);
 				break;

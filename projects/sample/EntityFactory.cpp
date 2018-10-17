@@ -35,3 +35,16 @@ std::unique_ptr<ECS::Entity> EntityFactory::EnemySkeleton(glm::vec2 pos) {
 
 	return std::move(enemy);
 }
+
+std::unique_ptr<ECS::Entity> EntityFactory::Contains(Assets::Level::ContainsType type, glm::vec2 pos) {
+	switch (type) {
+	case Assets::Level::CT_NONE:
+		return nullptr;
+
+	case Assets::Level::CT_SKELETON:
+		return EnemySkeleton(pos);
+
+	default:
+		return nullptr;
+	}
+}
