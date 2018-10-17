@@ -84,7 +84,7 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	m_LevelData.Set(cursor.x, cursor.y, tile.contains);
 
 	m_RenderTarget.SetTile(cursor.x, cursor.y, tile.tilemapX, tile.tilemapY);
-	m_RenderTarget.SetColor(cursor.x, cursor.y, glm::vec4(0.8f, 0.8f, 0.8f, 1.f));
+	m_RenderTarget.SetColor(cursor.x, cursor.y, glm::vec4(0.85f, 0.85f, 0.85f, 1.f));
 
 	if (m_InputState.EditLevelSavePressed()) {
 		try {
