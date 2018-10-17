@@ -10,6 +10,11 @@ namespace Component {
 	struct Enemy {};
 	struct CameraTarget {};
 
+	struct LevelEditCursor {
+		int x;
+		int y;
+	};
+
 	struct Position {
 		glm::vec2 pos;
 	};

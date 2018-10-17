@@ -28,6 +28,8 @@ protected:
 
 	inline bool KeyPressed(SDL_Scancode code) const { return !m_LastKeyboardState[code] && m_KeyboardState[code]; }
 	inline bool KeyHeld(SDL_Scancode code) const { return m_KeyboardState[code]; }
+	inline bool ShiftHeld() const { return m_KeyboardState[SDL_SCANCODE_LSHIFT] || m_KeyboardState[SDL_SCANCODE_RSHIFT]; }
+	inline bool ControlHeld() const { return m_KeyboardState[SDL_SCANCODE_LCTRL] || m_KeyboardState[SDL_SCANCODE_RCTRL]; }
 
 	struct {
 		int screenX;

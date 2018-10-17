@@ -16,27 +16,24 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 		}
 	}
 
-	auto tracked = el.Get(m_TrackID);
+	auto tracked = el.First<Component::LevelEditCursor>();
 
-	if (tracked == nullptr || !tracked->Has<Component::Position>()) {
-		SDL_Log("Did not find tracked entity with position comopnent for level cursor");
+	if (tracked == nullptr) {
+		SDL_Log("Did not find level cursor");
 		return;
 	}
 
-	auto trackPos = tracked->Data<Component::Position>();
+	auto cursor = tracked->Data<Component::LevelEditCursor>();
 
-	int cursorX = static_cast<int>(trackPos.pos.x);
-	int cursorY = static_cast<int>(trackPos.pos.y);
-
-	if (cursorX >= m_LevelData.width || cursorX < 0) {
+	if (cursor.x >= m_LevelData.width || cursor.y < 0) {
 		return;
 	}
 
-	if (cursorY >= m_LevelData.height || cursorY < 0) {
+	if (cursor.y >= m_LevelData.height || cursor.y < 0) {
 		return;
 	}
 
-	auto tile = m_LevelData.Get(cursorX, cursorY);
+	auto tile = m_LevelData.Get(cursor.x, cursor.y);
 
 	if (m_InputState.EditTileUpPressed() && tile.tilemapY > 0) {
 		--tile.tilemapY;
@@ -82,12 +79,12 @@ void SystemInputLevelEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 		tile.contains = Assets::Level::CT_NONE;
 	}
 
-	m_LevelData.Set(cursorX, cursorY, tile.tilemapX, tile.tilemapY);
-	m_LevelData.Set(cursorX, cursorY, tile.terrain);
-	m_LevelData.Set(cursorX, cursorY, tile.contains);
+	m_LevelData.Set(cursor.x, cursor.y, tile.tilemapX, tile.tilemapY);
+	m_LevelData.Set(cursor.x, cursor.y, tile.terrain);
+	m_LevelData.Set(cursor.x, cursor.y, tile.contains);
 
-	m_RenderTarget.SetTile(cursorX, cursorY, tile.tilemapX, tile.tilemapY);
-	m_RenderTarget.SetColor(cursorX, cursorY, glm::vec4(0.5f, 0.5f, 1.0f, 1.f));
+	m_RenderTarget.SetTile(cursor.x, cursor.y, tile.tilemapX, tile.tilemapY);
+	m_RenderTarget.SetColor(cursor.x, cursor.y, glm::vec4(0.5f, 0.5f, 1.0f, 1.f));
 
 	if (m_InputState.EditLevelSavePressed()) {
 		try {

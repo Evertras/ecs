@@ -5,34 +5,45 @@
 #include "Components.h"
 
 void SystemInputMovementEdit::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
-	bool moveUp = m_InputState.MoveUpHeld();
-	bool moveDown = m_InputState.MoveDownHeld();
-	bool moveRight = m_InputState.MoveRightHeld();
-	bool moveLeft = m_InputState.MoveLeftHeld();
+	bool moveUp = m_InputState.MoveUpPressed();
+	bool moveDown = m_InputState.MoveDownPressed();
+	bool moveRight = m_InputState.MoveRightPressed();
+	bool moveLeft = m_InputState.MoveLeftPressed();
 
-	ECS::EntityListFunction f = [&](ECS::Entity &e, ECS::DeltaSeconds d) {
-		glm::vec2 &vel = e.Data<Component::Velocity>().vel;
-		Component::Move &move = e.Data<Component::Move>();
+	auto e = el.First<Component::LevelEditCursor, Component::Position>();
 
-		vel.x = 0.f;
-		vel.y = 0.f;
+	if (e == nullptr) {
+		SDL_Log("No cursor found");
+		return;
+	}
 
-		if (moveUp) {
-			vel.y -= move.unitsPerSecond;
-		}
+	Component::LevelEditCursor& cursor = e->Data<Component::LevelEditCursor>();
+	Component::Position& pos = e->Data<Component::Position>();
 
-		if (moveDown) {
-			vel.y += move.unitsPerSecond;
-		}
+	if (moveUp) {
+		cursor.y -= 1;
+	}
 
-		if (moveRight) {
-			vel.x += move.unitsPerSecond;
-		}
+	if (moveDown) {
+		cursor.y += 1;
+	}
 
-		if (moveLeft) {
-			vel.x -= move.unitsPerSecond;
-		}
-	};
+	if (moveLeft) {
+		cursor.x -= 1;
+	}
 
-	el.Run<Component::Velocity, Component::InputMove, Component::Move>(f, d);
+	if (moveRight) {
+		cursor.x += 1;
+	}
+
+	if (cursor.y < 0) {
+		cursor.y = 0;
+	}
+
+	if (cursor.x < 0) {
+		cursor.x = 0;
+	}
+
+	pos.pos.x = static_cast<float>(cursor.x) + 0.5f;
+	pos.pos.y = static_cast<float>(cursor.y + 1);
 }

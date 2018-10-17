@@ -50,16 +50,10 @@ GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window)
 
 	// Sandbox for initial entities
 	{
-		const float cursorSpeed = 5.f;
-
 		std::unique_ptr<ECS::Entity> cursor = std::make_unique<ECS::Entity>();
 
-		//player->AddComponent(Component::AnimatedSprite{ Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 1.f, 1.f, 0 });
-		cursor->AddComponent(Component::Position{ glm::vec2(2.f, 1.9f) });
-		cursor->AddComponent(Component::Velocity{ glm::vec2(0.f, 0.f) });
-		cursor->AddComponent(Component::InputMove{ });
-		cursor->AddComponent(Component::Move{ cursorSpeed});
-		//cursor->AddComponent(Component::Player());
+		cursor->AddComponent(Component::LevelEditCursor{0, 0});
+		cursor->AddComponent(Component::Position{ {0.f, 0.f} });
 		cursor->AddComponent(Component::CameraTarget());
 
 		m_CursorID = m_EntityList.Add(std::move(cursor));
