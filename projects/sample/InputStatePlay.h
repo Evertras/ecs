@@ -10,7 +10,7 @@ public:
 	bool MoveLeftHeld() const { return KeyHeld(SDL_SCANCODE_S); }
 
 	bool Ability1Held() const { return KeyHeld(SDL_SCANCODE_Q) || m_MouseState.left; }
-	bool Ability2Held() const { return KeyHeld(SDL_SCANCODE_W) || m_MouseState.right; }
+	bool Ability2Held() const { return KeyHeld(SDL_SCANCODE_W); }
 	bool Ability3Held() const { return KeyHeld(SDL_SCANCODE_R); }
 	bool Ability4Held() const { return KeyHeld(SDL_SCANCODE_T); }
 	bool Ability5Held() const { return KeyHeld(SDL_SCANCODE_A); }

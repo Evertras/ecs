@@ -7,9 +7,11 @@ void Actions::Damage(ECS::EntityList& el, ECS::Entity& target, float amount) {
 	if (target.Has<Component::Position>()) {
 		auto number = std::make_unique<ECS::Entity>();
 
+		auto speedScale = glm::clamp(amount * 0.05f, 0.6f, 2.f);
+
 		number->AddComponent(Component::DamageNumber{ static_cast<int>(amount) });
 		number->AddComponent(Component::Position{ {target.Data<Component::Position>().pos + glm::vec2{0.f, -0.5f} } });
-		number->AddComponent(Component::Velocity{ glm::rotate(glm::vec2{ 0.f, -.8f }, glm::linearRand(-0.2f, 0.2f)) });
+		number->AddComponent(Component::Velocity{ glm::rotate(glm::vec2{ 0.f, -speedScale }, glm::linearRand(-0.2f, 0.2f)) });
 		number->AddComponent(Component::LifetimeTimer{ 1.5f });
 
 		el.Add(std::move(number));

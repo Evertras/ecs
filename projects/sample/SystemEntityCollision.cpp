@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "SystemEntityCollision.h"
+#include "Actions.h"
 #include "Components.h"
 
 typedef unsigned long CollisionBucket;
@@ -67,7 +68,7 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 
 		glm::vec2 abilityTopLeft = { pos.x - collision.boundingLeft, pos.y - collision.boundingTop };
 		glm::vec2 abilityBottomRight = { pos.x + collision.boundingRight, pos.y + collision.boundingBottom };
-		auto abilityType = e.Data<Component::Ability>().type;
+		const Component::Ability& ability = e.Data<Component::Ability>();
 
 		for (auto enemy : bucketsEnemies[bucket]) {
 			Component::Collision& otherCollision = enemy->Data<Component::Collision>();
@@ -79,23 +80,27 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 			if (abilityTopLeft.x <= enemyBottomRight.x && abilityTopLeft.y <= enemyBottomRight.y
 				&& abilityBottomRight.x >= enemyTopLeft.x && abilityBottomRight.y >= enemyTopLeft.y)
 			{
-				switch (abilityType) {
+				switch (ability.type) {
 				case Component::Ability::ABILITY_FIRESTREAM:
 					if (enemy->Has<Component::EffectBurn>()) {
 						Component::EffectBurn& burn = enemy->Data<Component::EffectBurn>();
 
-						burn.dps += 1.f * d;
-						burn.secondsRemaining = 4.f;
+						burn.dps += ability.param1 * d;
+						burn.secondsRemaining = ability.param2;
 					}
 					else {
 						Component::EffectBurn burn;
 
-						burn.dps = 10.f;
-						burn.secondsRemaining = 4.f;
+						burn.dps = ability.param1;
+						burn.secondsRemaining = ability.param2;
 						burn.tickRemaining = 0.f;
 
 						enemy->AddComponent(burn);
 					}
+					break;
+
+				case Component::Ability::ABILITY_IGNITE:
+					Actions::Damage(el, *enemy, ability.param1);
 					break;
 
 				default:

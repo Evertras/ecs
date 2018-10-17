@@ -4,6 +4,7 @@
 #include <Components.h>
 #include <SystemEntityCollision.h>
 #include <SystemEntityCollision.cpp>
+#include <Actions.cpp>
 
 SCENARIO("Ability: Firestream") {
 	GIVEN("a firestream projectile and enemy that are more than 1 unit apart") {

@@ -65,10 +65,10 @@ namespace Component {
 	};
 
 	struct AbilitiesPyromancer {
-		AbilitiesPyromancer() : gcd(0.f), cooldownFireStream(0.f) {}
+		AbilitiesPyromancer() : cooldownFireStream(0.f), cooldownIgnite(0.f) {}
 
-		float gcd;
 		float cooldownFireStream;
+		float cooldownIgnite;
 	};
 
 	struct LifetimeTimer {
@@ -80,18 +80,23 @@ namespace Component {
 	struct Ability {
 		enum ABILITY_TYPE {
 			ABILITY_FIRESTREAM,
+			ABILITY_IGNITE,
 
 			NUM_ABILITIES,
 			ABILITY_NONE
 		};
 
 		Ability() : type(ABILITY_NONE), friendly(false) {}
-		Ability(ABILITY_TYPE t, ECS::EntityID s, bool f) : type(t), source(s), friendly(f) {}
+		Ability(ABILITY_TYPE t, ECS::EntityID s, bool f, float p1 = 0.f, float p2 = 0.f)
+			: type(t), source(s), friendly(f), param1(p1), param2(p2) {}
 
 		ABILITY_TYPE type;
 
 		ECS::EntityID source;
 		bool friendly;
+
+		float param1;
+		float param2;
 	};
 
 	struct EffectBurn {
