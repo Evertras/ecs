@@ -10,5 +10,5 @@ public:
 	bool MoveRightPressed() const { return KeyPressed(SDL_SCANCODE_RIGHT) || KeyPressed(SDL_SCANCODE_F); }
 
 	bool CancelPressed() const { return KeyPressed(SDL_SCANCODE_ESCAPE); }
-	bool ConfirmPressed() const { return KeyPressed(SDL_SCANCODE_SPACE); }
+	bool ConfirmPressed() const { return KeyPressed(SDL_SCANCODE_SPACE) || KeyPressed(SDL_SCANCODE_RETURN); }
 };

@@ -21,6 +21,8 @@ private:
 
 	InputStateMenu m_InputState;
 
+	int m_SelectionIndex;
+
 	std::unique_ptr<class RenderTargetSprite> m_SpriteTarget;
 	std::unique_ptr<class RenderTargetText> m_TextTarget;
 

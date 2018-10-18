@@ -2,10 +2,11 @@
 
 #include "Component.h"
 #include "GameStatePlay.h"
+#include "GameStateEdit.h"
 #include "RenderTargetSprite.h"
 #include "RenderTargetText.h"
 
-GameStateTitle::GameStateTitle(SDL_Window* window) : m_Window(window)
+GameStateTitle::GameStateTitle(SDL_Window* window) : m_Window(window), m_SelectionIndex(0)
 {
 	// Shaders
 	{
@@ -47,9 +48,61 @@ std::unique_ptr<GameState> GameStateTitle::Update(ECS::DeltaSeconds d) {
 		SDL_PushEvent(&quitEvent);
 	}
 
-	m_TextTarget->QueueText("START", glm::vec2{ -2.f, -2.f }, Color::Green, 0.5f);
-	m_TextTarget->QueueText("EDIT", glm::vec2{ -2.f, -1.f }, Color::LightBlue, 0.5f);
-	m_TextTarget->QueueText("QUIT", glm::vec2{ -2.f, 0.f }, Color::Damage, 0.5f);
+	// TODO: All of this is awful, make it better later with an actual menu system...
+	if (m_InputState.MoveUpPressed()) {
+		if (--m_SelectionIndex < 0) {
+			m_SelectionIndex = 2;
+		}
+	}
+
+	if (m_InputState.MoveDownPressed()) {
+		if (++m_SelectionIndex > 2) {
+			m_SelectionIndex = 0;
+		}
+	}
+
+	if (m_SelectionIndex == 0) {
+		m_TextTarget->QueueText("START", glm::vec2{ 0.f, 0.f }, Color::White, 0.5f);
+	}
+	else {
+		m_TextTarget->QueueText("START", glm::vec2{ 0.f, 0.f }, Color::Black, 0.5f);
+	}
+
+	if (m_SelectionIndex == 1) {
+		m_TextTarget->QueueText("EDIT", glm::vec2{ 0.f, 1.f }, Color::White, 0.5f);
+	}
+	else {
+		m_TextTarget->QueueText("EDIT", glm::vec2{ 0.f, 1.f }, Color::Black, 0.5f);
+	}
+
+	if (m_SelectionIndex == 2) {
+		m_TextTarget->QueueText("QUIT", glm::vec2{ 0.f, 2.f }, Color::White, 0.5f);
+	}
+	else {
+		m_TextTarget->QueueText("QUIT", glm::vec2{ 0.f, 2.f }, Color::Black, 0.5f);
+	}
+
+	if (m_InputState.ConfirmPressed()) {
+		switch (m_SelectionIndex) {
+		case 0:
+			return std::make_unique<GameStatePlay>(m_Window);
+
+		case 1:
+			return std::make_unique<GameStateEdit>(m_Window);
+
+		case 2:
+			SDL_Event quitEvent;
+
+			quitEvent.type = SDL_QUIT;
+
+			// Memory is copied, okay to go out of scope after this
+			SDL_PushEvent(&quitEvent);
+			break;
+
+		default:
+			SDL_Log("Unexpected selection index: %d", m_SelectionIndex);
+		}
+	}
 
 	m_InputState.UpdateLastState();
 
