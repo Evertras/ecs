@@ -6,6 +6,7 @@
 
 #include "GameStateEdit.h"
 #include "GameStatePlay.h"
+#include "GameStateSandbox.h"
 
 Game::Game() : m_Window(nullptr), m_IsRunning(false)
 {
@@ -55,7 +56,7 @@ bool Game::Initialize() {
 		glGetError();
 	}
 
-	m_GameState = std::unique_ptr<GameState>(new GameStateEdit(m_Window));
+	m_GameState = std::unique_ptr<GameState>(new GameStateSandbox(m_Window));
 
 	return true;
 }

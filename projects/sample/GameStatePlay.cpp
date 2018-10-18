@@ -5,8 +5,8 @@
 
 #include "EntityFactory.h"
 
-#include "RenderTargetDamage.h"
 #include "RenderTargetSprite.h"
+#include "RenderTargetText.h"
 #include "RenderTargetTile.h"
 
 #include "SystemAISkeleton.h"
@@ -46,7 +46,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		// Actual render targets
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
 		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>(*m_SpriteShader.get(), m_DungeonTileset, 16);
-		m_DamageTarget = std::make_unique<RenderTargetDamage>(*m_SpriteShader.get(), Assets::Factory::CreateSpriteFont());
+		m_DamageTarget = std::make_unique<RenderTargetText>(*m_SpriteShader.get(), Assets::Factory::CreateSpriteFont());
 		m_HealthBarTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
 	}
 
