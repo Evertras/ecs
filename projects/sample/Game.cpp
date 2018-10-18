@@ -7,6 +7,7 @@
 #include "GameStateEdit.h"
 #include "GameStatePlay.h"
 #include "GameStateSandbox.h"
+#include "GameStateTitle.h"
 
 Game::Game() : m_Window(nullptr), m_IsRunning(false)
 {
@@ -56,7 +57,7 @@ bool Game::Initialize() {
 		glGetError();
 	}
 
-	m_GameState = std::unique_ptr<GameState>(new GameStateSandbox(m_Window));
+	m_GameState = std::unique_ptr<GameState>(new GameStateTitle(m_Window));
 
 	return true;
 }
