@@ -7,7 +7,7 @@
 
 class SystemInputPyromancer : public ECS::BaseSystem {
 public:
-	SystemInputPyromancer(InputStatePlay &input) : m_InputState(input), m_FirestreamAnimation(Assets::Factory::CreateAnimation(Assets::ANIM_FIRE)) {}
+	SystemInputPyromancer(InputStatePlay &input) : m_InputState(input), m_FirestreamAnimation(Assets::Factory::GetAnimation(Assets::ANIM_FIRE)) {}
 
 	void Run(ECS::EntityList& el, ECS::DeltaSeconds d) override;
 

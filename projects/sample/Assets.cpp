@@ -46,17 +46,35 @@ Texture Factory::GetTexture(const char* filename)
 	return iter->second->m_Data;
 }
 
-SpriteAnimation Factory::CreateAnimation(Assets::ANIM anim) {
+SpriteAnimation Factory::GetAnimation(Assets::ANIM anim) {
+	// TODO: This is potentially a lot of copying of frame vectors,
+	// it would be better to have handles to the animations rather
+	// than copies... fix if it becomes a problem
+	auto iter = m_Instance.m_Animations.find(anim);
+
+	if (iter != m_Instance.m_Animations.end()) {
+		return iter->second;
+	}
+
 	// Make this not terrible later with registration/init
 	std::vector<CropRect> frames;
 
 	switch (anim) {
 	case ANIM_FIRE:
-		return SpriteAnimation(
+		m_Instance.m_Animations[anim] = SpriteAnimation(
 			m_Instance.GetTexture("assets/fire.png"),
 			GetFramesFromFile("assets/fire.txt"),
 			60,
 			false);
+		break;
+
+	case ANIM_EXPLOSION:
+		m_Instance.m_Animations[anim] = SpriteAnimation(
+			m_Instance.GetTexture("assets/explosion.png"),
+			GetFramesFromFile("assets/explosion.txt"),
+			120,
+			false);
+		break;
 
 	case ANIM_WIZARD_IDLE:
 		frames = {
@@ -66,27 +84,31 @@ SpriteAnimation Factory::CreateAnimation(Assets::ANIM anim) {
 			{48, 24, 16, 24},
 		};
 
-		return SpriteAnimation(
+		m_Instance.m_Animations[anim] = SpriteAnimation(
 			m_Instance.GetTexture("assets/wizard.png"),
 			frames,
 			12,
 			true);
+		break;
 
 	case ANIM_SKELETON_IDLE:
 		frames = {
 			{16, 9*16, 16, 16},
 		};
 
-		return SpriteAnimation(
+		m_Instance.m_Animations[anim] = SpriteAnimation(
 			m_Instance.GetTexture("assets/tileset_dungeon.png"),
 			frames,
 			1,
 			false);
+		break;
 
 	default:
 		SDL_Log("Unexpected animation request: %d", anim);
 		throw std::invalid_argument("Texture undefined");
 	}
+
+	return m_Instance.m_Animations[anim];
 }
 
 SpriteFont Factory::CreateSpriteFont() {

@@ -17,7 +17,7 @@ public:
 		m_LevelData(level),
 		m_On(true)
 	{
-		m_SkeletonSprite = Assets::Factory::CreateAnimation(Assets::ANIM_SKELETON_IDLE);
+		m_SkeletonSprite = Assets::Factory::GetAnimation(Assets::ANIM_SKELETON_IDLE);
 	}
 
 	void Run(ECS::EntityList& el, ECS::DeltaSeconds d);

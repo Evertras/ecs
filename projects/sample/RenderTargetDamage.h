@@ -4,7 +4,7 @@
 
 class RenderTargetDamage {
 public:
-	RenderTargetDamage(Assets::SpriteShader& shader, Assets::SpriteFont font) : m_Font(font), m_SpriteTarget(shader) {}
+	RenderTargetDamage(Assets::SpriteShader& shader, Assets::SpriteFont font) : m_Font(font), m_SpriteTarget(shader, true) {}
 	~RenderTargetDamage() {}
 	RenderTargetDamage(const RenderTargetDamage& rhs) = delete;
 

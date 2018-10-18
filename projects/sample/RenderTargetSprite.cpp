@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "RenderTargetSprite.h"
 
-RenderTargetSprite::RenderTargetSprite(Assets::SpriteShader &shader) : m_Shader(shader)
+RenderTargetSprite::RenderTargetSprite(Assets::SpriteShader &shader, bool flipY) : m_Shader(shader), m_FlipY(flipY)
 {
 	m_Requests.reserve(static_cast<size_t>(1000));
 
@@ -64,11 +64,18 @@ void RenderTargetSprite::QueueSprite(
 		));
 	request.color = color;
 
-
 	for (auto iter = m_Requests.begin(); iter != m_Requests.end(); ++iter) {
-		if (iter->bottomCenter.y > bottomCenter.y) {
-			m_Requests.insert(iter, request);
-			return;
+		if (m_FlipY) {
+			if (iter->bottomCenter.y < bottomCenter.y) {
+				m_Requests.insert(iter, request);
+				return;
+			}
+		}
+		else {
+			if (iter->bottomCenter.y > bottomCenter.y) {
+				m_Requests.insert(iter, request);
+				return;
+			}
 		}
 	}
 

@@ -12,7 +12,7 @@ void Actions::Damage(ECS::EntityList& el, ECS::Entity& target, float amount) {
 		number->AddComponent(Component::DamageNumber{ static_cast<int>(amount) });
 		number->AddComponent(Component::Position{ {target.Data<Component::Position>().pos + glm::vec2{0.f, -0.5f} } });
 		number->AddComponent(Component::Velocity{ glm::rotate(glm::vec2{ 0.f, -speedScale }, glm::linearRand(-0.2f, 0.2f)) });
-		number->AddComponent(Component::LifetimeTimer{ 1.5f });
+		number->AddComponent(Component::LifetimeTimer{ 1.f + speedScale*2 });
 
 		el.Add(std::move(number));
 	}

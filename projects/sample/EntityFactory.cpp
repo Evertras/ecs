@@ -3,12 +3,12 @@
 #include "EntityFactory.h"
 
 const float PlayerSpeed = 3.f;
-const float SkeletonSpeed = 0.5f;
+const float SkeletonSpeed = 1.5f;
 
 std::unique_ptr<ECS::Entity> EntityFactory::PlayerPyromancer(glm::vec2 pos) {
 	auto player = std::make_unique<ECS::Entity>();
 
-	player->AddComponent(Component::AnimatedSprite(Assets::Factory::CreateAnimation(Assets::ANIM_WIZARD_IDLE), 1.f));
+	player->AddComponent(Component::AnimatedSprite(Assets::Factory::GetAnimation(Assets::ANIM_WIZARD_IDLE), 1.f));
 	player->AddComponent(Component::Position{ pos });
 	player->AddComponent(Component::Velocity{ {0.f, 0.f } });
 	player->AddComponent(Component::InputMove{});
@@ -24,7 +24,7 @@ std::unique_ptr<ECS::Entity> EntityFactory::PlayerPyromancer(glm::vec2 pos) {
 std::unique_ptr<ECS::Entity> EntityFactory::EnemySkeleton(glm::vec2 pos) {
 	auto enemy = std::make_unique<ECS::Entity>();
 
-	enemy->AddComponent(Component::AnimatedSprite(Assets::Factory::CreateAnimation(Assets::ANIM_SKELETON_IDLE), 0.5f));
+	enemy->AddComponent(Component::AnimatedSprite(Assets::Factory::GetAnimation(Assets::ANIM_SKELETON_IDLE), 0.5f));
 	enemy->AddComponent(Component::Position{ pos });
 	enemy->AddComponent(Component::Velocity{ {0.f, 0.f } });
 	enemy->AddComponent<Component::Enemy>({});
@@ -34,6 +34,18 @@ std::unique_ptr<ECS::Entity> EntityFactory::EnemySkeleton(glm::vec2 pos) {
 	enemy->AddComponent(Component::Health(100.f));
 
 	return std::move(enemy);
+}
+
+std::unique_ptr<ECS::Entity> EntityFactory::VfxExplosion(glm::vec2 pos, float scale) {
+	auto explosion = std::make_unique<ECS::Entity>();
+
+	pos.y += 0.25f*scale;
+
+	explosion->AddComponent(Component::Position{ pos });
+	explosion->AddComponent(Component::AnimatedSprite(Assets::Factory::GetAnimation(Assets::ANIM_EXPLOSION), scale));
+	explosion->AddComponent(Component::LifetimeAnimation{});
+
+	return std::move(explosion);
 }
 
 std::unique_ptr<ECS::Entity> EntityFactory::Contains(Assets::Level::ContainsType type, glm::vec2 pos) {

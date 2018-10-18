@@ -1,7 +1,9 @@
 #include "pch.h"
 
-#include "Components.h"
 #include "SystemInputPyromancer.h"
+
+#include "Components.h"
+#include "EntityFactory.h"
 
 void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	ECS::Entity* player = el.First<Component::Player, Component::AbilitiesPyromancer>();
@@ -76,6 +78,7 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 			igniteExplosion->AddComponent(Component::Position{ { pos } });
 
 			el.Add(std::move(igniteExplosion));
+			el.Add(EntityFactory::VfxExplosion(pos, 1.f));
 		};
 
 		el.Run<Component::EffectBurn, Component::Position>(f, d);

@@ -6,7 +6,7 @@
 class RenderTargetSprite
 {
 public:
-	RenderTargetSprite(Assets::SpriteShader &shader);
+	RenderTargetSprite(Assets::SpriteShader &shader, bool flipY = false);
 	~RenderTargetSprite();
 
 	void QueueSprite(
@@ -47,6 +47,9 @@ private:
 
 	// Sorted by Z value
 	std::vector<PendingDrawRequest> m_Requests;
+
+	// If true, show higher on top... if false, show lower on top
+	bool m_FlipY;
 
 	void QueueSprite(
 		const Assets::Texture &texture,

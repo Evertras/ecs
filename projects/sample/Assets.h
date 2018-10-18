@@ -33,6 +33,7 @@ namespace Assets {
 	enum ANIM {
 		// Spell effects
 		ANIM_FIRE,
+		ANIM_EXPLOSION,
 
 		// Player animations
 		ANIM_WIZARD_IDLE,
@@ -97,7 +98,7 @@ namespace Assets {
 	{
 	public:
 		static Texture GetTexture(const char* filename);
-		static SpriteAnimation CreateAnimation(ANIM anim);
+		static SpriteAnimation GetAnimation(ANIM anim);
 		static SpriteFont CreateSpriteFont();
 
 	private:
@@ -117,6 +118,7 @@ namespace Assets {
 		static std::vector<CropRect> GetFramesFromFile(const char *filename);
 
 		std::map<const char*, std::unique_ptr<LoadedTexture>> m_Textures;
+		std::map<ANIM, SpriteAnimation> m_Animations;
 
 		static Factory m_Instance;
 	};
