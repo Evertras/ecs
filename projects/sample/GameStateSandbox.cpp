@@ -79,7 +79,7 @@ std::unique_ptr<GameState> GameStateSandbox::Update(ECS::DeltaSeconds d) {
 		SDL_PushEvent(&quitEvent);
 	}
 
-	m_TextTarget->QueueText("IJKLMNOPQRSTUV", glm::vec2{ -2.f, -2.f }, Color::Green, 0.5f);
+	m_TextTarget->QueueText("MNOPQRSTUVWXYZ", glm::vec2{ -2.f, -2.f }, Color::Green, 0.5f);
 
 	m_InputStateEdit.UpdateLastState();
 	m_InputStatePlay.UpdateLastState();
