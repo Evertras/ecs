@@ -30,8 +30,6 @@ GameStateTitle::GameStateTitle(SDL_Window* window) : m_Window(window), m_Selecti
 		SDL_GetWindowSize(m_Window, &windowWidth, &windowHeight);
 		m_SystemCamera = std::make_unique<SystemCamera>(static_cast<float>(windowWidth), static_cast<float>(windowHeight));
 	}
-
-
 }
 
 GameStateTitle::~GameStateTitle() {}
@@ -48,7 +46,7 @@ std::unique_ptr<GameState> GameStateTitle::Update(ECS::DeltaSeconds d) {
 		SDL_PushEvent(&quitEvent);
 	}
 
-	// TODO: All of this is awful, make it better later with an actual menu system...
+	// TODO: All of the following is awful, make it better later with an actual menu system when more is needed...
 	if (m_InputState.MoveUpPressed()) {
 		if (--m_SelectionIndex < 0) {
 			m_SelectionIndex = 2;
