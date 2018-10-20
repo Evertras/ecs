@@ -97,11 +97,11 @@ namespace UI {
 
 			switch (m_Attachment.child) {
 			case AP_TOP:
-				m_AbsoluteCenter += glm::vec2{ 0.f, -0.5f * m_Dimensions.height };
+				m_AbsoluteCenter += glm::vec2{ 0.f, 0.5f * m_Dimensions.height };
 				break;
 
 			case AP_BOTTOM:
-				m_AbsoluteCenter += glm::vec2{ 0.f, 0.5f * m_Dimensions.height };
+				m_AbsoluteCenter += glm::vec2{ 0.f, -0.5f * m_Dimensions.height };
 				break;
 
 			case AP_RIGHT:
