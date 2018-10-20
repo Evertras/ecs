@@ -12,11 +12,6 @@ GameStateTitle::GameStateTitle(SDL_Window* window) : m_Window(window), m_Selecti
 	// Shaders
 	{
 		m_SpriteShader = std::make_unique<Assets::SpriteShader>();
-
-		if (!m_SpriteShader->Load("assets/shaders/basic.vert", "assets/shaders/basic.frag")) {
-			SDL_Log("Failed to load basic shader pair");
-			return;
-		}
 	}
 
 	// Render targets

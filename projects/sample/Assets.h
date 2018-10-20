@@ -1,6 +1,8 @@
 #pragma once
 #include "pch.h"
 
+#include "Shader.h"
+
 namespace Assets {
 	typedef GLuint TextureID;
 
@@ -123,38 +125,6 @@ namespace Assets {
 		static Factory m_Instance;
 	};
 
-	class SpriteShader
-	{
-	public:
-		SpriteShader();
-		~SpriteShader();
-
-		bool Load(const char* vertName, const char* fragName);
-		void Unload();
-		void SetActive();
-
-		GLuint GetProgramId() const { return m_ShaderProgram; }
-
-		void SetMVP(const glm::mat4& mvp) { glUniformMatrix4fv(m_MVP, 1, GL_FALSE, glm::value_ptr(mvp)); }
-		void SetSpriteBrightness(float brightness) { glUniform4f(m_SpriteColor, brightness, brightness, brightness, 1.f); }
-		void SetSpriteColor(const glm::vec4& color) { glUniform4f(m_SpriteColor, color.r, color.g, color.b, color.a); }
-
-		void SetTextureClipRect(int texWidth, int texHeight, int x, int y, int width, int height);
-		void ResetTextureClipRect();
-
-	private:
-		bool CompileShader(const char* fileName, GLenum shaderType, GLuint &outShader);
-		bool IsCompiled(GLuint shader);
-		bool IsValidProgram();
-
-		GLuint m_VertexShader;
-		GLuint m_FragShader;
-		GLuint m_ShaderProgram;
-
-		GLuint m_MVP;
-		GLuint m_TextureRect;
-		GLuint m_SpriteColor;
-	};
 
 	class Level {
 	public:
