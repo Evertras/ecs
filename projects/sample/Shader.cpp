@@ -117,7 +117,7 @@ SpriteShader::SpriteShader() : Shader("assets/shaders/sprite.vert", "assets/shad
 	SDL_Log("SpriteShader Sprite Color ID = %d", m_SpriteColor);
 }
 
-RectShader::RectShader() : Shader("assets/shaders/rect.vert", "assets/shaders/rect.frag") {
+UIRectShader::UIRectShader() : Shader("assets/shaders/uiRect.vert", "assets/shaders/uiRect.frag") {
 	m_MVP = glGetUniformLocation(m_ShaderProgram, "MVP");
 	SDL_Log("RectShader MVP ID = %d", m_MVP);
 

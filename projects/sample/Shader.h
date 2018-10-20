@@ -22,12 +22,12 @@ namespace Assets {
 		GLuint m_ShaderProgram;
 	};
 
-	class RectShader : public Shader
+	class UIRectShader : public Shader
 	{
 	public:
-		RectShader();
-		~RectShader() {}
-		RectShader(const RectShader& rhs) = delete;
+		UIRectShader();
+		~UIRectShader() {}
+		UIRectShader(const UIRectShader& rhs) = delete;
 
 		void SetMVP(const glm::mat4& mvp) { glUniformMatrix4fv(m_MVP, 1, GL_FALSE, glm::value_ptr(mvp)); }
 		void SetRectColor(const glm::vec4& color) { glUniform4f(m_RectColor, color.r, color.g, color.b, color.a); }

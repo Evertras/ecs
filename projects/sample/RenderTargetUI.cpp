@@ -2,7 +2,7 @@
 
 #include "RenderTargetUI.h"
 
-RenderTargetUI::RenderTargetUI(Assets::SpriteShader& rectShader) : m_RectShader(rectShader) {
+RenderTargetUI::RenderTargetUI(Assets::UIRectShader& rectShader) : m_RectShader(rectShader) {
 	float vertexBuffer[] = {
 		-0.5f, -0.5f, 1.0f, 0.f, 0.f,
 		0.5f, -0.5f, 1.0f, 1.f, 0.f,

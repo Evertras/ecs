@@ -5,6 +5,7 @@
 #include "RenderTargetSprite.h"
 #include "RenderTargetText.h"
 #include "RenderTargetTile.h"
+#include "RenderTargetUI.h"
 
 #include "SystemCamera.h"
 #include "SystemInputLevelEdit.h"
@@ -16,15 +17,40 @@
 
 GameStateSandbox::GameStateSandbox(SDL_Window* window) : m_Window(window)
 {
+	// TODO: Figure out how to handle resizes when resizing becomes a thing
+	int windowWidth, windowHeight;
+	SDL_GetWindowSize(m_Window, &windowWidth, &windowHeight);
+
 	{
 		// Shaders
 		m_SpriteShader = std::make_unique<Assets::SpriteShader>();
+		m_RectShader = std::make_unique<Assets::UIRectShader>();
 	}
 
 	// Render targets
 	{
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
 		m_TextTarget = std::make_unique<RenderTargetText>(*m_SpriteShader.get(), Assets::Factory::CreateSpriteFont());
+		m_UITarget = std::make_unique<RenderTargetUI>(*m_RectShader.get());
+	}
+
+	// UI
+	{
+		UI::Dimensions screen;
+
+		float ratio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
+
+		if (ratio < 1.f) {
+			screen.width = 1.f;
+			screen.height = 1.f / ratio;
+		}
+		else {
+			screen.width = ratio;
+			screen.height = 1.f;
+		}
+
+
+		m_UIRoot = std::make_unique<UI::BaseContainer>(screen);
 	}
 
 	// Sandbox for initial entities
@@ -43,9 +69,6 @@ GameStateSandbox::GameStateSandbox(SDL_Window* window) : m_Window(window)
 		// Mechanical systems
 		m_Systems.push_back(std::make_unique<SystemVelocity>());
 
-		// TODO: Figure out how to handle resizes when resizing becomes a thing
-		int windowWidth, windowHeight;
-		SDL_GetWindowSize(m_Window, &windowWidth, &windowHeight);
 		std::unique_ptr<SystemCamera> camera = std::make_unique<SystemCamera>(static_cast<float>(windowWidth), static_cast<float>(windowHeight));
 		m_SystemCamera = camera.get();
 		m_Systems.push_back(std::move(camera));
@@ -92,4 +115,5 @@ void GameStateSandbox::Draw() {
 
 	m_SpriteTarget->Draw(m_SystemCamera->GetViewProjection());
 	m_TextTarget->Draw(m_SystemCamera->GetViewProjection());
+	m_UIRoot->Draw(m_UITarget.get());
 }

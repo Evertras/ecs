@@ -5,6 +5,7 @@
 #include "InputStateEdit.h"
 #include "InputStatePlay.h"
 #include "SystemCamera.h"
+#include "UI.h"
 #include <SDL/SDL.h>
 
 class GameStateSandbox : public GameState
@@ -26,12 +27,12 @@ private:
 	std::vector<std::unique_ptr<ECS::BaseSystem>> m_Systems;
 	std::unique_ptr<class RenderTargetSprite> m_SpriteTarget;
 	std::unique_ptr<class RenderTargetText> m_TextTarget;
+	std::unique_ptr<class RenderTargetUI> m_UITarget;
 
 	std::unique_ptr<Assets::SpriteShader> m_SpriteShader;
-	Assets::Texture m_DungeonTileset;
+	std::unique_ptr<Assets::UIRectShader> m_RectShader;
 
-	Assets::Level m_LevelData;
-	ECS::EntityID m_CursorID;
+	std::unique_ptr<UI::BaseContainer> m_UIRoot;
 
 	const SystemCamera *m_SystemCamera;
 };
