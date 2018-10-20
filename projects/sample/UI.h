@@ -14,6 +14,7 @@ namespace UI {
 
 	struct Attachment {
 		Attachment() : parent(AP_CENTER), child(AP_CENTER) {}
+		Attachment(AnchorPoint parent, AnchorPoint child) : parent(parent), child(child) {}
 
 		AnchorPoint parent;
 		AnchorPoint child;
@@ -36,13 +37,16 @@ namespace UI {
 		const Dimensions& GetDimensions() const { return m_Dimensions; }
 
 	protected:
-		Element(Dimensions d, Attachment a) : m_Dimensions(d), m_Attachment(a) {}
+		Element(const Element* parent, Dimensions d, Attachment a)
+			: m_Parent(parent), m_Dimensions(d), m_Attachment(a) {
+			UpdateAbsoluteCenter();
+		}
 		virtual ~Element() {}
 		Element(const Element &rhs) = default;
 
 		void UpdateAbsoluteCenter() {
 			if (m_Parent == nullptr) {
-				m_AbsoluteCenter = m_RelativeCenter;
+				m_AbsoluteCenter = { m_Dimensions.width * 0.5f, m_Dimensions.height * 0.5f };
 				return;
 			}
 
@@ -87,15 +91,20 @@ namespace UI {
 
 		Dimensions m_Dimensions;
 		Attachment m_Attachment;
-		Element* m_Parent;
+		const Element* m_Parent;
 		std::vector<Element*> m_Children;
 		glm::vec2 m_RelativeCenter;
 		glm::vec2 m_AbsoluteCenter;
 	};
 
+	class BasePanel : public Element {
+	public:
+		BasePanel(Dimensions d) : Element(nullptr, d, Attachment(AP_CENTER, AP_CENTER)) {}
+	};
+
 	class Panel : public Element {
 	public:
-		Panel(Dimensions d, Attachment a) : Element(d, a) {}
+		Panel(const Element* parent, Dimensions d, Attachment a) : Element(parent, d, a) {}
 		~Panel() = default;
 		Panel(const Panel &rhs) = default;
 	};
