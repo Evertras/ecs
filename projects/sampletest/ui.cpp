@@ -72,6 +72,34 @@ SCENARIO("UI Structure for Panel") {
 					REQUIRE(p.GetAbsoluteCenter().y == basePanel.GetAbsoluteCenter().y);
 				}
 			}
+
+			AND_GIVEN("the panel's anchor point changes to the base panel's top") {
+				UI::Attachment newAttachment;
+
+				newAttachment.child = UI::AP_CENTER;
+				newAttachment.parent = UI::AP_TOP;
+
+				p.SetAttachment(newAttachment);
+
+				THEN("the panel's absolute center should be at the top center of the base panel") {
+					REQUIRE(p.GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
+					REQUIRE(p.GetAbsoluteCenter().y == Approx(0.f));
+				}
+			}
+
+			AND_GIVEN("the panel's anchor point changes to match its right to the base panel's right") {
+				UI::Attachment newAttachment;
+
+				newAttachment.child = UI::AP_RIGHT;
+				newAttachment.parent = UI::AP_RIGHT;
+
+				p.SetAttachment(newAttachment);
+
+				THEN("the panel's absolute center should be at the right of the screen, offset inwards") {
+					REQUIRE(p.GetAbsoluteCenter().x == Approx(baseDimensions.width - d.width*0.5f));
+					REQUIRE(p.GetAbsoluteCenter().y == basePanel.GetAbsoluteCenter().y);
+				}
+			}
 		}
 
 		AND_GIVEN("a single Panel attached from the base's center to its own top") {

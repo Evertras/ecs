@@ -105,11 +105,11 @@ namespace UI {
 				break;
 
 			case AP_RIGHT:
-				m_AbsoluteCenter += glm::vec2{ 0.5f * m_Dimensions.width, 0.f };
+				m_AbsoluteCenter += glm::vec2{ -0.5f * m_Dimensions.width, 0.f };
 				break;
 
 			case AP_LEFT:
-				m_AbsoluteCenter += glm::vec2{ -0.5f * m_Dimensions.width, 0.f };
+				m_AbsoluteCenter += glm::vec2{ 0.5f * m_Dimensions.width, 0.f };
 				break;
 			}
 
