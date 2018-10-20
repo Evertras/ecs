@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Assets.h"
+#include "UI.h"
 
 class RenderTargetUI {
 public:
@@ -8,7 +9,7 @@ public:
 	~RenderTargetUI() {}
 	RenderTargetUI(RenderTargetUI& rhs) = delete;
 
-	void DrawIcon(const Assets::Texture& icon);
+	void Draw(const UI::Element* root);
 
 private:
 	Assets::SpriteShader& m_Shader;

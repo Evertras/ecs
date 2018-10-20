@@ -2,5 +2,5 @@
 
 #include "RenderTargetUI.h"
 
-void RenderTargetUI::DrawIcon(const Assets::Texture& icon) {
+void RenderTargetUI::Draw(const UI::Element* root) {
 }

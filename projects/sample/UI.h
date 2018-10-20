@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <glm/vec2.hpp>
+#include <glm/vec4.hpp>
 
 namespace UI {
 	enum AnchorPoint {
@@ -25,6 +26,11 @@ namespace UI {
 		float height;
 	};
 
+	class ElementRenderer {
+	public:
+		virtual void RenderRect(glm::vec2 center, Dimensions d, glm::vec4 color) = 0;
+	};
+
 	class Element {
 	public:
 		void SetDimensions(Dimensions d) { m_Dimensions = d; UpdateAbsoluteCenter(); }
@@ -39,9 +45,17 @@ namespace UI {
 		const Element* GetParent() const { return m_Parent; }
 		const std::vector<Element*>& GetChildren() const { return m_Children; }
 
+		void Draw(ElementRenderer* renderer) const {
+			DrawReceive(renderer);
+
+			for (auto iter = m_Children.begin(); iter != m_Children.end(); ++iter) {
+				(*iter)->Draw(renderer);
+			}
+		}
+
 	protected:
-		Element(Element* parent, Dimensions d, Attachment a)
-			: m_Parent(parent), m_Dimensions(d), m_Attachment(a) {
+		Element(Element* parent, glm::vec2 center, Dimensions d, Attachment a)
+			: m_Parent(parent), m_RelativeCenter(center), m_Dimensions(d), m_Attachment(a) {
 			UpdateAbsoluteCenter();
 
 			if (m_Parent != nullptr) {
@@ -61,6 +75,8 @@ namespace UI {
 		}
 
 		Element(const Element &rhs) = default;
+
+		virtual void DrawReceive(ElementRenderer* renderer) const = 0;
 
 		void UpdateChildrenAbsoluteCenter() {
 			for (auto e : m_Children) {
@@ -124,15 +140,29 @@ namespace UI {
 		glm::vec2 m_AbsoluteCenter;
 	};
 
-	class BasePanel : public Element {
+	class BaseContainer : public Element {
 	public:
-		BasePanel(Dimensions d) : Element(nullptr, d, Attachment(AP_CENTER, AP_CENTER)) {}
+		BaseContainer(Dimensions d) : Element(nullptr, { 0.f, 0.f }, d, Attachment(AP_CENTER, AP_CENTER)) {}
+
+	protected:
+		void DrawReceive(ElementRenderer* renderer) const override {}
 	};
 
 	class Panel : public Element {
 	public:
-		Panel(Element* parent, Dimensions d, Attachment a) : Element(parent, d, a) {}
+		Panel(Element* parent, glm::vec2 center, Dimensions d, Attachment a, glm::vec4 color = { 0.f, 0.f, 0.f, 0.f })
+			: Element(parent, center, d, a), m_Color(color) {}
 		~Panel() = default;
 		Panel(const Panel &rhs) = default;
+
+		void SetColor(const glm::vec4& color) { m_Color = color; }
+		const glm::vec4& GetColor() const { return m_Color; }
+
+	protected:
+		glm::vec4 m_Color;
+
+		void DrawReceive(ElementRenderer* renderer) const override {
+			renderer->RenderRect(m_AbsoluteCenter, m_Dimensions, m_Color);
+		}
 	};
 }

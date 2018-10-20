@@ -10,7 +10,7 @@ SCENARIO("UI Structure for BasePanel") {
 		d.width = 1.2f;
 		d.height = 1.f;
 
-		UI::BasePanel p(d);
+		UI::BaseContainer p(d);
 
 		THEN("the absolute center is calculated at the center of the screen") {
 			auto center = p.GetAbsoluteCenter();
@@ -39,7 +39,7 @@ SCENARIO("UI Structure for Panel") {
 		baseDimensions.width = 1.2f;
 		baseDimensions.height = 1.f;
 
-		UI::BasePanel basePanel(baseDimensions);
+		UI::BaseContainer basePanel(baseDimensions);
 
 		AND_GIVEN("a single Panel attached from center to center") {
 			UI::Dimensions d;
@@ -52,7 +52,9 @@ SCENARIO("UI Structure for Panel") {
 			a.parent = UI::AP_CENTER;
 			a.child = UI::AP_CENTER;
 
-			UI::Panel p(&basePanel, d, a);
+			glm::vec2 center{ 0.f, 0.f };
+
+			UI::Panel p(&basePanel, center, d, a);
 
 			THEN("the panel's absolute center should be the same as the base panel's") {
 				REQUIRE(basePanel.GetAbsoluteCenter() == p.GetAbsoluteCenter());
@@ -155,11 +157,109 @@ SCENARIO("UI Structure for Panel") {
 			a.parent = UI::AP_CENTER;
 			a.child = UI::AP_TOP;
 
-			UI::Panel p(&basePanel, d, a);
+			UI::Panel p(&basePanel, { 0.f, 0.f }, d, a);
 
 			THEN("the panel's absolute center should be offset correctly") {
 				REQUIRE(p.GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
 				REQUIRE(p.GetAbsoluteCenter().y == Approx(basePanel.GetAbsoluteCenter().y + 0.5f*d.height));
+			}
+		}
+	}
+}
+
+SCENARIO("Rendering UIs") {
+	class MockRenderer : public UI::ElementRenderer {
+	public:
+		MockRenderer() : m_RenderRectCount(0) {}
+
+		void RenderRect(glm::vec2 center, UI::Dimensions dimensions, glm::vec4 color) override {
+			++m_RenderRectCount;
+
+			m_LastRectCenter = center;
+			m_LastRectDimensions = dimensions;
+			m_LastRectColor = color;
+		}
+
+		int m_RenderRectCount;
+		glm::vec4 m_LastRectColor;
+		glm::vec2 m_LastRectCenter;
+		UI::Dimensions m_LastRectDimensions;
+	};
+
+	GIVEN("a UI with a base container and one child panel") {
+		UI::Dimensions screenDimensions;
+
+		screenDimensions.width = 1.2f;
+		screenDimensions.height = 1.f;
+
+		UI::BaseContainer root(screenDimensions);
+
+		UI::Dimensions panelDimensions;
+		UI::Attachment panelAttach(UI::AP_CENTER, UI::AP_CENTER);
+		glm::vec2 panelCenter{ 0.1f, 0.1f };
+		glm::vec4 panelColor{ 0.1f, 0.2f, 0.3f, 0.4f };
+
+		panelDimensions.width = 0.1f;
+		panelDimensions.height = 0.2f;
+
+		UI::Panel panel(&root, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
+
+		AND_GIVEN("Draw is called on the root") {
+			MockRenderer mock;
+
+			root.Draw(&mock);
+
+			THEN("the panel is drawn with the expected parameters") {
+				REQUIRE(mock.m_RenderRectCount == 1);
+
+				auto expectedCenter = panel.GetAbsoluteCenter();
+				REQUIRE(mock.m_LastRectCenter.x == expectedCenter.x);
+				REQUIRE(mock.m_LastRectCenter.y == expectedCenter.y);
+
+				REQUIRE(mock.m_LastRectColor.r == panelColor.r);
+				REQUIRE(mock.m_LastRectColor.g == panelColor.g);
+				REQUIRE(mock.m_LastRectColor.b == panelColor.b);
+				REQUIRE(mock.m_LastRectColor.a == panelColor.a);
+
+				REQUIRE(mock.m_LastRectDimensions.width == panelDimensions.width);
+				REQUIRE(mock.m_LastRectDimensions.height == panelDimensions.height);
+			}
+		}
+	}
+
+	GIVEN("a UI with a base container and three child panels that have one child panel each") {
+		UI::Dimensions screenDimensions;
+
+		screenDimensions.width = 1.2f;
+		screenDimensions.height = 1.f;
+
+		UI::BaseContainer root(screenDimensions);
+
+		UI::Dimensions panelDimensions;
+		UI::Attachment panelAttach(UI::AP_CENTER, UI::AP_CENTER);
+		glm::vec2 panelCenter{ 0.1f, 0.1f };
+		glm::vec4 panelColor{ 0.1f, 0.2f, 0.3f, 0.4f };
+
+		panelDimensions.width = 0.1f;
+		panelDimensions.height = 0.2f;
+
+		// Don't care that they're all on top of each other
+		UI::Panel panel(&root, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
+		UI::Panel panelChild(&panel, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
+
+		UI::Panel panel2(&root, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
+		UI::Panel panelChild2(&panel2, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
+
+		UI::Panel panel3(&root, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
+		UI::Panel panelChild3(&panel3, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
+
+		AND_GIVEN("Draw is called on the root") {
+			MockRenderer mock;
+
+			root.Draw(&mock);
+
+			THEN("six rects are drawn") {
+				REQUIRE(mock.m_RenderRectCount == 6);
 			}
 		}
 	}
