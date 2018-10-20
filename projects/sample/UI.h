@@ -36,17 +36,42 @@ namespace UI {
 		const glm::vec2& GetAbsoluteCenter() const { return m_AbsoluteCenter; }
 		const Dimensions& GetDimensions() const { return m_Dimensions; }
 
+		const Element* GetParent() const { return m_Parent; }
+		const std::vector<Element*>& GetChildren() const { return m_Children; }
+
 	protected:
-		Element(const Element* parent, Dimensions d, Attachment a)
+		Element(Element* parent, Dimensions d, Attachment a)
 			: m_Parent(parent), m_Dimensions(d), m_Attachment(a) {
 			UpdateAbsoluteCenter();
+
+			if (m_Parent != nullptr) {
+				m_Parent->m_Children.push_back(this);
+			}
 		}
-		virtual ~Element() {}
+
+		virtual ~Element() {
+			if (m_Parent != nullptr) {
+				for (auto iter = m_Parent->m_Children.begin(); iter != m_Parent->m_Children.end(); ++iter) {
+					if (*iter == this) {
+						m_Parent->m_Children.erase(iter);
+						break;
+					}
+				}
+			}
+		}
+
 		Element(const Element &rhs) = default;
+
+		void UpdateChildrenAbsoluteCenter() {
+			for (auto e : m_Children) {
+				e->UpdateAbsoluteCenter();
+			}
+		}
 
 		void UpdateAbsoluteCenter() {
 			if (m_Parent == nullptr) {
 				m_AbsoluteCenter = { m_Dimensions.width * 0.5f, m_Dimensions.height * 0.5f };
+				UpdateChildrenAbsoluteCenter();
 				return;
 			}
 
@@ -87,11 +112,13 @@ namespace UI {
 				m_AbsoluteCenter += glm::vec2{ -0.5f * m_Dimensions.width, 0.f };
 				break;
 			}
+
+			UpdateChildrenAbsoluteCenter();
 		}
 
 		Dimensions m_Dimensions;
 		Attachment m_Attachment;
-		const Element* m_Parent;
+		Element* m_Parent;
 		std::vector<Element*> m_Children;
 		glm::vec2 m_RelativeCenter;
 		glm::vec2 m_AbsoluteCenter;
@@ -104,7 +131,7 @@ namespace UI {
 
 	class Panel : public Element {
 	public:
-		Panel(const Element* parent, Dimensions d, Attachment a) : Element(parent, d, a) {}
+		Panel(Element* parent, Dimensions d, Attachment a) : Element(parent, d, a) {}
 		~Panel() = default;
 		Panel(const Panel &rhs) = default;
 	};
