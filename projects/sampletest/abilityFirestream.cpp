@@ -59,14 +59,14 @@ SCENARIO("Ability: Firestream") {
 
 			e->AddComponent<Component::Position>({ {1.f, 1.f} });
 			e->AddComponent(Component::Collision(0.1f, 0.1f, 0.1f, 0.1f));
-			e->AddComponent(Component::Ability(Component::Ability::ABILITY_FIRESTREAM, 0, true));
+			e->AddComponent(Component::Ability(Component::Ability::ABILITY_FIRESTREAM, 0, true, 1.f, 10.f));
 
 			el.Add(std::move(e));
 		}
 
 		SystemEntityCollision system;
 
-		system.Run(el, 0.f);
+		system.Run(el, 1.f);
 
 		THEN("the enemy is burning") {
 			REQUIRE(el.First<Component::EffectBurn>() == enemy);
@@ -78,7 +78,7 @@ SCENARIO("Ability: Firestream") {
 				Component::EffectBurn originalValues = enemy->Data<Component::EffectBurn>();
 
 				for (int i = 0; i < 1000; ++i) {
-					system.Run(el, 0.f);
+					system.Run(el, 1.f);
 				}
 
 				REQUIRE(enemy->Has<Component::EffectBurn>());
