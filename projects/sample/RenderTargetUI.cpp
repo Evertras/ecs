@@ -30,6 +30,8 @@ RenderTargetUI::RenderTargetUI(Assets::UIRectShader& rectShader) : m_RectShader(
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, reinterpret_cast<void*>(sizeof(float) * 3));
+
+	SetBaseSize({ 1.f, 1.f });
 }
 
 RenderTargetUI::~RenderTargetUI()
@@ -40,4 +42,17 @@ RenderTargetUI::~RenderTargetUI()
 }
 
 void RenderTargetUI::RenderRect(glm::vec2 center, UI::Dimensions dimensions, glm::vec4 color) {
+	// TODO: Can probably cache this more nicely down the road, but will need to nicely handle resize/moves...
+	auto model = glm::scale(glm::identity<glm::mat4>(), { 1.f, 1.f, 1.f });
+
+	m_RectShader.SetMVP(m_VP * model);
+	m_RectShader.SetRectColor(color);
+	m_RectShader.SetActive();
+
+	glBindVertexArray(m_RectVertexArray);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+}
+
+void RenderTargetUI::SetBaseSize(UI::Dimensions dimensions) {
+	m_VP = glm::ortho(-dimensions.width * 0.5f, dimensions.width * 0.5f, dimensions.height * 0.5f, -dimensions.height * 0.5f);
 }

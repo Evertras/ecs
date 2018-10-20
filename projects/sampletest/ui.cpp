@@ -54,15 +54,16 @@ SCENARIO("UI Structure for Panel") {
 
 			glm::vec2 center{ 0.f, 0.f };
 
-			UI::Panel p(&basePanel, center, d, a);
+			UI::Element *p = basePanel.AddChild(std::make_unique<UI::Panel>(center, d, a));
 
 			THEN("the panel's absolute center should be the same as the base panel's") {
-				REQUIRE(basePanel.GetAbsoluteCenter() == p.GetAbsoluteCenter());
+				REQUIRE(basePanel.GetAbsoluteCenter().x == p->GetAbsoluteCenter().x);
+				REQUIRE(basePanel.GetAbsoluteCenter().y == p->GetAbsoluteCenter().y);
 			}
 
 			THEN("the panel's dimensions should be unchanged") {
-				REQUIRE(d.width == p.GetDimensions().width);
-				REQUIRE(d.height == p.GetDimensions().height);
+				REQUIRE(d.width == p->GetDimensions().width);
+				REQUIRE(d.height == p->GetDimensions().height);
 			}
 
 			AND_GIVEN("the base panel's dimensions are changed") {
@@ -70,8 +71,8 @@ SCENARIO("UI Structure for Panel") {
 				basePanel.SetDimensions(newDimensions);
 
 				THEN("the panel's absolute center has been updated") {
-					REQUIRE(p.GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
-					REQUIRE(p.GetAbsoluteCenter().y == basePanel.GetAbsoluteCenter().y);
+					REQUIRE(p->GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
+					REQUIRE(p->GetAbsoluteCenter().y == basePanel.GetAbsoluteCenter().y);
 				}
 			}
 
@@ -81,11 +82,11 @@ SCENARIO("UI Structure for Panel") {
 				newAttachment.child = UI::AP_CENTER;
 				newAttachment.parent = UI::AP_TOP;
 
-				p.SetAttachment(newAttachment);
+				p->SetAttachment(newAttachment);
 
 				THEN("the panel's absolute center should be at the top center of the base panel") {
-					REQUIRE(p.GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
-					REQUIRE(p.GetAbsoluteCenter().y == Approx(0.f));
+					REQUIRE(p->GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
+					REQUIRE(p->GetAbsoluteCenter().y == Approx(0.f));
 				}
 			}
 
@@ -95,11 +96,11 @@ SCENARIO("UI Structure for Panel") {
 				newAttachment.child = UI::AP_RIGHT;
 				newAttachment.parent = UI::AP_RIGHT;
 
-				p.SetAttachment(newAttachment);
+				p->SetAttachment(newAttachment);
 
 				THEN("the panel's absolute center should be at the right of the screen, offset inwards") {
-					REQUIRE(p.GetAbsoluteCenter().x == Approx(baseDimensions.width - d.width * 0.5f));
-					REQUIRE(p.GetAbsoluteCenter().y == basePanel.GetAbsoluteCenter().y);
+					REQUIRE(p->GetAbsoluteCenter().x == Approx(baseDimensions.width - d.width * 0.5f));
+					REQUIRE(p->GetAbsoluteCenter().y == basePanel.GetAbsoluteCenter().y);
 				}
 			}
 
@@ -109,11 +110,11 @@ SCENARIO("UI Structure for Panel") {
 				newAttachment.child = UI::AP_LEFT;
 				newAttachment.parent = UI::AP_LEFT;
 
-				p.SetAttachment(newAttachment);
+				p->SetAttachment(newAttachment);
 
 				THEN("the panel's absolute center should be at the left of the screen, offset inwards") {
-					REQUIRE(p.GetAbsoluteCenter().x == Approx(d.width * 0.5f));
-					REQUIRE(p.GetAbsoluteCenter().y == basePanel.GetAbsoluteCenter().y);
+					REQUIRE(p->GetAbsoluteCenter().x == Approx(d.width * 0.5f));
+					REQUIRE(p->GetAbsoluteCenter().y == basePanel.GetAbsoluteCenter().y);
 				}
 			}
 
@@ -123,11 +124,11 @@ SCENARIO("UI Structure for Panel") {
 				newAttachment.child = UI::AP_BOTTOM;
 				newAttachment.parent = UI::AP_BOTTOM;
 
-				p.SetAttachment(newAttachment);
+				p->SetAttachment(newAttachment);
 
 				THEN("the panel's absolute center should be at the bottom of the screen, offset inwards") {
-					REQUIRE(p.GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
-					REQUIRE(p.GetAbsoluteCenter().y == Approx(baseDimensions.height - d.height * 0.5f));
+					REQUIRE(p->GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
+					REQUIRE(p->GetAbsoluteCenter().y == Approx(baseDimensions.height - d.height * 0.5f));
 				}
 			}
 
@@ -137,11 +138,11 @@ SCENARIO("UI Structure for Panel") {
 				newAttachment.child = UI::AP_TOP;
 				newAttachment.parent = UI::AP_TOP;
 
-				p.SetAttachment(newAttachment);
+				p->SetAttachment(newAttachment);
 
 				THEN("the panel's absolute center should be at the top of the screen, offset inwards") {
-					REQUIRE(p.GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
-					REQUIRE(p.GetAbsoluteCenter().y == Approx(d.height * 0.5f));
+					REQUIRE(p->GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
+					REQUIRE(p->GetAbsoluteCenter().y == Approx(d.height * 0.5f));
 				}
 			}
 		}
@@ -157,11 +158,11 @@ SCENARIO("UI Structure for Panel") {
 			a.parent = UI::AP_CENTER;
 			a.child = UI::AP_TOP;
 
-			UI::Panel p(&basePanel, { 0.f, 0.f }, d, a);
+			UI::Element* p = basePanel.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, d, a));
 
 			THEN("the panel's absolute center should be offset correctly") {
-				REQUIRE(p.GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
-				REQUIRE(p.GetAbsoluteCenter().y == Approx(basePanel.GetAbsoluteCenter().y + 0.5f*d.height));
+				REQUIRE(p->GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
+				REQUIRE(p->GetAbsoluteCenter().y == Approx(basePanel.GetAbsoluteCenter().y + 0.5f*d.height));
 			}
 		}
 	}
@@ -202,7 +203,7 @@ SCENARIO("Rendering UIs") {
 		panelDimensions.width = 0.1f;
 		panelDimensions.height = 0.2f;
 
-		UI::Panel panel(&root, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
+		UI::Element* panel = root.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
 
 		AND_GIVEN("Draw is called on the root") {
 			MockRenderer mock;
@@ -212,7 +213,7 @@ SCENARIO("Rendering UIs") {
 			THEN("the panel is drawn with the expected parameters") {
 				REQUIRE(mock.m_RenderRectCount == 1);
 
-				auto expectedCenter = panel.GetAbsoluteCenter();
+				auto expectedCenter = panel->GetAbsoluteCenter();
 				REQUIRE(mock.m_LastRectCenter.x == expectedCenter.x);
 				REQUIRE(mock.m_LastRectCenter.y == expectedCenter.y);
 
@@ -244,14 +245,14 @@ SCENARIO("Rendering UIs") {
 		panelDimensions.height = 0.2f;
 
 		// Don't care that they're all on top of each other
-		UI::Panel panel(&root, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
-		UI::Panel panelChild(&panel, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
+		UI::Element* panel = root.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
+		panel->AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
 
-		UI::Panel panel2(&root, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
-		UI::Panel panelChild2(&panel2, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
+		UI::Element* panel2 = root.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
+		panel2->AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
 
-		UI::Panel panel3(&root, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
-		UI::Panel panelChild3(&panel3, { 0.f, 0.f }, panelDimensions, panelAttach, panelColor);
+		UI::Element* panel3 = root.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
+		panel3->AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
 
 		AND_GIVEN("Draw is called on the root") {
 			MockRenderer mock;
