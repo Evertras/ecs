@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "GameStateEdit.h"
 
 #include "Component.h"

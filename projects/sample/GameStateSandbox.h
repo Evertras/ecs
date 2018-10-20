@@ -6,12 +6,11 @@
 #include "InputStatePlay.h"
 #include "SystemCamera.h"
 #include "UI.h"
-#include <SDL/SDL.h>
 
 class GameStateSandbox : public GameState
 {
 public:
-	GameStateSandbox(SDL_Window *window);
+	GameStateSandbox(struct SDL_Window *window);
 	~GameStateSandbox();
 	GameStateSandbox(const GameStateSandbox &rhs) = delete;
 
@@ -19,7 +18,7 @@ public:
 	void Draw() override;
 
 private:
-	SDL_Window* m_Window;
+	struct SDL_Window* m_Window;
 	InputStateEdit m_InputStateEdit;
 	InputStatePlay m_InputStatePlay;
 

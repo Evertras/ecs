@@ -1,6 +1,9 @@
 #pragma once
 
-#include "pch.h"
+#include <glew/glew.h>
+#include <glm/vec4.hpp>
+#include <glm/matrix.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Assets {
 	class Shader {

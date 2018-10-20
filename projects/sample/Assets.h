@@ -1,7 +1,10 @@
 #pragma once
-#include "pch.h"
 
 #include "Shader.h"
+
+#include <glew/glew.h>
+#include <map>
+#include <vector>
 
 namespace Assets {
 	typedef GLuint TextureID;
@@ -119,12 +122,11 @@ namespace Assets {
 
 		static std::vector<CropRect> GetFramesFromFile(const char *filename);
 
-		std::map<const char*, std::unique_ptr<LoadedTexture>> m_Textures;
-		std::map<ANIM, SpriteAnimation> m_Animations;
+		std::unordered_map<const char*, std::unique_ptr<LoadedTexture>> m_Textures;
+		std::unordered_map<ANIM, SpriteAnimation> m_Animations;
 
 		static Factory m_Instance;
 	};
-
 
 	class Level {
 	public:

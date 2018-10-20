@@ -109,6 +109,11 @@ project "ECSLibTest"
 
 project "Sample"
   kind "ConsoleApp"
+
+  pchheader "pch.h"
+  pchsource "projects/sample/pch.cpp"
+  --includedirs "projects/sample"
+
   files "projects/sample/**"
   debugdir "projects/sample"
 
@@ -128,9 +133,7 @@ project "Sample"
 	    'cp -R ../projects/sample/assets %{cfg.buildtarget.directory}'
 	  }
 
-  --pchheader "pch.h"
-  --pchsource "pch.cpp"
-  --includedirs "projects/sample"
+  filter {}
 
 project "SampleTest"
   kind "ConsoleApp"

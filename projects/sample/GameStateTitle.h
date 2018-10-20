@@ -4,12 +4,11 @@
 #include "GameState.h"
 #include "InputStateMenu.h"
 #include "SystemCamera.h"
-#include <SDL/SDL.h>
 
 class GameStateTitle : public GameState
 {
 public:
-	GameStateTitle(SDL_Window *window);
+	GameStateTitle(struct SDL_Window *window);
 	~GameStateTitle();
 	GameStateTitle(const GameStateTitle &rhs) = delete;
 
@@ -17,7 +16,7 @@ public:
 	void Draw() override;
 
 private:
-	SDL_Window* m_Window;
+	struct SDL_Window* m_Window;
 
 	InputStateMenu m_InputState;
 
