@@ -19,7 +19,7 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 	abilities.cooldownIgnite -= d;
 
 	// TODO: Handle this over lower frame rates better
-	const float cooldownFirestream = 0.04f;
+	const float cooldownFirestream = 0.02f;
 	const int firestreamsPerShot = 2;
 	const float firestreamSpeed = 6.f;
 	const float firestreamSpread = .5f;

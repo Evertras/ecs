@@ -1,7 +1,9 @@
 #include "pch.h"
 
-#include "Components.h"
 #include "GameStatePlay.h"
+
+#include "Components.h"
+#include "GameStateTitle.h"
 
 #include "EntityFactory.h"
 
@@ -109,12 +111,7 @@ std::unique_ptr<GameState> GameStatePlay::Update(ECS::DeltaSeconds d) {
 	}
 
 	if (m_InputState.QuitPressed()) {
-		SDL_Event quitEvent;
-
-		quitEvent.type = SDL_QUIT;
-
-		// Memory is copied, okay to go out of scope after this
-		SDL_PushEvent(&quitEvent);
+		return std::make_unique<GameStateTitle>(m_Window);
 	}
 
 	m_InputState.UpdateLastState();

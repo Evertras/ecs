@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include "GameStatePlay.h"
+#include "GameStateTitle.h"
 #include "RenderTargetSprite.h"
 #include "RenderTargetTile.h"
 
@@ -94,16 +95,11 @@ std::unique_ptr<GameState> GameStateEdit::Update(ECS::DeltaSeconds d) {
 	}
 
 	if (m_InputState.QuitPressed()) {
-		SDL_Event quitEvent;
-
-		quitEvent.type = SDL_QUIT;
-
-		// Memory is copied, okay to go out of scope after this
-		SDL_PushEvent(&quitEvent);
+		return std::make_unique<GameStateTitle>(m_Window);
 	}
 
 	if (m_InputState.PlayPressed()) {
-		return std::unique_ptr<GameState>(new GameStatePlay(m_Window));
+		return std::make_unique<GameStatePlay>(m_Window);
 	}
 
 	m_InputState.UpdateLastState();

@@ -11,7 +11,7 @@ public:
 
 		m_LastKeyboardState = new Uint8[m_KeyboardStateLen];
 
-		memset(m_LastKeyboardState, 0, sizeof(Uint8));
+		UpdateLastState();
 	}
 
 	virtual ~InputState() { delete[] m_LastKeyboardState; }
