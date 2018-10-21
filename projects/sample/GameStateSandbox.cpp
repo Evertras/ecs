@@ -55,11 +55,11 @@ GameStateSandbox::GameStateSandbox(SDL_Window* window) : m_Window(window)
 		m_UIRoot = std::make_unique<UI::BaseContainer>(screen);
 
 		auto square = m_UIRoot->AddChild(
-			std::make_unique<UI::Panel>(
+			std::make_unique<UI::Icon>(
 				glm::vec2{ 0.f, 0.f },
 				UI::Dimensions{ 0.2f, 0.2f },
 				UI::Attachment(UI::AP_CENTER, UI::AP_TOP),
-				Color::Blue
+				Assets::Factory::GetTexture("assets/icon_firestream.png")
 		));
 
 		square->AddChild(

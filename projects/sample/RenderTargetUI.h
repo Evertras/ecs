@@ -12,6 +12,7 @@ public:
 	void Draw(const UI::Element* root);
 
 	void RenderRect(glm::vec2 center, UI::Dimensions dimensions, glm::vec4 color) override;
+	void RenderSprite(glm::vec2 center, UI::Dimensions dimensions, const Assets::Texture& texture, glm::vec4 color) override;
 	void SetBaseSize(UI::Dimensions size) override;
 
 private:

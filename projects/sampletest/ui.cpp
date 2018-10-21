@@ -171,7 +171,7 @@ SCENARIO("UI Structure for Panel") {
 SCENARIO("Rendering UIs") {
 	class MockRenderer : public UI::ElementRenderer {
 	public:
-		MockRenderer() : m_RenderRectCount(0), m_SetBaseSizeCount(0) {}
+		MockRenderer() : m_RenderRectCount(0), m_SetBaseSizeCount(0), m_RenderSpriteCount(0) {}
 
 		void RenderRect(glm::vec2 center, UI::Dimensions dimensions, glm::vec4 color) override {
 			++m_RenderRectCount;
@@ -181,6 +181,10 @@ SCENARIO("Rendering UIs") {
 			m_LastRectColor = color;
 		}
 
+		void RenderSprite(glm::vec2 center, UI::Dimensions dimensions, const Assets::Texture& tex, glm::vec4 color) override {
+			++m_RenderSpriteCount;
+		}
+
 		void SetBaseSize(UI::Dimensions size) override {
 			++m_SetBaseSizeCount;
 
@@ -188,6 +192,7 @@ SCENARIO("Rendering UIs") {
 		}
 
 		int m_RenderRectCount;
+		int m_RenderSpriteCount;
 		int m_SetBaseSizeCount;
 		glm::vec4 m_LastRectColor;
 		glm::vec2 m_LastRectCenter;

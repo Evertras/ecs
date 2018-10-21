@@ -3,6 +3,7 @@
 #include <vector>
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
+#include "Assets.h"
 
 namespace UI {
 	enum AnchorPoint {
@@ -29,6 +30,7 @@ namespace UI {
 	class ElementRenderer {
 	public:
 		virtual void RenderRect(glm::vec2 center, Dimensions d, glm::vec4 color) = 0;
+		virtual void RenderSprite(glm::vec2 center, Dimensions d, const Assets::Texture& tex, glm::vec4 color) = 0;
 		virtual void SetBaseSize(Dimensions size) = 0;
 	};
 
@@ -157,6 +159,21 @@ namespace UI {
 
 		void DrawReceive(ElementRenderer* renderer) const override {
 			renderer->RenderRect(m_AbsoluteCenter, m_Dimensions, m_Color);
+		}
+	};
+
+	class Icon : public Element {
+	public:
+		Icon(glm::vec2 center, Dimensions d, Attachment a, Assets::Texture texture, glm::vec4 color = { 1.f, 1.f, 1.f, 1.f })
+			: Element(center, d, a), m_Texture(texture), m_Color(color) {}
+		~Icon() = default;
+		Icon(const Icon& rhs) = default;
+
+	protected:
+		glm::vec4 m_Color;
+		Assets::Texture m_Texture;
+		void DrawReceive(ElementRenderer* renderer) const override {
+			renderer->RenderSprite(m_AbsoluteCenter, m_Dimensions, m_Texture, m_Color);
 		}
 	};
 }

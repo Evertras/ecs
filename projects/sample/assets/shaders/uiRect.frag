@@ -7,5 +7,4 @@ uniform vec4 rectColor;
 void main()
 {
 	outColor = rectColor;
-	//outColor = vec4(1.0, 0.0, 0.0, 1.0);
 }

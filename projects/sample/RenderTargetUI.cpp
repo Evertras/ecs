@@ -67,6 +67,29 @@ void RenderTargetUI::RenderRect(glm::vec2 center, UI::Dimensions dimensions, glm
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 
+void RenderTargetUI::RenderSprite(glm::vec2 center, UI::Dimensions dimensions, const Assets::Texture & texture, glm::vec4 color)
+{
+	// TODO: Can probably cache this more nicely down the road, but will need to nicely handle resize/moves...
+	auto translate = 
+		glm::translate(
+			glm::identity<glm::mat4>(),
+			{ center.x, center.y, 0.f }
+		);
+
+	auto model = glm::scale(
+		translate,
+		{ dimensions.width, dimensions.height, 1.f });
+
+	m_SpriteShader.SetActive();
+	m_SpriteShader.SetMVP(m_VP * model);
+	m_SpriteShader.SetSpriteColor(color);
+	m_SpriteShader.ResetTextureClipRect();
+
+	glBindVertexArray(m_RectVertexArray);
+	glBindTexture(GL_TEXTURE_2D, texture.ID());
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+}
+
 void RenderTargetUI::SetBaseSize(UI::Dimensions dimensions) {
 	m_VP = glm::ortho(0.f, dimensions.width, dimensions.height, 0.f, -100.f, 100.f);
 }
