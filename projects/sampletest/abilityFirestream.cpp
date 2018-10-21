@@ -6,8 +6,10 @@
 #include <SystemEntityCollision.cpp>
 #include <Actions.cpp>
 
-SCENARIO("Ability: Firestream") {
-	GIVEN("a firestream projectile and enemy that are more than 1 unit apart") {
+SCENARIO("Ability: Firestream")
+{
+	GIVEN("a firestream projectile and enemy that are more than 1 unit apart")
+	{
 		ECS::EntityList el;
 
 		{
@@ -34,17 +36,19 @@ SCENARIO("Ability: Firestream") {
 
 		system.Run(el, 0.f);
 
-		THEN("the enemy does not burn") {
+		THEN("the enemy does not burn")
+		{
 			REQUIRE(el.First<Component::EffectBurn>() == nullptr);
 		}
 	}
 
-	GIVEN("a firestream projectile and an enemy that are on top of each other") {
+	GIVEN("a firestream projectile and an enemy that are on top of each other")
+	{
 		ECS::EntityList el;
 		ECS::Entity* enemy;
-		
+
 		{
-			auto e = std::make_unique<ECS::Entity>(); 
+			auto e = std::make_unique<ECS::Entity>();
 			e->AddComponent<Component::Position>({ {1.f, 1.f} });
 			e->AddComponent(Component::Collision(0.1f, 0.1f, 0.1f, 0.1f));
 			e->AddComponent(Component::Enemy());
@@ -68,16 +72,20 @@ SCENARIO("Ability: Firestream") {
 
 		system.Run(el, 1.f);
 
-		THEN("the enemy is burning") {
+		THEN("the enemy is burning")
+		{
 			REQUIRE(el.First<Component::EffectBurn>() == enemy);
 		}
 
-		AND_GIVEN("the system is run many times") {
-			THEN("the enemy burns more with the same duration") {
+		AND_GIVEN("the system is run many times")
+		{
+			THEN("the enemy burns more with the same duration")
+			{
 				REQUIRE(enemy->Has<Component::EffectBurn>());
 				Component::EffectBurn originalValues = enemy->Data<Component::EffectBurn>();
 
-				for (int i = 0; i < 1000; ++i) {
+				for (int i = 0; i < 1000; ++i)
+				{
 					system.Run(el, 1.f);
 				}
 
@@ -90,7 +98,8 @@ SCENARIO("Ability: Firestream") {
 		}
 	}
 
-	GIVEN("a firestream projectile and an enemy that are close but not touching") {
+	GIVEN("a firestream projectile and an enemy that are close but not touching")
+	{
 		ECS::EntityList el;
 
 		{
@@ -117,7 +126,8 @@ SCENARIO("Ability: Firestream") {
 
 		system.Run(el, 0.f);
 
-		THEN("the enemy does not burn") {
+		THEN("the enemy does not burn")
+		{
 			REQUIRE(el.First<Component::EffectBurn>() == nullptr);
 		}
 	}

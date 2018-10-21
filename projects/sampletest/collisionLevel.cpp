@@ -3,8 +3,10 @@
 #include <SystemLevelCollision.cpp>
 #include <Components.h>
 
-SCENARIO("SystemCollisionLevel") {
-	GIVEN("a totally open level with an empty entity list") {
+SCENARIO("SystemCollisionLevel")
+{
+	GIVEN("a totally open level with an empty entity list")
+	{
 		const int width = 3;
 		const int height = 6;
 
@@ -31,7 +33,8 @@ SCENARIO("SystemCollisionLevel") {
 
 		REQUIRE(entity != nullptr);
 
-		AND_GIVEN("the entity has moved out the top left") {
+		AND_GIVEN("the entity has moved out the top left")
+		{
 			pos.x = -1.f;
 			pos.y = -2.f;
 
@@ -40,31 +43,36 @@ SCENARIO("SystemCollisionLevel") {
 
 			system.Run(el, 1.f);
 
-			THEN("the entity is clamped to the top left corner of the level") {
+			THEN("the entity is clamped to the top left corner of the level")
+			{
 				REQUIRE(pos.x == Approx(0));
 				REQUIRE(pos.y == Approx(0));
 			}
 		}
 
-		AND_GIVEN("the entity has moved out to the bottom right") {
+		AND_GIVEN("the entity has moved out to the bottom right")
+		{
 			pos.x = width + 1;
 			pos.y = height + 1;
 
 			system.Run(el, 1.f);
 
-			THEN("the entity is clamped to the bottom right corner of the level") {
+			THEN("the entity is clamped to the bottom right corner of the level")
+			{
 				REQUIRE(pos.x == Approx(width));
 				REQUIRE(pos.y == Approx(height));
 			}
 		}
 
-		AND_GIVEN("the entity is moving upwards through an open square") {
+		AND_GIVEN("the entity is moving upwards through an open square")
+		{
 			pos.x = 1.1f;
 			pos.y = 0.9f;
 
 			system.Run(el, 1.f);
 
-			THEN("the entity is not affected by level collision") {
+			THEN("the entity is not affected by level collision")
+			{
 				REQUIRE(pos.x == Approx(1.1f));
 				REQUIRE(pos.y == Approx(0.9f));
 			}

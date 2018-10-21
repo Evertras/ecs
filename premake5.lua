@@ -90,11 +90,22 @@ project "ECSLib"
 
   files "projects/ecslib/**"
 
+  filter "action:vs*"
+    prebuildcommands {
+      '..\\bin\\windows\\astyle.exe ..\\projects\\ecslib\\*.h --recursive --options=../.astylerc',
+    }
+
 project "ECSLibTest"
   kind "ConsoleApp"
   files "projects/ecslibtest/**"
   includeCatch()
   useECSLib()
+
+  filter "action:vs*"
+    prebuildcommands {
+      '..\\bin\\windows\\astyle.exe ..\\projects\\ecslibtest\\*.h --recursive --options=../.astylerc',
+      '..\\bin\\windows\\astyle.exe ..\\projects\\ecslibtest\\*.cpp --recursive --options=../.astylerc',
+    }
 
   filter "action:gmake*"
     --prebuildcommands {
@@ -153,6 +164,12 @@ project "SampleTest"
 
   includedirs "projects/sample/"
   links "Sample"
+
+  filter "action:vs*"
+    prebuildcommands {
+      '..\\bin\\windows\\astyle.exe ..\\projects\\sampletest\\*.h --recursive --options=../.astylerc',
+      '..\\bin\\windows\\astyle.exe ..\\projects\\sampletest\\*.cpp --recursive --options=../.astylerc',
+    }
 
   filter "action:gmake*"
     --prebuildcommands {
