@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "AbilityValues.h"
 #include "Assets.h"
 
 namespace Component {
@@ -65,10 +66,11 @@ namespace Component {
 	};
 
 	struct AbilitiesPyromancer {
-		AbilitiesPyromancer() : cooldownFireStream(0.f), cooldownIgnite(0.f) {}
+		AbilitiesPyromancer() : cooldownFireStream(0.f), cooldownIgnite(0.f), chargeFireStream(AbilityValues::Pyromancer::FirestreamChargeSeconds) {}
 
 		float cooldownFireStream;
 		float cooldownIgnite;
+		float chargeFireStream;
 	};
 
 	struct LifetimeTimer {
