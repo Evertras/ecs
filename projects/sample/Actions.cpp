@@ -31,3 +31,28 @@ void Actions::Damage(ECS::EntityList& el, ECS::Entity& target, float amount)
 		}
 	}
 }
+
+void Actions::ApplyBurn(ECS::EntityList& el, ECS::Entity& target, float dps, float duration)
+{
+	if (target.Has<Component::EffectBurn>())
+	{
+		Component::EffectBurn& burn = target.Data<Component::EffectBurn>();
+
+		burn.dps += dps;
+
+		if (burn.secondsRemaining < duration)
+		{
+			burn.secondsRemaining = duration;
+		}
+	}
+	else
+	{
+		Component::EffectBurn burn;
+
+		burn.dps = dps;
+		burn.secondsRemaining = duration;
+		burn.tickRemaining = 0.f;
+
+		target.AddComponent(burn);
+	}
+}

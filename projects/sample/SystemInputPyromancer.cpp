@@ -3,6 +3,7 @@
 #include "SystemInputPyromancer.h"
 
 #include "AbilityValues.h"
+#include "Actions.h"
 #include "Components.h"
 #include "EntityFactory.h"
 
@@ -13,7 +14,6 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 
 	if (player == nullptr)
 	{
-		SDL_Log("Did not find player with pyromancer abilities");
 		return;
 	}
 
@@ -22,9 +22,16 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 	abilities.cooldownFireStream -= d;
 	abilities.cooldownIgnite -= d;
 
-	if (m_InputState.Ability1Held() && abilities.chargeFireStream >= d)
+	if (m_InputState.Ability1Held())
 	{
 		abilities.chargeFireStream -= d;
+
+		if (abilities.chargeFireStream < 0.f)
+		{
+			Actions::ApplyBurn(el, *player, -abilities.chargeFireStream, 4.f);
+
+			abilities.chargeFireStream = 0.f;
+		}
 
 		if (abilities.cooldownFireStream <= 0.f)
 		{

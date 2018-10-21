@@ -16,7 +16,7 @@ public:
 		return &m_Root;
 	}
 
-	void Update(const Component::AbilitiesPyromancer& abilities, const Component::Health& playerHealth);
+	void Update(const Component::AbilitiesPyromancer& abilities);
 
 private:
 	UI::BaseContainer m_Root;

@@ -100,24 +100,7 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 				switch (ability.type)
 				{
 				case Component::Ability::ABILITY_FIRESTREAM:
-					if (enemy->Has<Component::EffectBurn>())
-					{
-						Component::EffectBurn& burn = enemy->Data<Component::EffectBurn>();
-
-						burn.dps += ability.param1 * d;
-						burn.secondsRemaining = ability.param2;
-					}
-					else
-					{
-						Component::EffectBurn burn;
-
-						burn.dps = ability.param1;
-						burn.secondsRemaining = ability.param2;
-						burn.tickRemaining = 0.f;
-
-						enemy->AddComponent(burn);
-					}
-
+					Actions::ApplyBurn(el, *enemy, ability.param1 * d, ability.param2);
 					break;
 
 				case Component::Ability::ABILITY_IGNITE:

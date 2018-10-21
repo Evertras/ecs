@@ -3,7 +3,10 @@
 #include "EntityFactory.h"
 
 const float PlayerSpeed = 3.f;
+const float PlayerHealth = 100.f;
+
 const float SkeletonSpeed = 1.5f;
+const float SkeletonHealth = 75.f;
 
 std::unique_ptr<ECS::Entity> EntityFactory::PlayerPyromancer(glm::vec2 pos)
 {
@@ -18,6 +21,7 @@ std::unique_ptr<ECS::Entity> EntityFactory::PlayerPyromancer(glm::vec2 pos)
 	player->AddComponent(Component::CameraTarget());
 	player->AddComponent(Component::Collision(0.2f, 0.2f, 0.3f, 0.f));
 	player->AddComponent(Component::AbilitiesPyromancer());
+	player->AddComponent(Component::Health{ PlayerHealth });
 
 	return std::move(player);
 }
@@ -33,7 +37,7 @@ std::unique_ptr<ECS::Entity> EntityFactory::EnemySkeleton(glm::vec2 pos)
 	enemy->AddComponent<Component::Move>({ SkeletonSpeed });
 	enemy->AddComponent<Component::AISkeletonIdle>({ 2.f });
 	enemy->AddComponent(Component::Collision(0.2f, 0.2f, 0.6f, 0.f, false));
-	enemy->AddComponent(Component::Health(100.f));
+	enemy->AddComponent(Component::Health(SkeletonHealth));
 
 	return std::move(enemy);
 }

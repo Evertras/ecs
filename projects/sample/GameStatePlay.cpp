@@ -145,14 +145,11 @@ std::unique_ptr<GameState> GameStatePlay::Update(ECS::DeltaSeconds d)
 	m_InputState.UpdateLastState();
 	m_EntityList.RemoveAllDeleted();
 
-	auto pyromancer = m_EntityList.First<Component::AbilitiesPyromancer, Component::Health>();
+	auto pyromancer = m_EntityList.First<Component::AbilitiesPyromancer>();
 
 	if (pyromancer != nullptr)
 	{
-		m_UIPyromancer->Update(
-		    pyromancer->Data<Component::AbilitiesPyromancer>(),
-		    pyromancer->Data<Component::Health>()
-		);
+		m_UIPyromancer->Update(pyromancer->Data<Component::AbilitiesPyromancer>());
 	}
 
 	return nullptr;
