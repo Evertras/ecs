@@ -10,6 +10,7 @@
 #include "RenderTargetSprite.h"
 #include "RenderTargetText.h"
 #include "RenderTargetTile.h"
+#include "RenderTargetUI.h"
 
 #include "SystemAISkeleton.h"
 #include "SystemEffects.h"
@@ -28,6 +29,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 	{
 		// Shaders
 		m_SpriteShader = std::make_unique<Assets::SpriteShader>();
+		m_UIRectShader = std::make_unique<Assets::UIRectShader>();
 	}
 
 	// Render targets
@@ -45,6 +47,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>(*m_SpriteShader.get(), m_DungeonTileset, 16);
 		m_DamageTarget = std::make_unique<RenderTargetText>(*m_SpriteShader.get(), Assets::Factory::CreateSpriteFont());
 		m_HealthBarTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
+		m_UITarget = std::make_unique<RenderTargetUI>(*m_UIRectShader.get(), *m_SpriteShader.get());
 	}
 
 	// Level loading

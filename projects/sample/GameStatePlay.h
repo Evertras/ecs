@@ -27,8 +27,10 @@ private:
 	std::unique_ptr<class RenderTargetSprite> m_HealthBarTarget;
 	std::unique_ptr<class RenderTargetTile> m_TileTarget;
 	std::unique_ptr<class RenderTargetText> m_DamageTarget;
+	std::unique_ptr<class RenderTargetUI> m_UITarget;
 
 	std::unique_ptr<Assets::SpriteShader> m_SpriteShader;
+	std::unique_ptr<Assets::UIRectShader> m_UIRectShader;
 	Assets::Texture m_DungeonTileset;
 
 	Assets::Level m_LevelData;

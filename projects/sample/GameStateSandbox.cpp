@@ -66,7 +66,7 @@ GameStateSandbox::GameStateSandbox(SDL_Window* window) : m_Window(window)
 			std::make_unique<UI::SolidBar>(
 				glm::vec2{ 0.f, 0.f },
 				UI::Dimensions{ 0.05f, 0.2f },
-				UI::BD_RIGHT,
+				UI::BD_UP,
 				UI::Attachment(UI::AP_RIGHT, UI::AP_LEFT),
 				Color::DarkGreen
 				)
