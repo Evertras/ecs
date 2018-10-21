@@ -176,4 +176,33 @@ namespace UI {
 			renderer->RenderSprite(m_AbsoluteCenter, m_Dimensions, m_Texture, m_Color);
 		}
 	};
+
+	enum BarDirection {
+		BD_UP,
+		BD_DOWN,
+		BD_RIGHT,
+		BD_LEFT
+	};
+
+	class SolidBar : public Element {
+	public:
+		SolidBar(glm::vec2 center, Dimensions d, BarDirection direction, Attachment a, glm::vec4 color)
+			: Element(center, d, a), m_Direction(direction), m_Color(color), m_Percent(1.f) {}
+		~SolidBar() = default;
+		SolidBar(const SolidBar& rhs) = delete;
+
+		void SetPercent(float percent) {
+			if (percent < 0.f) { percent = 0.f; }
+			else if (percent > 1.f) { percent = 1.f; }
+
+			m_Percent = percent;
+		}
+
+	protected:
+		glm::vec4 m_Color;
+		float m_Percent;
+		BarDirection m_Direction;
+
+		void DrawReceive(ElementRenderer* renderer) const override;
+	};
 }

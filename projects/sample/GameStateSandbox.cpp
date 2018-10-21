@@ -62,14 +62,17 @@ GameStateSandbox::GameStateSandbox(SDL_Window* window) : m_Window(window)
 				Assets::Factory::GetTexture("assets/icon_firestream.png")
 		));
 
-		square->AddChild(
-			std::make_unique<UI::Panel>(
+		auto bar = static_cast<UI::SolidBar*>(square->AddChild(
+			std::make_unique<UI::SolidBar>(
 				glm::vec2{ 0.f, 0.f },
 				UI::Dimensions{ 0.05f, 0.2f },
+				UI::BD_RIGHT,
 				UI::Attachment(UI::AP_RIGHT, UI::AP_LEFT),
 				Color::DarkGreen
 				)
-		);
+		));
+
+		bar->SetPercent(0.3f);
 	}
 
 	// Sandbox for initial entities
