@@ -119,9 +119,6 @@ void GameStateTitle::Draw() {
 	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	m_SpriteTarget->Draw(m_SystemCamera->GetViewProjection());
 	m_TextTarget->Draw(m_SystemCamera->GetViewProjection());
 }

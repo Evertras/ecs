@@ -16,8 +16,7 @@
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemVelocity.h"
 
-GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window)
-{
+GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window) {
 	{
 		// Shaders
 		m_SpriteShader = std::make_unique<Assets::SpriteShader>();
@@ -80,8 +79,7 @@ GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window)
 	}
 }
 
-GameStateEdit::~GameStateEdit()
-{
+GameStateEdit::~GameStateEdit() {
 }
 
 std::unique_ptr<GameState> GameStateEdit::Update(ECS::DeltaSeconds d) {
@@ -107,9 +105,6 @@ std::unique_ptr<GameState> GameStateEdit::Update(ECS::DeltaSeconds d) {
 void GameStateEdit::Draw() {
 	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	m_TileTarget->Draw(m_SystemCamera->GetViewProjection());
 	m_SpriteTarget->Draw(m_SystemCamera->GetViewProjection());

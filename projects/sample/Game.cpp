@@ -105,6 +105,9 @@ void Game::AdvanceFrame() {
 }
 
 void Game::Draw() {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	m_GameState->Draw();
 
 	SDL_GL_SwapWindow(m_Window);

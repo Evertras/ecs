@@ -147,11 +147,8 @@ std::unique_ptr<GameState> GameStatePlay::Update(ECS::DeltaSeconds d) {
 }
 
 void GameStatePlay::Draw() {
-	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
+	glClearColor(0.03f, 0.01f, 0.01f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	m_TileTarget->Draw(m_SystemCamera->GetViewProjection());
 	m_SpriteTarget->Draw(m_SystemCamera->GetViewProjection());
