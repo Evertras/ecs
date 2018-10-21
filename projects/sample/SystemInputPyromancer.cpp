@@ -2,6 +2,7 @@
 
 #include "SystemInputPyromancer.h"
 
+#include "AbilityValues.h"
 #include "Components.h"
 #include "EntityFactory.h"
 
@@ -83,6 +84,6 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d) {
 
 		el.Run<Component::EffectBurn, Component::Position>(f, d);
 
-		abilities.cooldownIgnite = 1.f;
+		abilities.cooldownIgnite = AbilityValues::Pyromancer::IgniteCooldown;
 	}
 }

@@ -117,14 +117,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 			screen.height = 1.f;
 		}
 
-		auto pyromancer = m_EntityList.First<Component::AbilitiesPyromancer>();
-
-		if (pyromancer == nullptr) {
-			SDL_Log("Could not find pyromancer");
-			throw "Nope";
-		}
-
-		m_UIPyromancer = std::make_unique<UIPyromancer>(screen, pyromancer->Data<Component::AbilitiesPyromancer>());
+		m_UIPyromancer = std::make_unique<UIPyromancer>(screen);
 	}
 }
 
@@ -143,6 +136,12 @@ std::unique_ptr<GameState> GameStatePlay::Update(ECS::DeltaSeconds d) {
 
 	m_InputState.UpdateLastState();
 	m_EntityList.RemoveAllDeleted();
+
+	auto pyromancer = m_EntityList.First<Component::AbilitiesPyromancer>();
+
+	if (pyromancer != nullptr) {
+		m_UIPyromancer->Update(pyromancer->Data<Component::AbilitiesPyromancer>());
+	}
 
 	return nullptr;
 }
