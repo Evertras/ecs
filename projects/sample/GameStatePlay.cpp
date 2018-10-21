@@ -24,8 +24,15 @@
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemVelocity.h"
 
+#include "UI.h"
+#include "UIPyromancer.h"
+
 GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 {	
+	// TODO: Figure out how to handle resizes when resizing becomes a thing
+	int windowWidth, windowHeight;
+	SDL_GetWindowSize(m_Window, &windowWidth, &windowHeight);
+
 	{
 		// Shaders
 		m_SpriteShader = std::make_unique<Assets::SpriteShader>();
@@ -85,9 +92,6 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		m_Systems.push_back(std::make_unique<SystemLifetime>());
 		m_Systems.push_back(std::make_unique<SystemEffects>());
 
-		// TODO: Figure out how to handle resizes when resizing becomes a thing
-		int windowWidth, windowHeight;
-		SDL_GetWindowSize(m_Window, &windowWidth, &windowHeight);
 		std::unique_ptr<SystemCamera> camera = std::make_unique<SystemCamera>(static_cast<float>(windowWidth), static_cast<float>(windowHeight));
 		m_SystemCamera = camera.get();
 		m_Systems.push_back(std::move(camera));
@@ -96,6 +100,31 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderDamageNumbers(*m_DamageTarget.get())));
 		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderHealthBars(*m_HealthBarTarget.get(), Assets::Factory::GetTexture("assets/bar.png"))));
+	}
+
+	// UI
+	{
+		UI::Dimensions screen;
+
+		float ratio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
+
+		if (ratio < 1.f) {
+			screen.width = 1.f;
+			screen.height = 1.f / ratio;
+		}
+		else {
+			screen.width = ratio;
+			screen.height = 1.f;
+		}
+
+		auto pyromancer = m_EntityList.First<Component::AbilitiesPyromancer>();
+
+		if (pyromancer == nullptr) {
+			SDL_Log("Could not find pyromancer");
+			throw "Nope";
+		}
+
+		m_UIPyromancer = std::make_unique<UIPyromancer>(screen, pyromancer->Data<Component::AbilitiesPyromancer>());
 	}
 }
 
@@ -129,4 +158,5 @@ void GameStatePlay::Draw() {
 	m_SpriteTarget->Draw(m_SystemCamera->GetViewProjection());
 	m_HealthBarTarget->Draw(m_SystemCamera->GetViewProjection());
 	m_DamageTarget->Draw(m_SystemCamera->GetViewProjection());
+	m_UITarget->Draw(m_UIPyromancer->GetRoot());
 }

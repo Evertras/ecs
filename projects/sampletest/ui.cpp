@@ -147,6 +147,27 @@ SCENARIO("UI Structure for Panel") {
 			}
 		}
 
+		AND_GIVEN("a single Panel attached from the base's center to its center with an offset center") {
+			UI::Dimensions d;
+
+			d.width = 0.1f;
+			d.height = 0.1f;
+
+			UI::Attachment a;
+
+			a.parent = UI::AP_CENTER;
+			a.child = UI::AP_CENTER;
+
+			glm::vec2 offsetCenter{ 1.f, 2.f };
+
+			UI::Element *p = basePanel.AddChild(std::make_unique<UI::Panel>(offsetCenter, d, a));
+
+			THEN("the absolute center of the panel is offset correctly") {
+				REQUIRE(p->GetAbsoluteCenter().x == Approx(baseDimensions.width * 0.5f + offsetCenter.x));
+				REQUIRE(p->GetAbsoluteCenter().y == Approx(baseDimensions.height * 0.5f + offsetCenter.y));
+			}
+		}
+
 		AND_GIVEN("a single Panel attached from the base's center to its own top") {
 			UI::Dimensions d;
 

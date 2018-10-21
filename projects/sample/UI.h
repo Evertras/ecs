@@ -123,6 +123,8 @@ namespace UI {
 				break;
 			}
 
+			m_AbsoluteCenter += m_RelativeCenter;
+
 			UpdateChildrenAbsoluteCenter();
 		}
 

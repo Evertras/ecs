@@ -5,6 +5,7 @@
 #include "Assets.h"
 #include "InputStatePlay.h"
 #include "SystemCamera.h"
+#include "UI.h"
 
 #include <SDL/SDL.h>
 
@@ -28,6 +29,8 @@ private:
 	std::unique_ptr<class RenderTargetTile> m_TileTarget;
 	std::unique_ptr<class RenderTargetText> m_DamageTarget;
 	std::unique_ptr<class RenderTargetUI> m_UITarget;
+
+	std::unique_ptr<class UIPyromancer> m_UIPyromancer;
 
 	std::unique_ptr<Assets::SpriteShader> m_SpriteShader;
 	std::unique_ptr<Assets::UIRectShader> m_UIRectShader;
