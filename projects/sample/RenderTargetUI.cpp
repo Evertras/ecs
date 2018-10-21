@@ -6,10 +6,10 @@ RenderTargetUI::RenderTargetUI(Assets::UIRectShader& rectShader, Assets::SpriteS
 	: m_RectShader(rectShader), m_SpriteShader(spriteShader)
 {
 	float rectVertexBuffer[] = {
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f,
+		-0.5f, -0.5f, 0.0f, 0.f, 0.f,
+		0.5f, -0.5f, 0.0f, 1.f, 0.f,
+		0.5f, 0.5f, 0.0f, 1.f, 1.f,
+		-0.5f, 0.5f, 0.0f, 0.f, 1.f
 	};
 
 	unsigned int rectIndexBuffer[] = {
@@ -22,14 +22,14 @@ RenderTargetUI::RenderTargetUI(Assets::UIRectShader& rectShader, Assets::SpriteS
 
 	glGenBuffers(1, &m_RectVertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_RectVertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, 4 * 3 * sizeof(float), rectVertexBuffer, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 4 * 5 * sizeof(float), rectVertexBuffer, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &m_RectIndexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RectIndexBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), rectIndexBuffer, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);
 
 	SetBaseSize({ 1.f, 1.f });
 }
