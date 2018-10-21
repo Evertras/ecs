@@ -33,7 +33,7 @@ GameStateSandbox::GameStateSandbox(SDL_Window* window) : m_Window(window)
 	{
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
 		m_TextTarget = std::make_unique<RenderTargetText>(*m_SpriteShader.get(), Assets::Factory::CreateSpriteFont());
-		m_UITarget = std::make_unique<RenderTargetUI>(*m_RectShader.get());
+		m_UITarget = std::make_unique<RenderTargetUI>(*m_RectShader.get(), *m_SpriteShader.get());
 	}
 
 	// UI
@@ -53,6 +53,14 @@ GameStateSandbox::GameStateSandbox(SDL_Window* window) : m_Window(window)
 
 
 		m_UIRoot = std::make_unique<UI::BaseContainer>(screen);
+
+		m_UIRoot->AddChild(
+			std::make_unique<UI::Panel>(
+				glm::vec2{ 0.f, 0.f },
+				UI::Dimensions{ 0.2f, 0.5f },
+				UI::Attachment(UI::AP_TOP, UI::AP_TOP),
+				Color::Blue
+		));
 	}
 
 	// Sandbox for initial entities
@@ -112,10 +120,7 @@ void GameStateSandbox::Draw() {
 	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	m_SpriteTarget->Draw(m_SystemCamera->GetViewProjection());
 	m_TextTarget->Draw(m_SystemCamera->GetViewProjection());
-	m_UIRoot->Draw(m_UITarget.get());
+	m_UITarget->Draw(m_UIRoot.get());
 }

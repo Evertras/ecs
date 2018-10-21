@@ -171,7 +171,7 @@ SCENARIO("UI Structure for Panel") {
 SCENARIO("Rendering UIs") {
 	class MockRenderer : public UI::ElementRenderer {
 	public:
-		MockRenderer() : m_RenderRectCount(0) {}
+		MockRenderer() : m_RenderRectCount(0), m_SetBaseSizeCount(0) {}
 
 		void RenderRect(glm::vec2 center, UI::Dimensions dimensions, glm::vec4 color) override {
 			++m_RenderRectCount;
@@ -181,10 +181,18 @@ SCENARIO("Rendering UIs") {
 			m_LastRectColor = color;
 		}
 
+		void SetBaseSize(UI::Dimensions size) override {
+			++m_SetBaseSizeCount;
+
+			m_LastBaseSize = size;
+		}
+
 		int m_RenderRectCount;
+		int m_SetBaseSizeCount;
 		glm::vec4 m_LastRectColor;
 		glm::vec2 m_LastRectCenter;
 		UI::Dimensions m_LastRectDimensions;
+		UI::Dimensions m_LastBaseSize;
 	};
 
 	GIVEN("a UI with a base container and one child panel") {
@@ -209,6 +217,12 @@ SCENARIO("Rendering UIs") {
 			MockRenderer mock;
 
 			root.Draw(&mock);
+
+			THEN("the base size is set correctly") {
+				REQUIRE(mock.m_SetBaseSizeCount == 1);
+				REQUIRE(mock.m_LastBaseSize.width == screenDimensions.width);
+				REQUIRE(mock.m_LastBaseSize.height == screenDimensions.height);
+			}
 
 			THEN("the panel is drawn with the expected parameters") {
 				REQUIRE(mock.m_RenderRectCount == 1);

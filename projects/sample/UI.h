@@ -29,6 +29,7 @@ namespace UI {
 	class ElementRenderer {
 	public:
 		virtual void RenderRect(glm::vec2 center, Dimensions d, glm::vec4 color) = 0;
+		virtual void SetBaseSize(Dimensions size) = 0;
 	};
 
 	class Element {
@@ -136,7 +137,9 @@ namespace UI {
 		BaseContainer(Dimensions d) : Element({ d.width*0.5f, d.height*0.5f }, d, Attachment(AP_CENTER, AP_CENTER)) {}
 
 	protected:
-		void DrawReceive(ElementRenderer* renderer) const override {}
+		void DrawReceive(ElementRenderer* renderer) const override {
+			renderer->SetBaseSize(m_Dimensions);
+		}
 	};
 
 	class Panel : public Element {
