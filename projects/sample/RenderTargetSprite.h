@@ -6,37 +6,40 @@
 class RenderTargetSprite
 {
 public:
-	RenderTargetSprite(Assets::SpriteShader &shader, bool flipY = false);
+	RenderTargetSprite(Assets::SpriteShader& shader, bool flipY = false);
 	~RenderTargetSprite();
 
 	void QueueSprite(
-		const Assets::Texture &texture,
-		glm::vec2 bottomCenter,
-		const Assets::CropRect &frame,
-		float scale,
-		bool flipX,
-		glm::vec4 color = glm::vec4{ 1.f, 1.f, 1.f, 1.f })
+	    const Assets::Texture& texture,
+	    glm::vec2 bottomCenter,
+	    const Assets::CropRect& frame,
+	    float scale,
+	    bool flipX,
+	    glm::vec4 color = glm::vec4{ 1.f, 1.f, 1.f, 1.f })
 	{
 		float ratio = static_cast<float>(frame.width) / static_cast<float>(frame.height);
 
-		if (ratio > 1.f) {
+		if (ratio > 1.f)
+		{
 			QueueSprite(texture, bottomCenter, frame, scale, scale / ratio, flipX, color);
 		}
-		else {
+		else
+		{
 			QueueSprite(texture, bottomCenter, frame, scale * ratio, scale, flipX, color);
 		}
 	}
 
-	void Draw(const glm::mat4 &vp);
+	void Draw(const glm::mat4& vp);
 
 private:
-	Assets::SpriteShader &m_Shader;
+	Assets::SpriteShader& m_Shader;
 	GLuint m_VertexArray;
 	GLuint m_VertexBuffer;
 	GLuint m_IndexBuffer;
 
-	struct PendingDrawRequest {
-		PendingDrawRequest(const Assets::Texture &texture) : texture(texture), color({ 1.f, 1.f, 1.f, 1.f }) {}
+	struct PendingDrawRequest
+	{
+		PendingDrawRequest(const Assets::Texture& texture) : texture(texture), color({ 1.f, 1.f, 1.f, 1.f }) {}
 
 		Assets::Texture texture;
 		glm::vec2 bottomCenter;
@@ -52,11 +55,11 @@ private:
 	bool m_FlipY;
 
 	void QueueSprite(
-		const Assets::Texture &texture,
-		glm::vec2 bottomCenter,
-		const Assets::CropRect &frame,
-		float scaleX,
-		float scaleY,
-		bool flipX,
-		glm::vec4 color);
+	    const Assets::Texture& texture,
+	    glm::vec2 bottomCenter,
+	    const Assets::CropRect& frame,
+	    float scaleX,
+	    float scaleY,
+	    bool flipX,
+	    glm::vec4 color);
 };

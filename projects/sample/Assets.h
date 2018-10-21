@@ -6,26 +6,38 @@
 #include <unordered_map>
 #include <vector>
 
-namespace Assets {
+namespace Assets
+{
 	typedef GLuint TextureID;
 
-	struct CropRect {
+	struct CropRect
+	{
 		int left;
 		int top;
 		int width;
 		int height;
 	};
 
-	class Texture {
+	class Texture
+	{
 	public:
 		Texture() : m_ID(-1), m_Width(0), m_Height(0) {}
 		Texture(TextureID texID, int texWidth, int texHeight) : m_ID(texID), m_Width(texWidth), m_Height(texHeight) {}
-		Texture(const Texture &rhs) : m_ID(rhs.m_ID), m_Width(rhs.m_Width), m_Height(rhs.m_Height) {}
+		Texture(const Texture& rhs) : m_ID(rhs.m_ID), m_Width(rhs.m_Width), m_Height(rhs.m_Height) {}
 		~Texture() = default;
 
-		TextureID ID() const { return m_ID; }
-		int Width() const { return m_Width; }
-		int Height() const { return m_Height; }
+		TextureID ID() const
+		{
+			return m_ID;
+		}
+		int Width() const
+		{
+			return m_Width;
+		}
+		int Height() const
+		{
+			return m_Height;
+		}
 
 	private:
 		friend class Factory;
@@ -35,7 +47,8 @@ namespace Assets {
 		int m_Height;
 	};
 
-	enum ANIM {
+	enum ANIM
+	{
 		// Spell effects
 		ANIM_FIRE,
 		ANIM_EXPLOSION,
@@ -49,18 +62,34 @@ namespace Assets {
 		NUM_ANIMS
 	};
 
-	class SpriteAnimation {
+	class SpriteAnimation
+	{
 	public:
 		SpriteAnimation() {}
 		SpriteAnimation(Texture texture, std::vector<CropRect> frames, float fps, bool isLooping);
-		
-		float FPS() const { return m_FPS; }
-		bool IsLooping() const { return m_IsLooping; }
 
-		int NumFrames() const { return m_NumFrames; }
-		CropRect GetFrame(int i) const { return m_Frames[i]; }
+		float FPS() const
+		{
+			return m_FPS;
+		}
+		bool IsLooping() const
+		{
+			return m_IsLooping;
+		}
 
-		Texture GetTexture() { return m_Texture; }
+		int NumFrames() const
+		{
+			return m_NumFrames;
+		}
+		CropRect GetFrame(int i) const
+		{
+			return m_Frames[i];
+		}
+
+		Texture GetTexture()
+		{
+			return m_Texture;
+		}
 
 	private:
 		Texture m_Texture;
@@ -70,22 +99,31 @@ namespace Assets {
 		std::vector<CropRect> m_Frames;
 	};
 
-	class SpriteFont {
+	class SpriteFont
+	{
 	public:
 		SpriteFont() {}
 		SpriteFont(Texture texture, std::unordered_map<char, CropRect> letters) : m_Texture(texture), m_Characters(letters) {}
 
-		const Texture& GetTexture() const { return m_Texture; }
-		const CropRect& GetCharacter(char c) { return m_Characters[c]; }
+		const Texture& GetTexture() const
+		{
+			return m_Texture;
+		}
+		const CropRect& GetCharacter(char c)
+		{
+			return m_Characters[c];
+		}
 
 	private:
 		Texture m_Texture;
 		std::unordered_map<char, CropRect> m_Characters;
 	};
 
-	class SpriteTile {
+	class SpriteTile
+	{
 	public:
-		struct TileRect {
+		struct TileRect
+		{
 			int left;
 			int top;
 			int width;
@@ -108,19 +146,23 @@ namespace Assets {
 
 	private:
 		Factory() {}
-		~Factory() { m_Textures.clear(); }
+		~Factory()
+		{
+			m_Textures.clear();
+		}
 
 		// RAII for underlying texture data
-		class LoadedTexture {
+		class LoadedTexture
+		{
 		public:
 			LoadedTexture(const char* filename);
 			~LoadedTexture();
-			LoadedTexture(LoadedTexture &rhs) = delete;
+			LoadedTexture(LoadedTexture& rhs) = delete;
 
 			Texture m_Data;
 		};
 
-		static std::vector<CropRect> GetFramesFromFile(const char *filename);
+		static std::vector<CropRect> GetFramesFromFile(const char* filename);
 
 		std::unordered_map<const char*, std::unique_ptr<LoadedTexture>> m_Textures;
 		std::unordered_map<ANIM, SpriteAnimation> m_Animations;
@@ -128,23 +170,27 @@ namespace Assets {
 		static Factory m_Instance;
 	};
 
-	class Level {
+	class Level
+	{
 	public:
-		enum TerrainType {
+		enum TerrainType
+		{
 			TT_OPEN,
 			TT_WALL,
 
 			TT_NUM_TYPES
 		};
 
-		enum ContainsType {
+		enum ContainsType
+		{
 			CT_NONE,
 			CT_SKELETON,
 
 			CT_NUM_TYPES
 		};
 
-		struct Tile {
+		struct Tile
+		{
 			int tilemapX;
 			int tilemapY;
 			TerrainType terrain;
@@ -152,16 +198,53 @@ namespace Assets {
 		};
 
 		Level() {}
-		Level(int w, int h) : width(w), height(h) { tiles.resize(w*h); SetAll(TT_OPEN); SetAll(CT_NONE); }
+		Level(int w, int h) : width(w), height(h)
+		{
+			tiles.resize(w * h);
+			SetAll(TT_OPEN);
+			SetAll(CT_NONE);
+		}
 
-		void Set(int worldX, int worldY, int tileX, int tileY) { int i = worldX * height + worldY; tiles[i].tilemapX = tileX; tiles[i].tilemapY = tileY; }
-		void Set(int worldX, int worldY, TerrainType type) { tiles[worldX*height + worldY].terrain = type; }
-		void Set(int worldX, int worldY, ContainsType type) { tiles[worldX*height + worldY].contains = type; }
-		void SetAll(int tileX, int tileY) { for (int i = 0; i < tiles.size(); ++i) { tiles[i].tilemapX = tileX; tiles[i].tilemapY = tileY; } }
-		void SetAll(TerrainType type) { for (int i = 0; i < tiles.size(); ++i) tiles[i].terrain = type; }
-		void SetAll(ContainsType type) { for (int i = 0; i < tiles.size(); ++i) tiles[i].contains = type; }
-		Tile Get(int x, int y) const { return tiles[x*height + y]; }
-		void Size(int w, int h) { width = w; height = h; tiles.resize(w*h); }
+		void Set(int worldX, int worldY, int tileX, int tileY)
+		{
+			int i = worldX * height + worldY;
+			tiles[i].tilemapX = tileX;
+			tiles[i].tilemapY = tileY;
+		}
+		void Set(int worldX, int worldY, TerrainType type)
+		{
+			tiles[worldX * height + worldY].terrain = type;
+		}
+		void Set(int worldX, int worldY, ContainsType type)
+		{
+			tiles[worldX * height + worldY].contains = type;
+		}
+		void SetAll(int tileX, int tileY)
+		{
+			for (int i = 0; i < tiles.size(); ++i)
+			{
+				tiles[i].tilemapX = tileX;
+				tiles[i].tilemapY = tileY;
+			}
+		}
+		void SetAll(TerrainType type)
+		{
+			for (int i = 0; i < tiles.size(); ++i) tiles[i].terrain = type;
+		}
+		void SetAll(ContainsType type)
+		{
+			for (int i = 0; i < tiles.size(); ++i) tiles[i].contains = type;
+		}
+		Tile Get(int x, int y) const
+		{
+			return tiles[x * height + y];
+		}
+		void Size(int w, int h)
+		{
+			width = w;
+			height = h;
+			tiles.resize(w * h);
+		}
 
 		std::vector<Tile> tiles;
 

@@ -4,7 +4,8 @@
 
 #include "RenderTargetSprite.h"
 
-class SystemRenderHealthBars : public ECS::BaseSystem {
+class SystemRenderHealthBars : public ECS::BaseSystem
+{
 public:
 	SystemRenderHealthBars(RenderTargetSprite& target, Assets::Texture texture) : m_Target(target), m_Texture(texture) {}
 	~SystemRenderHealthBars() {}

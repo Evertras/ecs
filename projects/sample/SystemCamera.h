@@ -2,17 +2,33 @@
 
 #include <System.h>
 
-class SystemCamera : public ECS::BaseSystem {
+class SystemCamera : public ECS::BaseSystem
+{
 public:
-	SystemCamera(float viewportWidth, float viewportHeight) : m_CameraPos({ 0,0 }) { UpdateViewportSize(viewportWidth, viewportHeight); }
+	SystemCamera(float viewportWidth, float viewportHeight) : m_CameraPos({ 0, 0 })
+	{
+		UpdateViewportSize(viewportWidth, viewportHeight);
+	}
 	~SystemCamera() {}
 
-	void Run(ECS::EntityList &el, ECS::DeltaSeconds d) override;
+	void Run(ECS::EntityList& el, ECS::DeltaSeconds d) override;
 
-	const glm::vec2& GetPosition() const { return m_CameraPos; }
-	const glm::mat4& GetView() const { return m_View; }
-	const glm::mat4& GetProjection() const { return m_Projection; }
-	const glm::mat4& GetViewProjection() const { return m_VP; }
+	const glm::vec2& GetPosition() const
+	{
+		return m_CameraPos;
+	}
+	const glm::mat4& GetView() const
+	{
+		return m_View;
+	}
+	const glm::mat4& GetProjection() const
+	{
+		return m_Projection;
+	}
+	const glm::mat4& GetViewProjection() const
+	{
+		return m_VP;
+	}
 
 	void UpdateViewportSize(float viewportWidth, float viewportHeight);
 

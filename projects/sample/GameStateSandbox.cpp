@@ -42,11 +42,13 @@ GameStateSandbox::GameStateSandbox(SDL_Window* window) : m_Window(window)
 
 		float ratio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
 
-		if (ratio < 1.f) {
+		if (ratio < 1.f)
+		{
 			screen.width = 1.f;
 			screen.height = 1.f / ratio;
 		}
-		else {
+		else
+		{
 			screen.width = ratio;
 			screen.height = 1.f;
 		}
@@ -55,22 +57,22 @@ GameStateSandbox::GameStateSandbox(SDL_Window* window) : m_Window(window)
 		m_UIRoot = std::make_unique<UI::BaseContainer>(screen);
 
 		auto square = m_UIRoot->AddChild(
-			std::make_unique<UI::Icon>(
-				glm::vec2{ 0.f, 0.f },
-				UI::Dimensions{ 0.2f, 0.2f },
-				UI::Attachment(UI::AP_CENTER, UI::AP_TOP),
-				Assets::Factory::GetTexture("assets/icon_firestream.png")
-		));
+		                  std::make_unique<UI::Icon>(
+		                      glm::vec2{ 0.f, 0.f },
+		                      UI::Dimensions{ 0.2f, 0.2f },
+		                      UI::Attachment(UI::AP_CENTER, UI::AP_TOP),
+		                      Assets::Factory::GetTexture("assets/icon_firestream.png")
+		                  ));
 
 		auto bar = static_cast<UI::SolidBar*>(square->AddChild(
-			std::make_unique<UI::SolidBar>(
-				glm::vec2{ 0.f, 0.f },
-				UI::Dimensions{ 0.05f, 0.2f },
-				UI::BD_UP,
-				UI::Attachment(UI::AP_RIGHT, UI::AP_LEFT),
-				Color::DarkGreen
-				)
-		));
+		        std::make_unique<UI::SolidBar>(
+		            glm::vec2{ 0.f, 0.f },
+		            UI::Dimensions{ 0.05f, 0.2f },
+		            UI::BD_UP,
+		            UI::Attachment(UI::AP_RIGHT, UI::AP_LEFT),
+		            Color::DarkGreen
+		        )
+		                                      ));
 
 		bar->SetPercent(0.3f);
 	}
@@ -102,15 +104,18 @@ GameStateSandbox::GameStateSandbox(SDL_Window* window) : m_Window(window)
 
 GameStateSandbox::~GameStateSandbox() {}
 
-std::unique_ptr<GameState> GameStateSandbox::Update(ECS::DeltaSeconds d) {
+std::unique_ptr<GameState> GameStateSandbox::Update(ECS::DeltaSeconds d)
+{
 	m_InputStateEdit.Update(m_SystemCamera->GetView());
 	m_InputStatePlay.Update(m_SystemCamera->GetView());
 
-	for (auto iter = m_Systems.begin(); iter != m_Systems.end(); ++iter) {
+	for (auto iter = m_Systems.begin(); iter != m_Systems.end(); ++iter)
+	{
 		(*iter)->Run(m_EntityList, d);
 	}
 
-	if (m_InputStateEdit.QuitPressed()) {
+	if (m_InputStateEdit.QuitPressed())
+	{
 		SDL_Event quitEvent;
 
 		quitEvent.type = SDL_QUIT;
@@ -128,7 +133,8 @@ std::unique_ptr<GameState> GameStateSandbox::Update(ECS::DeltaSeconds d) {
 	return nullptr;
 }
 
-void GameStateSandbox::Draw() {
+void GameStateSandbox::Draw()
+{
 	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 

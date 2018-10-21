@@ -18,7 +18,7 @@ public:
 	void Run();
 
 private:
-	SDL_Window *m_Window;
+	SDL_Window* m_Window;
 	SDL_GLContext m_Context;
 
 	std::unique_ptr<GameState> m_GameState;

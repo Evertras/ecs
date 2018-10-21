@@ -6,12 +6,13 @@
 #include "InputStateEdit.h"
 #include "RenderTargetSprite.h"
 
-class SystemLevelContainsOverlay : public ECS::BaseSystem {
+class SystemLevelContainsOverlay : public ECS::BaseSystem
+{
 public:
 	SystemLevelContainsOverlay(
-		const InputStateEdit& inputState,
-		RenderTargetSprite& target,
-		Assets::Level& level
+	    const InputStateEdit& inputState,
+	    RenderTargetSprite& target,
+	    Assets::Level& level
 	) : m_InputState(inputState),
 		m_Target(target),
 		m_LevelData(level),

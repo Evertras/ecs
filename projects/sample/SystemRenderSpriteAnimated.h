@@ -6,13 +6,13 @@
 class SystemRenderSpriteAnimated : public ECS::System<Component::AnimatedSprite, Component::Position>
 {
 public:
-	SystemRenderSpriteAnimated(RenderTargetSprite &target);
+	SystemRenderSpriteAnimated(RenderTargetSprite& target);
 	~SystemRenderSpriteAnimated();
 
-	void Run(ECS::EntityList &el, ECS::DeltaSeconds deltaSeconds) override;
+	void Run(ECS::EntityList& el, ECS::DeltaSeconds deltaSeconds) override;
 
 private:
-	RenderTargetSprite &m_RenderTarget;
+	RenderTargetSprite& m_RenderTarget;
 
 	float m_TimePassed;
 };

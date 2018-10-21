@@ -3,10 +3,12 @@
 #include "Components.h"
 #include "SystemCamera.h"
 
-void SystemCamera::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
+void SystemCamera::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
+{
 	glm::vec2 cameraPos = m_CameraPos;
 
-	ECS::EntityListFunction f = [&cameraPos](ECS::Entity &e, ECS::DeltaSeconds d) {
+	ECS::EntityListFunction f = [&cameraPos](ECS::Entity & e, ECS::DeltaSeconds d)
+	{
 		auto diff = e.Data<Component::Position>().pos - cameraPos;
 
 		// Cheap but effective
@@ -37,21 +39,23 @@ void SystemCamera::UpdateViewportSize(float viewportWidth, float viewportHeight)
 	UpdateProjection();
 }
 
-void SystemCamera::UpdateView() {
+void SystemCamera::UpdateView()
+{
 	m_View =
-		glm::translate(
-			glm::scale(
-				glm::identity<glm::mat4>(),
-				glm::vec3(m_WorldZoom, m_WorldZoom, 1.f)),
-			glm::vec3(
-				-m_CameraPos.x + m_WorldWidth * 0.5f,
-				-m_CameraPos.y + m_WorldHeight * 0.5f,
-				0.0f));
+	    glm::translate(
+	        glm::scale(
+	            glm::identity<glm::mat4>(),
+	            glm::vec3(m_WorldZoom, m_WorldZoom, 1.f)),
+	        glm::vec3(
+	            -m_CameraPos.x + m_WorldWidth * 0.5f,
+	            -m_CameraPos.y + m_WorldHeight * 0.5f,
+	            0.0f));
 
 	m_VP = m_Projection * m_View;
 }
 
-void SystemCamera::UpdateProjection() {
+void SystemCamera::UpdateProjection()
+{
 	m_Projection = glm::ortho(0.f, m_ViewportWidth, m_ViewportHeight, 0.f, -100.f, 100.f);
 
 	m_VP = m_Projection * m_View;

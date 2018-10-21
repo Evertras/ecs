@@ -3,7 +3,8 @@
 #include <System.h>
 #include "RenderTargetText.h"
 
-class SystemRenderDamageNumbers : public ECS::BaseSystem {
+class SystemRenderDamageNumbers : public ECS::BaseSystem
+{
 public:
 	SystemRenderDamageNumbers(RenderTargetText& target) : m_Target(target) {}
 	~SystemRenderDamageNumbers() {}

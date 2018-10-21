@@ -5,8 +5,10 @@
 #include <glm/vec4.hpp>
 #include "Assets.h"
 
-namespace UI {
-	enum AnchorPoint {
+namespace UI
+{
+	enum AnchorPoint
+	{
 		AP_CENTER,
 		AP_TOP,
 		AP_RIGHT,
@@ -14,7 +16,8 @@ namespace UI {
 		AP_BOTTOM
 	};
 
-	struct Attachment {
+	struct Attachment
+	{
 		Attachment() : parent(AP_CENTER), child(AP_CENTER) {}
 		Attachment(AnchorPoint parent, AnchorPoint child) : parent(parent), child(child) {}
 
@@ -22,30 +25,54 @@ namespace UI {
 		AnchorPoint child;
 	};
 
-	struct Dimensions {
+	struct Dimensions
+	{
 		float width;
 		float height;
 	};
 
-	class ElementRenderer {
+	class ElementRenderer
+	{
 	public:
 		virtual void RenderRect(glm::vec2 center, Dimensions d, glm::vec4 color) = 0;
 		virtual void RenderSprite(glm::vec2 center, Dimensions d, const Assets::Texture& tex, glm::vec4 color) = 0;
 		virtual void SetBaseSize(Dimensions size) = 0;
 	};
 
-	class Element {
+	class Element
+	{
 	public:
 		virtual ~Element() { }
-		Element(const Element &rhs) = delete;
+		Element(const Element& rhs) = delete;
 
-		void SetDimensions(Dimensions d) { m_Dimensions = d; UpdateAbsoluteCenter(); }
-		void SetParentAnchor(AnchorPoint point) { m_Attachment.parent = point; UpdateAbsoluteCenter(); }
-		void SetChildAnchor(AnchorPoint point) { m_Attachment.child = point; UpdateAbsoluteCenter(); }
-		void SetAttachment(Attachment attachment) { m_Attachment = attachment; UpdateAbsoluteCenter(); }
-		void SetRelativeCenter(const glm::vec2& center) { m_RelativeCenter = center; UpdateAbsoluteCenter(); }
+		void SetDimensions(Dimensions d)
+		{
+			m_Dimensions = d;
+			UpdateAbsoluteCenter();
+		}
+		void SetParentAnchor(AnchorPoint point)
+		{
+			m_Attachment.parent = point;
+			UpdateAbsoluteCenter();
+		}
+		void SetChildAnchor(AnchorPoint point)
+		{
+			m_Attachment.child = point;
+			UpdateAbsoluteCenter();
+		}
+		void SetAttachment(Attachment attachment)
+		{
+			m_Attachment = attachment;
+			UpdateAbsoluteCenter();
+		}
+		void SetRelativeCenter(const glm::vec2& center)
+		{
+			m_RelativeCenter = center;
+			UpdateAbsoluteCenter();
+		}
 
-		Element* AddChild(std::unique_ptr<Element> child) {
+		Element* AddChild(std::unique_ptr<Element> child)
+		{
 			child->m_Parent = this;
 			child->UpdateAbsoluteCenter();
 
@@ -54,32 +81,45 @@ namespace UI {
 			return e;
 		}
 
-		const glm::vec2& GetAbsoluteCenter() const { return m_AbsoluteCenter; }
-		const Dimensions& GetDimensions() const { return m_Dimensions; }
+		const glm::vec2& GetAbsoluteCenter() const
+		{
+			return m_AbsoluteCenter;
+		}
+		const Dimensions& GetDimensions() const
+		{
+			return m_Dimensions;
+		}
 
-		void Draw(ElementRenderer* renderer) const {
+		void Draw(ElementRenderer* renderer) const
+		{
 			DrawReceive(renderer);
 
-			for (auto iter = m_Children.begin(); iter != m_Children.end(); ++iter) {
+			for (auto iter = m_Children.begin(); iter != m_Children.end(); ++iter)
+			{
 				(*iter)->Draw(renderer);
 			}
 		}
 
 	protected:
 		Element(glm::vec2 center, Dimensions d, Attachment a)
-			: m_Parent(nullptr), m_RelativeCenter(center), m_Dimensions(d), m_Attachment(a), m_AbsoluteCenter(center) {
+			: m_Parent(nullptr), m_RelativeCenter(center), m_Dimensions(d), m_Attachment(a), m_AbsoluteCenter(center)
+		{
 		}
 
 		virtual void DrawReceive(ElementRenderer* renderer) const = 0;
 
-		void UpdateChildrenAbsoluteCenter() {
-			for (auto iter = m_Children.begin(); iter != m_Children.end(); ++iter) {
+		void UpdateChildrenAbsoluteCenter()
+		{
+			for (auto iter = m_Children.begin(); iter != m_Children.end(); ++iter)
+			{
 				(*iter)->UpdateAbsoluteCenter();
 			}
 		}
 
-		void UpdateAbsoluteCenter() {
-			if (m_Parent == nullptr) {
+		void UpdateAbsoluteCenter()
+		{
+			if (m_Parent == nullptr)
+			{
 				m_AbsoluteCenter = { m_Dimensions.width * 0.5f, m_Dimensions.height * 0.5f };
 				UpdateChildrenAbsoluteCenter();
 				return;
@@ -87,7 +127,8 @@ namespace UI {
 
 			m_AbsoluteCenter = m_Parent->m_AbsoluteCenter;
 
-			switch (m_Attachment.parent) {
+			switch (m_Attachment.parent)
+			{
 			case AP_TOP:
 				m_AbsoluteCenter += glm::vec2{ 0.f, -0.5f * m_Parent->m_Dimensions.height };
 				break;
@@ -105,7 +146,8 @@ namespace UI {
 				break;
 			}
 
-			switch (m_Attachment.child) {
+			switch (m_Attachment.child)
+			{
 			case AP_TOP:
 				m_AbsoluteCenter += glm::vec2{ 0.f, 0.5f * m_Dimensions.height };
 				break;
@@ -136,35 +178,46 @@ namespace UI {
 		glm::vec2 m_AbsoluteCenter;
 	};
 
-	class BaseContainer : public Element {
+	class BaseContainer : public Element
+	{
 	public:
-		BaseContainer(Dimensions d) : Element({ d.width*0.5f, d.height*0.5f }, d, Attachment(AP_CENTER, AP_CENTER)) {}
+		BaseContainer(Dimensions d) : Element({ d.width * 0.5f, d.height * 0.5f }, d, Attachment(AP_CENTER, AP_CENTER)) {}
 
 	protected:
-		void DrawReceive(ElementRenderer* renderer) const override {
+		void DrawReceive(ElementRenderer* renderer) const override
+		{
 			renderer->SetBaseSize(m_Dimensions);
 		}
 	};
 
-	class Panel : public Element {
+	class Panel : public Element
+	{
 	public:
 		Panel(glm::vec2 center, Dimensions d, Attachment a, glm::vec4 color = { 0.f, 0.f, 0.f, 0.f })
 			: Element(center, d, a), m_Color(color) {}
 		~Panel() = default;
-		Panel(const Panel &rhs) = default;
+		Panel(const Panel& rhs) = default;
 
-		void SetColor(const glm::vec4& color) { m_Color = color; }
-		const glm::vec4& GetColor() const { return m_Color; }
+		void SetColor(const glm::vec4& color)
+		{
+			m_Color = color;
+		}
+		const glm::vec4& GetColor() const
+		{
+			return m_Color;
+		}
 
 	protected:
 		glm::vec4 m_Color;
 
-		void DrawReceive(ElementRenderer* renderer) const override {
+		void DrawReceive(ElementRenderer* renderer) const override
+		{
 			renderer->RenderRect(m_AbsoluteCenter, m_Dimensions, m_Color);
 		}
 	};
 
-	class Icon : public Element {
+	class Icon : public Element
+	{
 	public:
 		Icon(glm::vec2 center, Dimensions d, Attachment a, Assets::Texture texture, glm::vec4 color = { 1.f, 1.f, 1.f, 1.f })
 			: Element(center, d, a), m_Texture(texture), m_Color(color) {}
@@ -174,28 +227,38 @@ namespace UI {
 	protected:
 		glm::vec4 m_Color;
 		Assets::Texture m_Texture;
-		void DrawReceive(ElementRenderer* renderer) const override {
+		void DrawReceive(ElementRenderer* renderer) const override
+		{
 			renderer->RenderSprite(m_AbsoluteCenter, m_Dimensions, m_Texture, m_Color);
 		}
 	};
 
-	enum BarDirection {
+	enum BarDirection
+	{
 		BD_UP,
 		BD_DOWN,
 		BD_RIGHT,
 		BD_LEFT
 	};
 
-	class SolidBar : public Element {
+	class SolidBar : public Element
+	{
 	public:
 		SolidBar(glm::vec2 center, Dimensions d, BarDirection direction, Attachment a, glm::vec4 color)
 			: Element(center, d, a), m_Direction(direction), m_Color(color), m_Percent(1.f) {}
 		~SolidBar() = default;
 		SolidBar(const SolidBar& rhs) = delete;
 
-		void SetPercent(float percent) {
-			if (percent < 0.f) { percent = 0.f; }
-			else if (percent > 1.f) { percent = 1.f; }
+		void SetPercent(float percent)
+		{
+			if (percent < 0.f)
+			{
+				percent = 0.f;
+			}
+			else if (percent > 1.f)
+			{
+				percent = 1.f;
+			}
 
 			m_Percent = percent;
 		}

@@ -10,9 +10,9 @@
 class GameStateSandbox : public GameState
 {
 public:
-	GameStateSandbox(struct SDL_Window *window);
+	GameStateSandbox(struct SDL_Window* window);
 	~GameStateSandbox();
-	GameStateSandbox(const GameStateSandbox &rhs) = delete;
+	GameStateSandbox(const GameStateSandbox& rhs) = delete;
 
 	std::unique_ptr<GameState> Update(ECS::DeltaSeconds d) override;
 	void Draw() override;
@@ -33,5 +33,5 @@ private:
 
 	std::unique_ptr<UI::BaseContainer> m_UIRoot;
 
-	const SystemCamera *m_SystemCamera;
+	const SystemCamera* m_SystemCamera;
 };

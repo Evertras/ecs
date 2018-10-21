@@ -4,15 +4,16 @@
 #include "InputStateEdit.h"
 #include "RenderTargetTile.h"
 
-class SystemInputLevelEdit : public ECS::BaseSystem {
+class SystemInputLevelEdit : public ECS::BaseSystem
+{
 public:
 	SystemInputLevelEdit(
-		const InputStateEdit& inputState,
-		RenderTargetTile& target,
-		Assets::Level& levelData,
-		ECS::EntityID trackID,
-		int tilemapWidth,
-		int tilemapHeight)
+	    const InputStateEdit& inputState,
+	    RenderTargetTile& target,
+	    Assets::Level& levelData,
+	    ECS::EntityID trackID,
+	    int tilemapWidth,
+	    int tilemapHeight)
 		: m_InputState(inputState),
 		  m_RenderTarget(target),
 		  m_LevelData(levelData),

@@ -8,9 +8,9 @@
 class GameStateTitle : public GameState
 {
 public:
-	GameStateTitle(struct SDL_Window *window);
+	GameStateTitle(struct SDL_Window* window);
 	~GameStateTitle();
-	GameStateTitle(const GameStateTitle &rhs) = delete;
+	GameStateTitle(const GameStateTitle& rhs) = delete;
 
 	std::unique_ptr<GameState> Update(ECS::DeltaSeconds d) override;
 	void Draw() override;

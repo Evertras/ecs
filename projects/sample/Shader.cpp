@@ -6,15 +6,18 @@
 
 using namespace Assets;
 
-Shader::~Shader() {
+Shader::~Shader()
+{
 	glDeleteProgram(m_ShaderProgram);
 	glDeleteShader(m_VertexShader);
 	glDeleteShader(m_FragShader);
 }
 
-Shader::Shader(const char* vertName, const char* fragName) {
+Shader::Shader(const char* vertName, const char* fragName)
+{
 	if (!CompileShader(vertName, GL_VERTEX_SHADER, m_VertexShader) ||
-		!CompileShader(fragName, GL_FRAGMENT_SHADER, m_FragShader)) {
+	        !CompileShader(fragName, GL_FRAGMENT_SHADER, m_FragShader))
+	{
 		throw "Nope";
 	}
 
@@ -24,15 +27,18 @@ Shader::Shader(const char* vertName, const char* fragName) {
 	glAttachShader(m_ShaderProgram, m_FragShader);
 	glLinkProgram(m_ShaderProgram);
 
-	if (!IsValidProgram()) {
+	if (!IsValidProgram())
+	{
 		throw "Nope";
 	}
 }
 
-bool Shader::CompileShader(const char* fileName, GLenum shaderType, GLuint &outShader) {
+bool Shader::CompileShader(const char* fileName, GLenum shaderType, GLuint& outShader)
+{
 	std::ifstream source(fileName);
 
-	if (!source.is_open()) {
+	if (!source.is_open())
+	{
 		SDL_Log("Error opening shader file: %s", fileName);
 		return false;
 	}
@@ -48,7 +54,8 @@ bool Shader::CompileShader(const char* fileName, GLenum shaderType, GLuint &outS
 	glShaderSource(outShader, 1, &(contents), nullptr);
 	glCompileShader(outShader);
 
-	if (!IsCompiled(outShader)) {
+	if (!IsCompiled(outShader))
+	{
 		SDL_Log("Failed to compile shader %s", fileName);
 		return false;
 	}
@@ -56,11 +63,14 @@ bool Shader::CompileShader(const char* fileName, GLenum shaderType, GLuint &outS
 	return true;
 }
 
-bool Shader::IsCompiled(GLuint shader) {
+bool Shader::IsCompiled(GLuint shader)
+{
 	GLint status;
 
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
-	if (status != GL_TRUE) {
+
+	if (status != GL_TRUE)
+	{
 		char buffer[512];
 		memset(buffer, 0, 512);
 		glGetShaderInfoLog(shader, 511, nullptr, buffer);
@@ -71,12 +81,14 @@ bool Shader::IsCompiled(GLuint shader) {
 	return true;
 }
 
-bool Shader::IsValidProgram() {
+bool Shader::IsValidProgram()
+{
 	GLint status;
 
 	glGetProgramiv(m_ShaderProgram, GL_LINK_STATUS, &status);
 
-	if (status != GL_TRUE) {
+	if (status != GL_TRUE)
+	{
 		char buffer[512];
 		memset(buffer, 0, 512);
 		glGetProgramInfoLog(m_ShaderProgram, 511, nullptr, buffer);
@@ -87,11 +99,13 @@ bool Shader::IsValidProgram() {
 	return true;
 }
 
-void Shader::SetActive() {
+void Shader::SetActive()
+{
 	glUseProgram(m_ShaderProgram);
 }
 
-void SpriteShader::SetTextureClipRect(int texWidth, int texHeight, int x, int y, int width, int height) {
+void SpriteShader::SetTextureClipRect(int texWidth, int texHeight, int x, int y, int width, int height)
+{
 	float fx = ((float)x) / ((float)texWidth);
 	float fy = ((float)y) / ((float)texHeight);
 	float fw = ((float)width) / ((float)texWidth);
@@ -101,12 +115,14 @@ void SpriteShader::SetTextureClipRect(int texWidth, int texHeight, int x, int y,
 	glUniform4fv(m_TextureRect, 1, val);
 }
 
-void SpriteShader::ResetTextureClipRect() {
+void SpriteShader::ResetTextureClipRect()
+{
 	const GLfloat val[4] = { 0.f, 0.f, 1.f, 1.f };
 	glUniform4fv(m_TextureRect, 1, val);
 }
 
-SpriteShader::SpriteShader() : Shader("assets/shaders/sprite.vert", "assets/shaders/sprite.frag") {
+SpriteShader::SpriteShader() : Shader("assets/shaders/sprite.vert", "assets/shaders/sprite.frag")
+{
 	m_MVP = glGetUniformLocation(m_ShaderProgram, "MVP");
 	SDL_Log("SpriteShader MVP ID = %d", m_MVP);
 
@@ -117,7 +133,8 @@ SpriteShader::SpriteShader() : Shader("assets/shaders/sprite.vert", "assets/shad
 	SDL_Log("SpriteShader Sprite Color ID = %d", m_SpriteColor);
 }
 
-UIRectShader::UIRectShader() : Shader("assets/shaders/uiRect.vert", "assets/shaders/uiRect.frag") {
+UIRectShader::UIRectShader() : Shader("assets/shaders/uiRect.vert", "assets/shaders/uiRect.frag")
+{
 	m_MVP = glGetUniformLocation(m_ShaderProgram, "MVP");
 	SDL_Log("RectShader MVP ID = %d", m_MVP);
 

@@ -28,7 +28,7 @@
 #include "UIPyromancer.h"
 
 GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
-{	
+{
 	// TODO: Figure out how to handle resizes when resizing becomes a thing
 	int windowWidth, windowHeight;
 	SDL_GetWindowSize(m_Window, &windowWidth, &windowHeight);
@@ -59,12 +59,15 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 
 	// Level loading
 	{
-		for (int x = 0; x < m_LevelData.width; ++x) {
-			for (int y = 0; y < m_LevelData.height; ++y) {
+		for (int x = 0; x < m_LevelData.width; ++x)
+		{
+			for (int y = 0; y < m_LevelData.height; ++y)
+			{
 				auto tile = m_LevelData.Get(x, y);
 				m_TileTarget->SetTile(x, y, tile.tilemapX, tile.tilemapY);
 
-				if (tile.contains != Assets::Level::CT_NONE) {
+				if (tile.contains != Assets::Level::CT_NONE)
+				{
 					m_EntityList.Add(EntityFactory::Contains(tile.contains, { static_cast<float>(x) + 0.5f, static_cast<float>(y) + 0.9f }));
 				}
 			}
@@ -108,11 +111,13 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 
 		float ratio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
 
-		if (ratio < 1.f) {
+		if (ratio < 1.f)
+		{
 			screen.width = 1.f;
 			screen.height = 1.f / ratio;
 		}
-		else {
+		else
+		{
 			screen.width = ratio;
 			screen.height = 1.f;
 		}
@@ -123,14 +128,17 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 
 GameStatePlay::~GameStatePlay() {}
 
-std::unique_ptr<GameState> GameStatePlay::Update(ECS::DeltaSeconds d) {
+std::unique_ptr<GameState> GameStatePlay::Update(ECS::DeltaSeconds d)
+{
 	m_InputState.Update(m_SystemCamera->GetView());
 
-	for (auto iter = m_Systems.begin(); iter != m_Systems.end(); ++iter) {
+	for (auto iter = m_Systems.begin(); iter != m_Systems.end(); ++iter)
+	{
 		(*iter)->Run(m_EntityList, d);
 	}
 
-	if (m_InputState.QuitPressed()) {
+	if (m_InputState.QuitPressed())
+	{
 		return std::make_unique<GameStateTitle>(m_Window);
 	}
 
@@ -139,14 +147,16 @@ std::unique_ptr<GameState> GameStatePlay::Update(ECS::DeltaSeconds d) {
 
 	auto pyromancer = m_EntityList.First<Component::AbilitiesPyromancer>();
 
-	if (pyromancer != nullptr) {
+	if (pyromancer != nullptr)
+	{
 		m_UIPyromancer->Update(pyromancer->Data<Component::AbilitiesPyromancer>());
 	}
 
 	return nullptr;
 }
 
-void GameStatePlay::Draw() {
+void GameStatePlay::Draw()
+{
 	glClearColor(0.03f, 0.01f, 0.01f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 

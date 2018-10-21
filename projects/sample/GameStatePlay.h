@@ -9,11 +9,12 @@
 
 #include <SDL/SDL.h>
 
-class GameStatePlay : public GameState {
+class GameStatePlay : public GameState
+{
 public:
-	GameStatePlay(SDL_Window *window);
+	GameStatePlay(SDL_Window* window);
 	~GameStatePlay();
-	GameStatePlay(const GameStatePlay &rhs) = delete;
+	GameStatePlay(const GameStatePlay& rhs) = delete;
 
 	std::unique_ptr<GameState> Update(ECS::DeltaSeconds d) override;
 	void Draw() override;
@@ -39,5 +40,5 @@ private:
 	Assets::Level m_LevelData;
 	ECS::EntityID m_PlayerID;
 
-	const SystemCamera *m_SystemCamera;
+	const SystemCamera* m_SystemCamera;
 };

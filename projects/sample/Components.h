@@ -5,26 +5,31 @@
 #include "AbilityValues.h"
 #include "Assets.h"
 
-namespace Component {
+namespace Component
+{
 	struct WobbleSprite {};
 	struct Player {};
 	struct Enemy {};
 	struct CameraTarget {};
 
-	struct LevelEditCursor {
+	struct LevelEditCursor
+	{
 		int x;
 		int y;
 	};
 
-	struct Position {
+	struct Position
+	{
 		glm::vec2 pos;
 	};
 
-	struct Velocity {
+	struct Velocity
+	{
 		glm::vec2 vel;
 	};
 
-	struct AnimatedSprite {
+	struct AnimatedSprite
+	{
 		AnimatedSprite() : currentFrame(0.f), scale(1.f), flipped(false) {}
 		AnimatedSprite(const Assets::SpriteAnimation& anim, float size = 1.f) : currentFrame(0.f), scale(size), flipped(false), animation(anim) {}
 		Assets::SpriteAnimation animation;
@@ -37,17 +42,20 @@ namespace Component {
 		bool flipped;
 	};
 
-	struct TileSprite {
+	struct TileSprite
+	{
 		Assets::SpriteTile tile;
 	};
 
 	struct InputMove { };
 
-	struct Move {
+	struct Move
+	{
 		float unitsPerSecond;
 	};
 
-	struct Collision {
+	struct Collision
+	{
 		Collision() : goesThroughWalls(false), boundingLeft(0.f), boundingRight(0.f), boundingTop(0.f), boundingBottom(0.f) {}
 
 		Collision(float boundLeft, float boundRight, float boundTop, float boundBottom, bool goThroughWalls = false) :
@@ -65,7 +73,8 @@ namespace Component {
 		float boundingBottom;
 	};
 
-	struct AbilitiesPyromancer {
+	struct AbilitiesPyromancer
+	{
 		AbilitiesPyromancer() : cooldownFireStream(0.f), cooldownIgnite(0.f), chargeFireStream(AbilityValues::Pyromancer::FirestreamChargeSeconds) {}
 
 		float cooldownFireStream;
@@ -73,14 +82,17 @@ namespace Component {
 		float chargeFireStream;
 	};
 
-	struct LifetimeTimer {
+	struct LifetimeTimer
+	{
 		float lifetime;
 	};
 
 	struct LifetimeAnimation {};
 
-	struct Ability {
-		enum ABILITY_TYPE {
+	struct Ability
+	{
+		enum ABILITY_TYPE
+		{
 			ABILITY_FIRESTREAM,
 			ABILITY_IGNITE,
 
@@ -101,17 +113,20 @@ namespace Component {
 		float param2;
 	};
 
-	struct EffectBurn {
+	struct EffectBurn
+	{
 		float dps;
 		float secondsRemaining;
 		float tickRemaining;
 	};
 
-	struct DamageNumber {
+	struct DamageNumber
+	{
 		int amount;
 	};
 
-	struct Health {
+	struct Health
+	{
 		Health() : max(0.f), remaining(0.f) {}
 		Health(float m) : max(m), remaining(m) {}
 
@@ -119,10 +134,12 @@ namespace Component {
 		float remaining;
 	};
 
-	struct AISkeletonIdle {
+	struct AISkeletonIdle
+	{
 		float alertRange;
 	};
 
-	struct AISkeletonActive {
+	struct AISkeletonActive
+	{
 	};
 }

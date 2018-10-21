@@ -9,9 +9,9 @@
 class GameStateEdit : public GameState
 {
 public:
-	GameStateEdit(SDL_Window *window);
+	GameStateEdit(SDL_Window* window);
 	~GameStateEdit();
-	GameStateEdit(const GameStateEdit &rhs) = delete;
+	GameStateEdit(const GameStateEdit& rhs) = delete;
 
 	std::unique_ptr<GameState> Update(ECS::DeltaSeconds d) override;
 	void Draw() override;
@@ -31,5 +31,5 @@ private:
 	Assets::Level m_LevelData;
 	ECS::EntityID m_CursorID;
 
-	const SystemCamera *m_SystemCamera;
+	const SystemCamera* m_SystemCamera;
 };

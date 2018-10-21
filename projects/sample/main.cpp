@@ -5,7 +5,8 @@ int main(int argc, char** argv)
 {
 	Game g;
 
-	if (g.Initialize()) {
+	if (g.Initialize())
+	{
 		g.Run();
 	}
 

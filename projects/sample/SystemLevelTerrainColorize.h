@@ -6,19 +6,20 @@
 #include "RenderTargetTile.h"
 #include "Assets.h"
 
-class SystemLevelTerrainColorize : public ECS::BaseSystem {
+class SystemLevelTerrainColorize : public ECS::BaseSystem
+{
 public:
 	SystemLevelTerrainColorize(
-		const InputStateEdit &inputState,
-		RenderTargetTile &render,
-		Assets::Level &levelData)
+	    const InputStateEdit& inputState,
+	    RenderTargetTile& render,
+	    Assets::Level& levelData)
 		: m_InputState(inputState),
 		  m_Target(render),
 		  m_LevelData(levelData),
 		  m_On(false)
 	{}
 
-	void Run(ECS::EntityList &el, ECS::DeltaSeconds d) override;
+	void Run(ECS::EntityList& el, ECS::DeltaSeconds d) override;
 
 private:
 	const InputStateEdit& m_InputState;

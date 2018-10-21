@@ -4,7 +4,8 @@
 
 #include "Components.h"
 
-void SystemInputMovementEdit::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
+void SystemInputMovementEdit::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
+{
 	bool moveUp = m_InputState.MoveUpPressed();
 	bool moveDown = m_InputState.MoveDownPressed();
 	bool moveRight = m_InputState.MoveRightPressed();
@@ -12,7 +13,8 @@ void SystemInputMovementEdit::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 
 	auto e = el.First<Component::LevelEditCursor, Component::Position>();
 
-	if (e == nullptr) {
+	if (e == nullptr)
+	{
 		SDL_Log("No cursor found");
 		return;
 	}
@@ -20,27 +22,33 @@ void SystemInputMovementEdit::Run(ECS::EntityList &el, ECS::DeltaSeconds d) {
 	Component::LevelEditCursor& cursor = e->Data<Component::LevelEditCursor>();
 	Component::Position& pos = e->Data<Component::Position>();
 
-	if (moveUp) {
+	if (moveUp)
+	{
 		cursor.y -= 1;
 	}
 
-	if (moveDown) {
+	if (moveDown)
+	{
 		cursor.y += 1;
 	}
 
-	if (moveLeft) {
+	if (moveLeft)
+	{
 		cursor.x -= 1;
 	}
 
-	if (moveRight) {
+	if (moveRight)
+	{
 		cursor.x += 1;
 	}
 
-	if (cursor.y < 0) {
+	if (cursor.y < 0)
+	{
 		cursor.y = 0;
 	}
 
-	if (cursor.x < 0) {
+	if (cursor.x < 0)
+	{
 		cursor.x = 0;
 	}
 

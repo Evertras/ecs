@@ -1,7 +1,9 @@
 #pragma once
 
-namespace AbilityValues {
-	namespace Pyromancer {
+namespace AbilityValues
+{
+	namespace Pyromancer
+	{
 		const float IgniteCooldown = 5.f;
 		const float FirestreamChargeSeconds = 3.f;
 		const float FirestreamRechargeRate = 0.4f;

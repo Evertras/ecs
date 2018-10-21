@@ -3,7 +3,8 @@
 #include "Assets.h"
 #include "UI.h"
 
-class RenderTargetUI : public UI::ElementRenderer {
+class RenderTargetUI : public UI::ElementRenderer
+{
 public:
 	RenderTargetUI(Assets::UIRectShader& rectShader, Assets::SpriteShader& spriteShader);
 	~RenderTargetUI();

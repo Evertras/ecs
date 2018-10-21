@@ -2,7 +2,8 @@
 
 #include <glm/vec4.hpp>
 
-namespace Color {
+namespace Color
+{
 	const glm::vec4 White{ 1.f, 1.f, 1.f, 1.f };
 	const glm::vec4 Gray{ 1.f, 1.f, 1.f, 1.f };
 	const glm::vec4 Black{ 0.f, 0.f, 0.f, 1.f };

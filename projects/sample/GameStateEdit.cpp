@@ -16,7 +16,8 @@
 #include "SystemRenderSpriteAnimated.h"
 #include "SystemVelocity.h"
 
-GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window) {
+GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window)
+{
 	{
 		// Shaders
 		m_SpriteShader = std::make_unique<Assets::SpriteShader>();
@@ -37,8 +38,10 @@ GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window) {
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
 		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>(*m_SpriteShader.get(), m_DungeonTileset, 16);
 
-		for (int x = 0; x < m_LevelData.width; ++x) {
-			for (int y = 0; y < m_LevelData.height; ++y) {
+		for (int x = 0; x < m_LevelData.width; ++x)
+		{
+			for (int y = 0; y < m_LevelData.height; ++y)
+			{
 				auto tile = m_LevelData.Get(x, y);
 				m_TileTarget->SetTile(x, y, tile.tilemapX, tile.tilemapY);
 			}
@@ -79,21 +82,26 @@ GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window) {
 	}
 }
 
-GameStateEdit::~GameStateEdit() {
+GameStateEdit::~GameStateEdit()
+{
 }
 
-std::unique_ptr<GameState> GameStateEdit::Update(ECS::DeltaSeconds d) {
+std::unique_ptr<GameState> GameStateEdit::Update(ECS::DeltaSeconds d)
+{
 	m_InputState.Update(m_SystemCamera->GetView());
 
-	for (auto iter = m_Systems.begin(); iter != m_Systems.end(); ++iter) {
+	for (auto iter = m_Systems.begin(); iter != m_Systems.end(); ++iter)
+	{
 		(*iter)->Run(m_EntityList, d);
 	}
 
-	if (m_InputState.QuitPressed()) {
+	if (m_InputState.QuitPressed())
+	{
 		return std::make_unique<GameStateTitle>(m_Window);
 	}
 
-	if (m_InputState.PlayPressed()) {
+	if (m_InputState.PlayPressed())
+	{
 		return std::make_unique<GameStatePlay>(m_Window);
 	}
 
@@ -102,7 +110,8 @@ std::unique_ptr<GameState> GameStateEdit::Update(ECS::DeltaSeconds d) {
 	return nullptr;
 }
 
-void GameStateEdit::Draw() {
+void GameStateEdit::Draw()
+{
 	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 

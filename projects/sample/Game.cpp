@@ -20,7 +20,8 @@ Game::~Game()
 	SDL_Quit();
 }
 
-bool Game::Initialize() {
+bool Game::Initialize()
+{
 	// OpenGL settings
 	{
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -38,7 +39,8 @@ bool Game::Initialize() {
 	{
 		m_Window = SDL_CreateWindow("ECS Sample", 100, 100, 1024, 768, SDL_WINDOW_OPENGL);
 
-		if (!m_Window) {
+		if (!m_Window)
+		{
 			SDL_Log("Failed to create window: %s", SDL_GetError());
 			return false;
 		}
@@ -48,7 +50,9 @@ bool Game::Initialize() {
 	{
 		m_Context = SDL_GL_CreateContext(m_Window);
 		glewExperimental = GL_TRUE;
-		if (glewInit() != GLEW_OK) {
+
+		if (glewInit() != GLEW_OK)
+		{
 			SDL_Log("Failed to initialize GLEW.");
 			return false;
 		}
@@ -62,21 +66,26 @@ bool Game::Initialize() {
 	return true;
 }
 
-void Game::Run() {
+void Game::Run()
+{
 	m_IsRunning = true;
 
-	while (m_IsRunning) {
+	while (m_IsRunning)
+	{
 		ProcessSDLEvents();
 		AdvanceFrame();
 		Draw();
 	}
 }
 
-void Game::ProcessSDLEvents() {
+void Game::ProcessSDLEvents()
+{
 	SDL_Event event;
 
-	while (SDL_PollEvent(&event)) {
-		switch (event.type) {
+	while (SDL_PollEvent(&event))
+	{
+		switch (event.type)
+		{
 		case SDL_QUIT:
 			m_IsRunning = false;
 			break;
@@ -84,7 +93,8 @@ void Game::ProcessSDLEvents() {
 	}
 }
 
-void Game::AdvanceFrame() {
+void Game::AdvanceFrame()
+{
 	while (!SDL_TICKS_PASSED(SDL_GetTicks(), m_TickCount + 1));
 
 	auto ticks = SDL_GetTicks();
@@ -93,18 +103,21 @@ void Game::AdvanceFrame() {
 
 	m_TickCount = ticks;
 
-	if (deltaSeconds > 0.05f) {
+	if (deltaSeconds > 0.05f)
+	{
 		deltaSeconds = 0.05f;
 	}
 
 	auto next = m_GameState->Update(deltaSeconds);
 
-	if (next != nullptr) {
+	if (next != nullptr)
+	{
 		m_GameState = std::move(next);
 	}
 }
 
-void Game::Draw() {
+void Game::Draw()
+{
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

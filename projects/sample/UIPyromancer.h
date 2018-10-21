@@ -3,14 +3,18 @@
 #include "UI.h"
 #include "Components.h"
 
-class UIPyromancer {
+class UIPyromancer
+{
 public:
 	UIPyromancer(UI::Dimensions screen);
-		
+
 	~UIPyromancer() {}
 	UIPyromancer(const UIPyromancer& rhs) = delete;
 
-	const UI::BaseContainer* GetRoot() { return &m_Root; }
+	const UI::BaseContainer* GetRoot()
+	{
+		return &m_Root;
+	}
 
 	void Update(const Component::AbilitiesPyromancer& abilities);
 
