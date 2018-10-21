@@ -1,0 +1,9 @@
+style=allman
+indent=tab
+indent-namespaces
+break-blocks
+pad-oper
+pad-header
+align-pointer=type
+align-reference=type
+suffix=none
