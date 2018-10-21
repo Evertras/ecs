@@ -4,8 +4,10 @@
 
 #include "MockComponents.h"
 
-SCENARIO("A system can alter a list") {
-	GIVEN("a list with two entities with positions and a system that alters positions") {
+SCENARIO("A system can alter a list")
+{
+	GIVEN("a list with two entities with positions and a system that alters positions")
+	{
 		ECS::EntityList el;
 
 		Position firstPosition = { 1.f, 2.f };

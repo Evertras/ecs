@@ -1,11 +1,13 @@
 #pragma once
 
-struct Position {
+struct Position
+{
 	float x;
 	float y;
 };
 
-struct Velocity {
+struct Velocity
+{
 	float x;
 	float y;
 };
