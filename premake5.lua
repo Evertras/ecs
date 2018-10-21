@@ -11,7 +11,6 @@ end
 
 function useECSLib()
 	includedirs "projects/ecslib/include"
-	links "ECSLib"
 end
 
 function useSDL()
@@ -126,6 +125,12 @@ project "Sample"
   useGlew()
   useOpenGL()
   useGLM()
+
+  filter "action:vs*"
+    prebuildcommands {
+      '..\\bin\\windows\\astyle.exe ..\\projects\\sample\\*.cpp --recursive --options=../.astylerc',
+      '..\\bin\\windows\\astyle.exe ..\\projects\\sample\\*.h --recursive --options=../.astylerc'
+    }
 
   filter "action:gmake*"
 	  prebuildcommands {
