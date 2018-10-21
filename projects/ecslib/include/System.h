@@ -2,10 +2,12 @@
 
 #include "EntityList.h"
 
-namespace ECS {
-	class BaseSystem {
+namespace ECS
+{
+	class BaseSystem
+	{
 	public:
-		virtual void Run(EntityList &list, DeltaSeconds deltaSeconds) = 0;
+		virtual void Run(EntityList& list, DeltaSeconds deltaSeconds) = 0;
 	};
 
 	template<typename ...T>
@@ -14,7 +16,8 @@ namespace ECS {
 	public:
 		virtual ~System() {}
 
-		void Run(EntityList &list, DeltaSeconds deltaSeconds) override {
+		void Run(EntityList& list, DeltaSeconds deltaSeconds) override
+		{
 			list.Run<T...>(m_F, deltaSeconds);
 		}
 

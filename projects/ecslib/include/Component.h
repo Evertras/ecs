@@ -1,12 +1,14 @@
 #pragma once
-namespace ECS {
-	namespace Internal {
+namespace ECS
+{
+	namespace Internal
+	{
 		class BaseComponent
 		{
 		public:
 			BaseComponent() {}
 			virtual ~BaseComponent() {}
-			BaseComponent(const BaseComponent &rhs) {}
+			BaseComponent(const BaseComponent& rhs) {}
 		};
 	}
 
@@ -15,10 +17,10 @@ namespace ECS {
 	{
 	public:
 		Component() {}
-		Component(const T &rhs) : data(rhs) {}
-		Component(const T &&rhs) : data(rhs) {}
+		Component(const T& rhs) : data(rhs) {}
+		Component(const T&& rhs) : data(rhs) {}
 		~Component() {}
-		Component(const Component<T> &rhs) : data(rhs.data) { }
+		Component(const Component<T>& rhs) : data(rhs.data) { }
 
 		T data;
 	};
