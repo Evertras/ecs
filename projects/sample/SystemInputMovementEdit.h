@@ -7,7 +7,8 @@
 class SystemInputMovementEdit : public ECS::BaseSystem
 {
 public:
-	SystemInputMovementEdit(const InputStateEdit& inputState) : m_InputState(inputState) {}
+	SystemInputMovementEdit(const InputStateEdit& inputState) : m_InputState(
+		    inputState) {}
 	~SystemInputMovementEdit() {}
 
 	void Run(ECS::EntityList& el, ECS::DeltaSeconds d) override;

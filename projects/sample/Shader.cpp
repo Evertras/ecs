@@ -33,7 +33,8 @@ Shader::Shader(const char* vertName, const char* fragName)
 	}
 }
 
-bool Shader::CompileShader(const char* fileName, GLenum shaderType, GLuint& outShader)
+bool Shader::CompileShader(const char* fileName, GLenum shaderType,
+                           GLuint& outShader)
 {
 	std::ifstream source(fileName);
 
@@ -104,7 +105,8 @@ void Shader::SetActive()
 	glUseProgram(m_ShaderProgram);
 }
 
-void SpriteShader::SetTextureClipRect(int texWidth, int texHeight, int x, int y, int width, int height)
+void SpriteShader::SetTextureClipRect(int texWidth, int texHeight, int x, int y,
+                                      int width, int height)
 {
 	float fx = ((float)x) / ((float)texWidth);
 	float fy = ((float)y) / ((float)texHeight);
@@ -121,7 +123,8 @@ void SpriteShader::ResetTextureClipRect()
 	glUniform4fv(m_TextureRect, 1, val);
 }
 
-SpriteShader::SpriteShader() : Shader("assets/shaders/sprite.vert", "assets/shaders/sprite.frag")
+SpriteShader::SpriteShader() : Shader("assets/shaders/sprite.vert",
+	                                      "assets/shaders/sprite.frag")
 {
 	m_MVP = glGetUniformLocation(m_ShaderProgram, "MVP");
 	SDL_Log("SpriteShader MVP ID = %d", m_MVP);
@@ -133,7 +136,8 @@ SpriteShader::SpriteShader() : Shader("assets/shaders/sprite.vert", "assets/shad
 	SDL_Log("SpriteShader Sprite Color ID = %d", m_SpriteColor);
 }
 
-UIRectShader::UIRectShader() : Shader("assets/shaders/uiRect.vert", "assets/shaders/uiRect.frag")
+UIRectShader::UIRectShader() : Shader("assets/shaders/uiRect.vert",
+	                                      "assets/shaders/uiRect.frag")
 {
 	m_MVP = glGetUniformLocation(m_ShaderProgram, "MVP");
 	SDL_Log("RectShader MVP ID = %d", m_MVP);

@@ -25,7 +25,8 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 
 	buckets.resize(9);
 
-	ECS::EntityListFunction findCollisions = [&](ECS::Entity & e, ECS::DeltaSeconds d)
+	ECS::EntityListFunction findCollisions = [&](ECS::Entity & e,
+	        ECS::DeltaSeconds d)
 	{
 		auto pos = e.Data<Component::Position>().pos;
 
@@ -71,7 +72,8 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 
 	el.Run<Component::Collision, Component::Position>(findCollisions, d);
 
-	ECS::EntityListFunction respondToCollisions = [&](ECS::Entity & e, ECS::DeltaSeconds d)
+	ECS::EntityListFunction respondToCollisions = [&](ECS::Entity & e,
+	        ECS::DeltaSeconds d)
 	{
 		Component::Collision& collision = e.Data<Component::Collision>();
 		glm::vec2& pos = e.Data<Component::Position>().pos;
@@ -98,8 +100,10 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 				glm::vec2 enemyTopLeft = { enemyPos.x - otherCollision.boundingLeft, enemyPos.y - otherCollision.boundingTop };
 				glm::vec2 enemyBottomRight = { enemyPos.x + otherCollision.boundingRight, enemyPos.y + otherCollision.boundingBottom };
 
-				if (abilityTopLeft.x <= enemyBottomRight.x && abilityTopLeft.y <= enemyBottomRight.y
-				        && abilityBottomRight.x >= enemyTopLeft.x && abilityBottomRight.y >= enemyTopLeft.y)
+				if (abilityTopLeft.x <= enemyBottomRight.x
+				        && abilityTopLeft.y <= enemyBottomRight.y
+				        && abilityBottomRight.x >= enemyTopLeft.x
+				        && abilityBottomRight.y >= enemyTopLeft.y)
 				{
 					switch (ability.type)
 					{
@@ -126,7 +130,8 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 		iter->second.clear();
 	}
 
-	for (auto iter = bucketsAbilities.begin(); iter != bucketsAbilities.end(); ++iter)
+	for (auto iter = bucketsAbilities.begin(); iter != bucketsAbilities.end();
+	        ++iter)
 	{
 		iter->second.clear();
 	}

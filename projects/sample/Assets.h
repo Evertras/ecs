@@ -22,8 +22,10 @@ namespace Assets
 	{
 	public:
 		Texture() : m_ID(-1), m_Width(0), m_Height(0) {}
-		Texture(TextureID texID, int texWidth, int texHeight) : m_ID(texID), m_Width(texWidth), m_Height(texHeight) {}
-		Texture(const Texture& rhs) : m_ID(rhs.m_ID), m_Width(rhs.m_Width), m_Height(rhs.m_Height) {}
+		Texture(TextureID texID, int texWidth, int texHeight) : m_ID(texID),
+			m_Width(texWidth), m_Height(texHeight) {}
+		Texture(const Texture& rhs) : m_ID(rhs.m_ID), m_Width(rhs.m_Width),
+			m_Height(rhs.m_Height) {}
 		~Texture() = default;
 
 		TextureID ID() const
@@ -66,7 +68,8 @@ namespace Assets
 	{
 	public:
 		SpriteAnimation() {}
-		SpriteAnimation(Texture texture, std::vector<CropRect> frames, float fps, bool isLooping);
+		SpriteAnimation(Texture texture, std::vector<CropRect> frames, float fps,
+		                bool isLooping);
 
 		float FPS() const
 		{
@@ -103,7 +106,9 @@ namespace Assets
 	{
 	public:
 		SpriteFont() {}
-		SpriteFont(Texture texture, std::unordered_map<char, CropRect> letters) : m_Texture(texture), m_Characters(letters) {}
+		SpriteFont(Texture texture,
+		           std::unordered_map<char, CropRect> letters) : m_Texture(texture),
+			m_Characters(letters) {}
 
 		const Texture& GetTexture() const
 		{

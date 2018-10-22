@@ -52,12 +52,14 @@ namespace ECS
 		template<typename T>
 		T& Data()
 		{
-			return std::ref(dynamic_cast<Component<T>*>(m_Components[typeid(T)].get())->data);
+			return std::ref(dynamic_cast<Component<T>*>(m_Components[typeid(
+			                    T)].get())->data);
 		}
 
 		template<typename T, typename ...Others>
-		typename std::enable_if < sizeof...(Others) != 0, std::tuple<T&, Others& ... >>::type
-		        Data()
+		typename std::enable_if < sizeof...(Others) != 0,
+		         std::tuple<T&, Others& ... >>::type
+		         Data()
 		{
 			return std::tuple<T&, Others& ...>(
 			           std::ref(dynamic_cast<Component<T>*>(m_Components[typeid(T)].get())->data),
@@ -71,7 +73,8 @@ namespace ECS
 		}
 
 	private:
-		std::unordered_map<std::type_index, std::unique_ptr<Internal::BaseComponent>> m_Components;
+		std::unordered_map<std::type_index, std::unique_ptr<Internal::BaseComponent>>
+		        m_Components;
 		EntityID m_ID;
 
 		// EntityList should call this instead of manipulating m_ID directly

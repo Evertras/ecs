@@ -3,7 +3,8 @@
 #include "Components.h"
 #include "RenderTargetSprite.h"
 
-class SystemRenderSpriteAnimated : public ECS::System<Component::AnimatedSprite, Component::Position>
+class SystemRenderSpriteAnimated : public
+	ECS::System<Component::AnimatedSprite, Component::Position>
 {
 public:
 	SystemRenderSpriteAnimated(RenderTargetSprite& target);

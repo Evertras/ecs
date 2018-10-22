@@ -36,7 +36,8 @@ GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window)
 
 		// Actual render targets
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
-		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>(*m_SpriteShader.get(), m_DungeonTileset, 16);
+		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>
+		               (*m_SpriteShader.get(), m_DungeonTileset, 16);
 
 		for (int x = 0; x < m_LevelData.width; ++x)
 		{
@@ -68,17 +69,22 @@ GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window)
 		// TODO: Figure out how to handle resizes when resizing becomes a thing
 		int windowWidth, windowHeight;
 		SDL_GetWindowSize(m_Window, &windowWidth, &windowHeight);
-		std::unique_ptr<SystemCamera> camera = std::make_unique<SystemCamera>(static_cast<float>(windowWidth), static_cast<float>(windowHeight));
+		std::unique_ptr<SystemCamera> camera = std::make_unique<SystemCamera>
+		                                       (static_cast<float>(windowWidth), static_cast<float>(windowHeight));
 		m_SystemCamera = camera.get();
 		m_Systems.push_back(std::move(camera));
 
 		// Level editing systems
-		m_Systems.push_back(std::make_unique<SystemLevelTerrainColorize>(m_InputState, *m_TileTarget.get(), m_LevelData));
-		m_Systems.push_back(std::make_unique<SystemLevelContainsOverlay>(m_InputState, *m_SpriteTarget.get(), m_LevelData));
-		m_Systems.push_back(std::make_unique<SystemInputLevelEdit>(m_InputState, *m_TileTarget.get(), m_LevelData, m_CursorID, 16, 16));
+		m_Systems.push_back(std::make_unique<SystemLevelTerrainColorize>(m_InputState,
+		                    *m_TileTarget.get(), m_LevelData));
+		m_Systems.push_back(std::make_unique<SystemLevelContainsOverlay>(m_InputState,
+		                    *m_SpriteTarget.get(), m_LevelData));
+		m_Systems.push_back(std::make_unique<SystemInputLevelEdit>(m_InputState,
+		                    *m_TileTarget.get(), m_LevelData, m_CursorID, 16, 16));
 
 		// Draw systems
-		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
+		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new
+		                    SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
 	}
 }
 

@@ -14,7 +14,8 @@ void SystemAISkeleton::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 
 	auto playerPos = player->Data<Component::Position>().pos;
 
-	ECS::EntityListFunction idleFunc = [&playerPos](ECS::Entity & e, ECS::DeltaSeconds d)
+	ECS::EntityListFunction idleFunc = [&playerPos](ECS::Entity & e,
+	                                   ECS::DeltaSeconds d)
 	{
 		if (e.Has<Component::Health>())
 		{
@@ -40,7 +41,8 @@ void SystemAISkeleton::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 		}
 	};
 
-	ECS::EntityListFunction activeFunc = [&playerPos](ECS::Entity & e, ECS::DeltaSeconds d)
+	ECS::EntityListFunction activeFunc = [&playerPos](ECS::Entity & e,
+	                                     ECS::DeltaSeconds d)
 	{
 		auto skelePos = e.Data<Component::Position>().pos;
 		auto skeleMove = e.Data<Component::Move>();
@@ -50,5 +52,6 @@ void SystemAISkeleton::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 	};
 
 	el.Run<Component::AISkeletonIdle, Component::Position>(idleFunc, d);
-	el.Run<Component::AISkeletonActive, Component::Position, Component::Velocity, Component::Move>(activeFunc, d);
+	el.Run<Component::AISkeletonActive, Component::Position, Component::Velocity, Component::Move>
+	(activeFunc, d);
 }

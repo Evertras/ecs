@@ -17,7 +17,8 @@ public:
 	    bool flipX,
 	    glm::vec4 color = glm::vec4{ 1.f, 1.f, 1.f, 1.f })
 	{
-		float ratio = static_cast<float>(frame.width) / static_cast<float>(frame.height);
+		float ratio = static_cast<float>(frame.width) / static_cast<float>
+		              (frame.height);
 
 		if (ratio > 1.f)
 		{

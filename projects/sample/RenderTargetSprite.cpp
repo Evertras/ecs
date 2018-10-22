@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "RenderTargetSprite.h"
 
-RenderTargetSprite::RenderTargetSprite(Assets::SpriteShader& shader, bool flipY) : m_Shader(shader), m_FlipY(flipY)
+RenderTargetSprite::RenderTargetSprite(Assets::SpriteShader& shader,
+                                       bool flipY) : m_Shader(shader), m_FlipY(flipY)
 {
 	m_Requests.reserve(static_cast<size_t>(1000));
 
@@ -24,16 +25,19 @@ RenderTargetSprite::RenderTargetSprite(Assets::SpriteShader& shader, bool flipY)
 
 	glGenBuffers(1, &m_VertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, 4 * 5 * sizeof(float), vertexBuffer, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 4 * 5 * sizeof(float), vertexBuffer,
+	             GL_STATIC_DRAW);
 
 	glGenBuffers(1, &m_IndexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indexBuffer, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indexBuffer,
+	             GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, reinterpret_cast<void*>(sizeof(float) * 3));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5,
+	                      reinterpret_cast<void*>(sizeof(float) * 3));
 }
 
 RenderTargetSprite::~RenderTargetSprite()
@@ -54,7 +58,8 @@ void RenderTargetSprite::QueueSprite(
 {
 	PendingDrawRequest request(texture);
 	auto id = glm::identity<glm::mat4>();
-	auto translate = glm::translate(id, glm::vec3(bottomCenter.x, bottomCenter.y, 0));
+	auto translate = glm::translate(id, glm::vec3(bottomCenter.x, bottomCenter.y,
+	                                0));
 
 	request.bottomCenter = bottomCenter;
 	request.crop = frame;

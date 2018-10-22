@@ -46,11 +46,13 @@ protected:
 	}
 	inline bool ShiftHeld() const
 	{
-		return m_KeyboardState[SDL_SCANCODE_LSHIFT] || m_KeyboardState[SDL_SCANCODE_RSHIFT];
+		return m_KeyboardState[SDL_SCANCODE_LSHIFT]
+		       || m_KeyboardState[SDL_SCANCODE_RSHIFT];
 	}
 	inline bool ControlHeld() const
 	{
-		return m_KeyboardState[SDL_SCANCODE_LCTRL] || m_KeyboardState[SDL_SCANCODE_RCTRL];
+		return m_KeyboardState[SDL_SCANCODE_LCTRL]
+		       || m_KeyboardState[SDL_SCANCODE_RCTRL];
 	}
 
 	struct

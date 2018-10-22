@@ -27,7 +27,8 @@ SCENARIO("Ability: Firestream")
 
 			e->AddComponent<Component::Position>({ {3.f, 3.f} });
 			e->AddComponent(Component::Collision(0.1f, 0.1f, 0.1f, 0.1f));
-			e->AddComponent(Component::Ability(Component::Ability::ABILITY_FIRESTREAM, 0, true));
+			e->AddComponent(Component::Ability(Component::Ability::ABILITY_FIRESTREAM, 0,
+			                                   true));
 
 			el.Add(std::move(e));
 		}
@@ -63,7 +64,8 @@ SCENARIO("Ability: Firestream")
 
 			e->AddComponent<Component::Position>({ {1.f, 1.f} });
 			e->AddComponent(Component::Collision(0.1f, 0.1f, 0.1f, 0.1f));
-			e->AddComponent(Component::Ability(Component::Ability::ABILITY_FIRESTREAM, 0, true, 1.f, 10.f));
+			e->AddComponent(Component::Ability(Component::Ability::ABILITY_FIRESTREAM, 0,
+			                                   true, 1.f, 10.f));
 
 			el.Add(std::move(e));
 		}
@@ -117,7 +119,8 @@ SCENARIO("Ability: Firestream")
 
 			e->AddComponent<Component::Position>({ {1.8f, 1.8f} });
 			e->AddComponent(Component::Collision(0.1f, 0.1f, 0.1f, 0.1f));
-			e->AddComponent(Component::Ability(Component::Ability::ABILITY_FIRESTREAM, 0, true));
+			e->AddComponent(Component::Ability(Component::Ability::ABILITY_FIRESTREAM, 0,
+			                                   true));
 
 			el.Add(std::move(e));
 		}

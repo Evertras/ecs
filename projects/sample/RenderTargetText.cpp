@@ -22,18 +22,21 @@ void RenderTargetText::QueueDamage(int amount, const glm::vec2& bottomCenter)
 
 	for (int i = 0; i < str.length(); ++i)
 	{
-		m_SpriteTarget.QueueSprite(m_Font.GetTexture(), bottomCenter + offset, m_Font.GetCharacter(str[i]), scale, false, Color::Damage);
+		m_SpriteTarget.QueueSprite(m_Font.GetTexture(), bottomCenter + offset,
+		                           m_Font.GetCharacter(str[i]), scale, false, Color::Damage);
 		offset.x += 0.8f * scale;
 	}
 }
 
-void RenderTargetText::QueueText(const std::string& text, const glm::vec2& bottomLeft, const glm::vec4& color, float scale)
+void RenderTargetText::QueueText(const std::string& text,
+                                 const glm::vec2& bottomLeft, const glm::vec4& color, float scale)
 {
 	glm::vec2 offset = { 0.f, 0.f };
 
 	for (int i = 0; i < text.length(); ++i)
 	{
-		m_SpriteTarget.QueueSprite(m_Font.GetTexture(), bottomLeft + offset, m_Font.GetCharacter(text[i]), scale, false, color);
+		m_SpriteTarget.QueueSprite(m_Font.GetTexture(), bottomLeft + offset,
+		                           m_Font.GetCharacter(text[i]), scale, false, color);
 		offset.x += 0.8f * scale;
 	}
 }

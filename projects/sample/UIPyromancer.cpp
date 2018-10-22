@@ -49,6 +49,8 @@ UIPyromancer::UIPyromancer(UI::Dimensions screen)
 
 void UIPyromancer::Update(const Component::AbilitiesPyromancer& abilities)
 {
-	m_FirestreamBar->SetPercent(1.f - abilities.chargeFireStream / AbilityValues::Pyromancer::FirestreamChargeSeconds);
-	m_IgniteBar->SetPercent(1.f - abilities.cooldownIgnite / AbilityValues::Pyromancer::IgniteCooldown);
+	m_FirestreamBar->SetPercent(1.f - abilities.chargeFireStream /
+	                            AbilityValues::Pyromancer::FirestreamChargeSeconds);
+	m_IgniteBar->SetPercent(1.f - abilities.cooldownIgnite /
+	                        AbilityValues::Pyromancer::IgniteCooldown);
 }

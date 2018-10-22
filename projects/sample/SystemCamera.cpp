@@ -56,7 +56,8 @@ void SystemCamera::UpdateView()
 
 void SystemCamera::UpdateProjection()
 {
-	m_Projection = glm::ortho(0.f, m_ViewportWidth, m_ViewportHeight, 0.f, -100.f, 100.f);
+	m_Projection = glm::ortho(0.f, m_ViewportWidth, m_ViewportHeight, 0.f, -100.f,
+	                          100.f);
 
 	m_VP = m_Projection * m_View;
 }

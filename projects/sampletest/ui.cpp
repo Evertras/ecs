@@ -115,7 +115,8 @@ SCENARIO("UI Structure for Panel")
 
 				THEN("the panel's absolute center should be at the right of the screen, offset inwards")
 				{
-					REQUIRE(p->GetAbsoluteCenter().x == Approx(baseDimensions.width - d.width * 0.5f));
+					REQUIRE(p->GetAbsoluteCenter().x == Approx(baseDimensions.width - d.width *
+					        0.5f));
 					REQUIRE(p->GetAbsoluteCenter().y == basePanel.GetAbsoluteCenter().y);
 				}
 			}
@@ -148,7 +149,8 @@ SCENARIO("UI Structure for Panel")
 				THEN("the panel's absolute center should be at the bottom of the screen, offset inwards")
 				{
 					REQUIRE(p->GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
-					REQUIRE(p->GetAbsoluteCenter().y == Approx(baseDimensions.height - d.height * 0.5f));
+					REQUIRE(p->GetAbsoluteCenter().y == Approx(baseDimensions.height - d.height *
+					        0.5f));
 				}
 			}
 
@@ -183,12 +185,15 @@ SCENARIO("UI Structure for Panel")
 
 			glm::vec2 offsetCenter{ 1.f, 2.f };
 
-			UI::Element* p = basePanel.AddChild(std::make_unique<UI::Panel>(offsetCenter, d, a));
+			UI::Element* p = basePanel.AddChild(std::make_unique<UI::Panel>(offsetCenter, d,
+			                                    a));
 
 			THEN("the absolute center of the panel is offset correctly")
 			{
-				REQUIRE(p->GetAbsoluteCenter().x == Approx(baseDimensions.width * 0.5f + offsetCenter.x));
-				REQUIRE(p->GetAbsoluteCenter().y == Approx(baseDimensions.height * 0.5f + offsetCenter.y));
+				REQUIRE(p->GetAbsoluteCenter().x == Approx(baseDimensions.width * 0.5f +
+				        offsetCenter.x));
+				REQUIRE(p->GetAbsoluteCenter().y == Approx(baseDimensions.height * 0.5f +
+				        offsetCenter.y));
 			}
 		}
 
@@ -204,12 +209,14 @@ SCENARIO("UI Structure for Panel")
 			a.parent = UI::AP_CENTER;
 			a.child = UI::AP_TOP;
 
-			UI::Element* p = basePanel.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, d, a));
+			UI::Element* p = basePanel.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f },
+			                                    d, a));
 
 			THEN("the panel's absolute center should be offset correctly")
 			{
 				REQUIRE(p->GetAbsoluteCenter().x == basePanel.GetAbsoluteCenter().x);
-				REQUIRE(p->GetAbsoluteCenter().y == Approx(basePanel.GetAbsoluteCenter().y + 0.5f * d.height));
+				REQUIRE(p->GetAbsoluteCenter().y == Approx(basePanel.GetAbsoluteCenter().y +
+				        0.5f * d.height));
 			}
 		}
 	}
@@ -220,9 +227,11 @@ SCENARIO("Rendering UIs")
 	class MockRenderer : public UI::ElementRenderer
 	{
 	public:
-		MockRenderer() : m_RenderRectCount(0), m_SetBaseSizeCount(0), m_RenderSpriteCount(0) {}
+		MockRenderer() : m_RenderRectCount(0), m_SetBaseSizeCount(0),
+			m_RenderSpriteCount(0) {}
 
-		void RenderRect(glm::vec2 center, UI::Dimensions dimensions, glm::vec4 color) override
+		void RenderRect(glm::vec2 center, UI::Dimensions dimensions,
+		                glm::vec4 color) override
 		{
 			++m_RenderRectCount;
 
@@ -231,7 +240,8 @@ SCENARIO("Rendering UIs")
 			m_LastRectColor = color;
 		}
 
-		void RenderSprite(glm::vec2 center, UI::Dimensions dimensions, const Assets::Texture& tex, glm::vec4 color) override
+		void RenderSprite(glm::vec2 center, UI::Dimensions dimensions,
+		                  const Assets::Texture& tex, glm::vec4 color) override
 		{
 			++m_RenderSpriteCount;
 		}
@@ -269,7 +279,8 @@ SCENARIO("Rendering UIs")
 		panelDimensions.width = 0.1f;
 		panelDimensions.height = 0.2f;
 
-		UI::Element* panel = root.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
+		UI::Element* panel = root.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f },
+		                                   panelDimensions, panelAttach, panelColor));
 
 		AND_GIVEN("Draw is called on the root")
 		{
@@ -321,14 +332,20 @@ SCENARIO("Rendering UIs")
 		panelDimensions.height = 0.2f;
 
 		// Don't care that they're all on top of each other
-		UI::Element* panel = root.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
-		panel->AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
+		UI::Element* panel = root.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f },
+		                                   panelDimensions, panelAttach, panelColor));
+		panel->AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f },
+		                panelDimensions, panelAttach, panelColor));
 
-		UI::Element* panel2 = root.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
-		panel2->AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
+		UI::Element* panel2 = root.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f },
+		                                    panelDimensions, panelAttach, panelColor));
+		panel2->AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f },
+		                 panelDimensions, panelAttach, panelColor));
 
-		UI::Element* panel3 = root.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
-		panel3->AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f }, panelDimensions, panelAttach, panelColor));
+		UI::Element* panel3 = root.AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f },
+		                                    panelDimensions, panelAttach, panelColor));
+		panel3->AddChild(std::make_unique<UI::Panel>(glm::vec2{ 0.f, 0.f },
+		                 panelDimensions, panelAttach, panelColor));
 
 		AND_GIVEN("Draw is called on the root")
 		{

@@ -7,3 +7,4 @@ pad-header
 align-pointer=type
 align-reference=type
 suffix=none
+max-code-length=80

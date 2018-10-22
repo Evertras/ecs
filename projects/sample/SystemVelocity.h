@@ -4,7 +4,8 @@
 
 #include "Components.h"
 
-class SystemVelocity : public ECS::System<Component::Position, Component::Velocity>
+class SystemVelocity : public
+	ECS::System<Component::Position, Component::Velocity>
 {
 public:
 	SystemVelocity() : System<Component::Position, Component::Velocity>

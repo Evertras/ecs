@@ -71,7 +71,8 @@ namespace Assets
 			glUniform4f(m_SpriteColor, color.r, color.g, color.b, color.a);
 		}
 
-		void SetTextureClipRect(int texWidth, int texHeight, int x, int y, int width, int height);
+		void SetTextureClipRect(int texWidth, int texHeight, int x, int y, int width,
+		                        int height);
 		void ResetTextureClipRect();
 
 	private:

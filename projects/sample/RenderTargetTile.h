@@ -19,7 +19,8 @@ public:
 	    glm::vec4 color
 	) = 0;
 
-	virtual void SetAll(int tileX, int tileY, const glm::vec4& color = { 1.f, 1.f, 1.f, 1.f }) = 0;
+	virtual void SetAll(int tileX, int tileY, const glm::vec4& color = { 1.f, 1.f, 1.f, 1.f })
+	    = 0;
 
 	virtual void Draw(const glm::mat4x4& vp) = 0;
 };
@@ -28,7 +29,8 @@ template<size_t width, size_t height>
 class RenderTargetTileSized : public RenderTargetTile
 {
 public:
-	RenderTargetTileSized(Assets::SpriteShader& shader, const Assets::Texture& tileset, int size);
+	RenderTargetTileSized(Assets::SpriteShader& shader,
+	                      const Assets::Texture& tileset, int size);
 	~RenderTargetTileSized();
 
 	void SetTile(
@@ -42,7 +44,8 @@ public:
 	    int worldY,
 	    glm::vec4 color) override;
 
-	void SetAll(int tileX, int tileY, const glm::vec4& color = { 1.f, 1.f, 1.f, 1.f }) override
+	void SetAll(int tileX, int tileY, const glm::vec4& color = { 1.f, 1.f, 1.f, 1.f })
+	override
 	{
 		for (int i = 0; i < width * height; ++i)
 		{
@@ -100,16 +103,19 @@ RenderTargetTileSized<width, height>::RenderTargetTileSized(
 
 	glGenBuffers(1, &m_VertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, 4 * 5 * sizeof(float), vertexBuffer, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 4 * 5 * sizeof(float), vertexBuffer,
+	             GL_STATIC_DRAW);
 
 	glGenBuffers(1, &m_IndexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indexBuffer, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indexBuffer,
+	             GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, reinterpret_cast<void*>(sizeof(float) * 3));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5,
+	                      reinterpret_cast<void*>(sizeof(float) * 3));
 
 	for (int x = 0; x < width; ++x)
 	{

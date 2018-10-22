@@ -7,7 +7,8 @@
 class SystemInputMovementPlay : public ECS::BaseSystem
 {
 public:
-	SystemInputMovementPlay(const InputStatePlay& inputState) : m_InputState(inputState) {}
+	SystemInputMovementPlay(const InputStatePlay& inputState) : m_InputState(
+		    inputState) {}
 	~SystemInputMovementPlay() {}
 
 	void Run(ECS::EntityList& el, ECS::DeltaSeconds d) override;

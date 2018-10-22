@@ -31,7 +31,9 @@ namespace Component
 	struct AnimatedSprite
 	{
 		AnimatedSprite() : currentFrame(0.f), scale(1.f), flipped(false) {}
-		AnimatedSprite(const Assets::SpriteAnimation& anim, float size = 1.f) : currentFrame(0.f), scale(size), flipped(false), animation(anim) {}
+		AnimatedSprite(const Assets::SpriteAnimation& anim,
+		               float size = 1.f) : currentFrame(0.f), scale(size), flipped(false),
+			animation(anim) {}
 		Assets::SpriteAnimation animation;
 
 		float scale;
@@ -56,9 +58,11 @@ namespace Component
 
 	struct Collision
 	{
-		Collision() : goesThroughWalls(false), boundingLeft(0.f), boundingRight(0.f), boundingTop(0.f), boundingBottom(0.f) {}
+		Collision() : goesThroughWalls(false), boundingLeft(0.f), boundingRight(0.f),
+			boundingTop(0.f), boundingBottom(0.f) {}
 
-		Collision(float boundLeft, float boundRight, float boundTop, float boundBottom, bool goThroughWalls = false) :
+		Collision(float boundLeft, float boundRight, float boundTop, float boundBottom,
+		          bool goThroughWalls = false) :
 			goesThroughWalls(goThroughWalls),
 			boundingLeft(boundLeft),
 			boundingRight(boundRight),
@@ -75,7 +79,8 @@ namespace Component
 
 	struct AbilitiesPyromancer
 	{
-		AbilitiesPyromancer() : cooldownFireStream(0.f), cooldownIgnite(0.f), chargeFireStream(AbilityValues::Pyromancer::FirestreamChargeSeconds) {}
+		AbilitiesPyromancer() : cooldownFireStream(0.f), cooldownIgnite(0.f),
+			chargeFireStream(AbilityValues::Pyromancer::FirestreamChargeSeconds) {}
 
 		float cooldownFireStream;
 		float cooldownIgnite;

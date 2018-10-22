@@ -51,10 +51,13 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 
 		// Actual render targets
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
-		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>(*m_SpriteShader.get(), m_DungeonTileset, 16);
-		m_DamageTarget = std::make_unique<RenderTargetText>(*m_SpriteShader.get(), Assets::Factory::CreateSpriteFont());
+		m_TileTarget = std::make_unique<RenderTargetTileSized<width, height>>
+		               (*m_SpriteShader.get(), m_DungeonTileset, 16);
+		m_DamageTarget = std::make_unique<RenderTargetText>(*m_SpriteShader.get(),
+		                 Assets::Factory::CreateSpriteFont());
 		m_HealthBarTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
-		m_UITarget = std::make_unique<RenderTargetUI>(*m_UIRectShader.get(), *m_SpriteShader.get());
+		m_UITarget = std::make_unique<RenderTargetUI>(*m_UIRectShader.get(),
+		             *m_SpriteShader.get());
 	}
 
 	// Level loading
@@ -95,21 +98,26 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		m_Systems.push_back(std::make_unique<SystemLifetime>());
 		m_Systems.push_back(std::make_unique<SystemEffects>());
 
-		std::unique_ptr<SystemCamera> camera = std::make_unique<SystemCamera>(static_cast<float>(windowWidth), static_cast<float>(windowHeight));
+		std::unique_ptr<SystemCamera> camera = std::make_unique<SystemCamera>
+		                                       (static_cast<float>(windowWidth), static_cast<float>(windowHeight));
 		m_SystemCamera = camera.get();
 		m_Systems.push_back(std::move(camera));
 
 		// Draw systems
-		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
-		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderDamageNumbers(*m_DamageTarget.get())));
-		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderHealthBars(*m_HealthBarTarget.get(), Assets::Factory::GetTexture("assets/bar.png"))));
+		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new
+		                    SystemRenderSpriteAnimated(*m_SpriteTarget.get())));
+		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new
+		                    SystemRenderDamageNumbers(*m_DamageTarget.get())));
+		m_Systems.push_back(std::unique_ptr<ECS::BaseSystem>(new SystemRenderHealthBars(
+		                        *m_HealthBarTarget.get(), Assets::Factory::GetTexture("assets/bar.png"))));
 	}
 
 	// UI
 	{
 		UI::Dimensions screen;
 
-		float ratio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
+		float ratio = static_cast<float>(windowWidth) / static_cast<float>
+		              (windowHeight);
 
 		if (ratio < 1.f)
 		{

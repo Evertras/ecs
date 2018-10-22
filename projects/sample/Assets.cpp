@@ -146,7 +146,8 @@ SpriteFont Factory::CreateSpriteFont()
 
 	in.close();
 
-	SDL_Log("Loaded character frame information from %s, found %d characters", letterFramesFilename, characters.size());
+	SDL_Log("Loaded character frame information from %s, found %d characters",
+	        letterFramesFilename, characters.size());
 
 	return SpriteFont(tex, characters);
 }
@@ -174,7 +175,8 @@ std::vector<CropRect> Factory::GetFramesFromFile(const char* filename)
 
 	in.close();
 
-	SDL_Log("Loaded frame information from %s, found %d frames", filename, frames.size());
+	SDL_Log("Loaded frame information from %s, found %d frames", filename,
+	        frames.size());
 
 	return frames;
 }
@@ -184,7 +186,8 @@ Factory::LoadedTexture::LoadedTexture(const char* filename)
 	int channels = 0;
 	TextureID id;
 	int width, height;
-	unsigned char* image = SOIL_load_image(filename, &width, &height, &channels, SOIL_LOAD_AUTO);
+	unsigned char* image = SOIL_load_image(filename, &width, &height, &channels,
+	                                       SOIL_LOAD_AUTO);
 
 	if (image == nullptr)
 	{
@@ -198,7 +201,8 @@ Factory::LoadedTexture::LoadedTexture(const char* filename)
 
 	glGenTextures(1, &id);
 	glBindTexture(GL_TEXTURE_2D, id);
-	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image);
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format,
+	             GL_UNSIGNED_BYTE, image);
 	SOIL_free_image_data(image);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

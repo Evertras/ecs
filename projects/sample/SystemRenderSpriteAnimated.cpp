@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "SystemRenderSpriteAnimated.h"
 
-SystemRenderSpriteAnimated::SystemRenderSpriteAnimated(RenderTargetSprite& target)
+SystemRenderSpriteAnimated::SystemRenderSpriteAnimated(RenderTargetSprite&
+        target)
 	: m_RenderTarget(target), m_TimePassed(0.f)
 {
 }
@@ -10,7 +11,8 @@ SystemRenderSpriteAnimated::~SystemRenderSpriteAnimated()
 {
 }
 
-void SystemRenderSpriteAnimated::Run(ECS::EntityList& el, ECS::DeltaSeconds deltaSeconds)
+void SystemRenderSpriteAnimated::Run(ECS::EntityList& el,
+                                     ECS::DeltaSeconds deltaSeconds)
 {
 	m_TimePassed += deltaSeconds;
 

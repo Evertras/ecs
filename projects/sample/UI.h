@@ -19,7 +19,8 @@ namespace UI
 	struct Attachment
 	{
 		Attachment() : parent(AP_CENTER), child(AP_CENTER) {}
-		Attachment(AnchorPoint parent, AnchorPoint child) : parent(parent), child(child) {}
+		Attachment(AnchorPoint parent, AnchorPoint child) : parent(parent),
+			child(child) {}
 
 		AnchorPoint parent;
 		AnchorPoint child;
@@ -35,7 +36,8 @@ namespace UI
 	{
 	public:
 		virtual void RenderRect(glm::vec2 center, Dimensions d, glm::vec4 color) = 0;
-		virtual void RenderSprite(glm::vec2 center, Dimensions d, const Assets::Texture& tex, glm::vec4 color) = 0;
+		virtual void RenderSprite(glm::vec2 center, Dimensions d,
+		                          const Assets::Texture& tex, glm::vec4 color) = 0;
 		virtual void SetBaseSize(Dimensions size) = 0;
 	};
 
@@ -102,7 +104,8 @@ namespace UI
 
 	protected:
 		Element(glm::vec2 center, Dimensions d, Attachment a)
-			: m_Parent(nullptr), m_RelativeCenter(center), m_Dimensions(d), m_Attachment(a), m_AbsoluteCenter(center)
+			: m_Parent(nullptr), m_RelativeCenter(center), m_Dimensions(d), m_Attachment(a),
+			  m_AbsoluteCenter(center)
 		{
 		}
 
@@ -181,7 +184,8 @@ namespace UI
 	class BaseContainer : public Element
 	{
 	public:
-		BaseContainer(Dimensions d) : Element({ d.width * 0.5f, d.height * 0.5f }, d, Attachment(AP_CENTER, AP_CENTER)) {}
+		BaseContainer(Dimensions d) : Element({ d.width * 0.5f, d.height * 0.5f }, d,
+		Attachment(AP_CENTER, AP_CENTER)) {}
 
 	protected:
 		void DrawReceive(ElementRenderer* renderer) const override
@@ -219,7 +223,8 @@ namespace UI
 	class Icon : public Element
 	{
 	public:
-		Icon(glm::vec2 center, Dimensions d, Attachment a, Assets::Texture texture, glm::vec4 color = { 1.f, 1.f, 1.f, 1.f })
+		Icon(glm::vec2 center, Dimensions d, Attachment a, Assets::Texture texture,
+		     glm::vec4 color = { 1.f, 1.f, 1.f, 1.f })
 			: Element(center, d, a), m_Texture(texture), m_Color(color) {}
 		~Icon() = default;
 		Icon(const Icon& rhs) = default;
@@ -244,8 +249,10 @@ namespace UI
 	class SolidBar : public Element
 	{
 	public:
-		SolidBar(glm::vec2 center, Dimensions d, BarDirection direction, Attachment a, glm::vec4 color)
-			: Element(center, d, a), m_Direction(direction), m_Color(color), m_Percent(1.f) {}
+		SolidBar(glm::vec2 center, Dimensions d, BarDirection direction, Attachment a,
+		         glm::vec4 color)
+			: Element(center, d, a), m_Direction(direction), m_Color(color),
+			  m_Percent(1.f) {}
 		~SolidBar() = default;
 		SolidBar(const SolidBar& rhs) = delete;
 

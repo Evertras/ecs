@@ -37,7 +37,8 @@ bool Game::Initialize()
 
 	// Window creation
 	{
-		m_Window = SDL_CreateWindow("ECS Sample", 100, 100, 1024, 768, SDL_WINDOW_OPENGL);
+		m_Window = SDL_CreateWindow("ECS Sample", 100, 100, 1024, 768,
+		                            SDL_WINDOW_OPENGL);
 
 		if (!m_Window)
 		{

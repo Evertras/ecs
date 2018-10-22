@@ -32,7 +32,8 @@ void Actions::Damage(ECS::EntityList& el, ECS::Entity& target, float amount)
 	}
 }
 
-void Actions::ApplyBurn(ECS::EntityList& el, ECS::Entity& target, float dps, float duration)
+void Actions::ApplyBurn(ECS::EntityList& el, ECS::Entity& target, float dps,
+                        float duration)
 {
 	if (target.Has<Component::EffectBurn>())
 	{

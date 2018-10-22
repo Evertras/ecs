@@ -10,14 +10,16 @@
 // TODO: This is getting bigger than it should, split out
 void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 {
-	ECS::Entity* player = el.First<Component::Player, Component::AbilitiesPyromancer>();
+	ECS::Entity* player =
+	    el.First<Component::Player, Component::AbilitiesPyromancer>();
 
 	if (player == nullptr)
 	{
 		return;
 	}
 
-	Component::AbilitiesPyromancer& abilities = player->Data<Component::AbilitiesPyromancer>();
+	Component::AbilitiesPyromancer& abilities =
+	    player->Data<Component::AbilitiesPyromancer>();
 
 	abilities.cooldownFireStream -= d;
 	abilities.cooldownIgnite -= d;
@@ -50,9 +52,11 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 	}
 	else
 	{
-		abilities.chargeFireStream += d * AbilityValues::Pyromancer::FirestreamRechargeRate;
+		abilities.chargeFireStream += d *
+		                              AbilityValues::Pyromancer::FirestreamRechargeRate;
 
-		if (abilities.chargeFireStream > AbilityValues::Pyromancer::FirestreamChargeSeconds)
+		if (abilities.chargeFireStream >
+		        AbilityValues::Pyromancer::FirestreamChargeSeconds)
 		{
 			abilities.chargeFireStream = AbilityValues::Pyromancer::FirestreamChargeSeconds;
 		}

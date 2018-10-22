@@ -5,7 +5,8 @@
 
 void SystemLifetime::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 {
-	ECS::EntityListFunction reapTimed = [this, &el](ECS::Entity & e, ECS::DeltaSeconds d)
+	ECS::EntityListFunction reapTimed = [this, &el](ECS::Entity & e,
+	                                    ECS::DeltaSeconds d)
 	{
 		Component::LifetimeTimer& timed = e.Data<Component::LifetimeTimer>();
 
@@ -17,7 +18,8 @@ void SystemLifetime::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 		}
 	};
 
-	ECS::EntityListFunction reapAnimated = [&el](ECS::Entity & e, ECS::DeltaSeconds d)
+	ECS::EntityListFunction reapAnimated = [&el](ECS::Entity & e,
+	                                       ECS::DeltaSeconds d)
 	{
 		if (!e.Has<Component::AnimatedSprite>())
 		{

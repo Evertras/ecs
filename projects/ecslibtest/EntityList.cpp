@@ -30,7 +30,8 @@ SCENARIO("EntityList general functionality", "[entityList]")
 			{
 				bool foundID = false;
 
-				ECS::EntityListFunction checkID = [id, &foundID](ECS::Entity & entity, ECS::DeltaSeconds d)
+				ECS::EntityListFunction checkID = [id, &foundID](ECS::Entity & entity,
+				                                  ECS::DeltaSeconds d)
 				{
 					foundID = foundID || entity.ID() == id;
 					REQUIRE(entity.ID() == id);
@@ -196,10 +197,12 @@ SCENARIO("EntityList general functionality", "[entityList]")
 				REQUIRE(el.Size() == 1);
 				bool foundSecond = false;
 
-				ECS::EntityListFunction checkFirst = [&foundSecond, secondPosition](ECS::Entity & entity, ECS::DeltaSeconds d)
+				ECS::EntityListFunction checkFirst = [&foundSecond,
+				                                      secondPosition](ECS::Entity & entity, ECS::DeltaSeconds d)
 				{
 					Position& pos = entity.Data<Position>();
-					foundSecond = foundSecond || (pos.x == secondPosition.x && pos.y == secondPosition.y);
+					foundSecond = foundSecond || (pos.x == secondPosition.x
+					                              && pos.y == secondPosition.y);
 				};
 
 				el.Run<Position>(checkFirst, 0.f);
@@ -218,10 +221,12 @@ SCENARIO("EntityList general functionality", "[entityList]")
 				REQUIRE(el.Size() == 1);
 				bool foundFirst = false;
 
-				ECS::EntityListFunction checkFirst = [&foundFirst, firstPosition](ECS::Entity & entity, ECS::DeltaSeconds d)
+				ECS::EntityListFunction checkFirst = [&foundFirst,
+				                                      firstPosition](ECS::Entity & entity, ECS::DeltaSeconds d)
 				{
 					Position& pos = entity.Data<Position>();
-					foundFirst = foundFirst || (pos.x == firstPosition.x && pos.y == firstPosition.y);
+					foundFirst = foundFirst || (pos.x == firstPosition.x
+					                            && pos.y == firstPosition.y);
 				};
 
 				el.Run<Position>(checkFirst, 0.f);
@@ -243,7 +248,8 @@ SCENARIO("EntityList general functionality", "[entityList]")
 
 		WHEN("a function is run that doubles positions")
 		{
-			ECS::EntityListFunction positionDoubler = [](ECS::Entity & entity, ECS::DeltaSeconds d)
+			ECS::EntityListFunction positionDoubler = [](ECS::Entity & entity,
+			        ECS::DeltaSeconds d)
 			{
 				Position& pos = entity.Data<Position>();
 				pos.x *= 2;
@@ -257,16 +263,19 @@ SCENARIO("EntityList general functionality", "[entityList]")
 				bool doubledFirst = false;
 				bool doubledSecond = false;
 
-				ECS::EntityListFunction doubleChecker = [&](ECS::Entity & entity, ECS::DeltaSeconds d)
+				ECS::EntityListFunction doubleChecker = [&](ECS::Entity & entity,
+				                                        ECS::DeltaSeconds d)
 				{
 					Position& pos = entity.Data<Position>();
 
-					if (pos.x == Approx(firstPosition.x * 2) && pos.y == Approx(firstPosition.y * 2))
+					if (pos.x == Approx(firstPosition.x * 2)
+					        && pos.y == Approx(firstPosition.y * 2))
 					{
 						doubledFirst = true;
 					}
 
-					if (pos.x == Approx(secondPosition.x * 2) && pos.y == Approx(secondPosition.y * 2))
+					if (pos.x == Approx(secondPosition.x * 2)
+					        && pos.y == Approx(secondPosition.y * 2))
 					{
 						doubledSecond = true;
 					}

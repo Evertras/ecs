@@ -9,7 +9,8 @@
 #include "RenderTargetSprite.h"
 #include "RenderTargetText.h"
 
-GameStateTitle::GameStateTitle(SDL_Window* window) : m_Window(window), m_SelectionIndex(0)
+GameStateTitle::GameStateTitle(SDL_Window* window) : m_Window(window),
+	m_SelectionIndex(0)
 {
 	// Shaders
 	{
@@ -19,14 +20,16 @@ GameStateTitle::GameStateTitle(SDL_Window* window) : m_Window(window), m_Selecti
 	// Render targets
 	{
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
-		m_TextTarget = std::make_unique<RenderTargetText>(*m_SpriteShader.get(), Assets::Factory::CreateSpriteFont());
+		m_TextTarget = std::make_unique<RenderTargetText>(*m_SpriteShader.get(),
+		               Assets::Factory::CreateSpriteFont());
 	}
 
 	{
 		// TODO: Figure out how to handle resizes when resizing becomes a thing
 		int windowWidth, windowHeight;
 		SDL_GetWindowSize(m_Window, &windowWidth, &windowHeight);
-		m_SystemCamera = std::make_unique<SystemCamera>(static_cast<float>(windowWidth), static_cast<float>(windowHeight));
+		m_SystemCamera = std::make_unique<SystemCamera>(static_cast<float>(windowWidth),
+		                 static_cast<float>(windowHeight));
 	}
 }
 
