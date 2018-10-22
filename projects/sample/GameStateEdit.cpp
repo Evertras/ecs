@@ -26,8 +26,8 @@ GameStateEdit::GameStateEdit(SDL_Window* window): m_Window(window)
 	// Render targets
 	{
 		// Temporary
-		const int width = 50;
-		const int height = 50;
+		const int width = 30;
+		const int height = 30;
 		m_DungeonTileset = Assets::Factory::GetTexture("assets/tileset_dungeon.png");
 		m_LevelData = Assets::Level(width, height);
 
