@@ -47,7 +47,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 		m_DungeonTileset = Assets::Factory::GetTexture("assets/tileset_dungeon.png");
 		m_LevelData = Assets::Level(width, height);
 
-		Assets::LevelLoad("assets/temp.lev", m_LevelData);
+		Assets::LevelLoad("assets/levels/1.lev", m_LevelData);
 
 		// Actual render targets
 		m_SpriteTarget = std::make_unique<RenderTargetSprite>(*m_SpriteShader.get());
