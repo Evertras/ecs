@@ -38,34 +38,11 @@ void SystemInputPyromancer::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 			glm::vec2 playerPos = player->Data<Component::Position>().pos;
 			playerPos.y -= 0.2f;
 			glm::vec2 direction = glm::normalize(m_InputState.MouseWorld() - playerPos);
-			glm::vec2 velBase = AbilityValues::Pyromancer::FirestreamSpeed * direction;
 			glm::vec2 spawnPos = direction * 0.2f + playerPos;
 
 			for (int i = 0; i < AbilityValues::Pyromancer::FirestreamsPerShot; ++i)
 			{
-				auto firestreamProjectile = std::make_unique<ECS::Entity>();
-
-				firestreamProjectile->AddComponent<Component::AnimatedSprite>(
-				    Component::AnimatedSprite(m_FirestreamAnimation, 0.8f));
-
-				firestreamProjectile->AddComponent<Component::LifetimeTimer>({ (47.f / 60.f) });
-				firestreamProjectile->AddComponent(
-				    Component::Ability(
-				        Component::Ability::ABILITY_FIRESTREAM,
-				        player->ID(),
-				        true,
-				        1.f,  // DPS (stacking)
-				        5.f   // Duration (refreshes)
-				    ));
-
-				float thetaModifier = glm::linearRand(-AbilityValues::Pyromancer::FirestreamSpreadRadians * 0.5f, AbilityValues::Pyromancer::FirestreamSpreadRadians * 0.5f);
-				auto vel = glm::rotate(velBase, thetaModifier);
-
-				firestreamProjectile->AddComponent<Component::Position>({ spawnPos });
-				firestreamProjectile->AddComponent<Component::Velocity>({ vel });
-				firestreamProjectile->AddComponent(Component::Collision(0.2f, 0.2f, 0.5f, 0.f, false));
-
-				el.Add(std::move(firestreamProjectile));
+				el.Add(EntityFactory::PlayerProjectileFirestream(*player, spawnPos, direction));
 
 				abilities.cooldownFireStream = AbilityValues::Pyromancer::FirestreamCooldown;
 			}

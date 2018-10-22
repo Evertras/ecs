@@ -26,6 +26,37 @@ std::unique_ptr<ECS::Entity> EntityFactory::PlayerPyromancer(glm::vec2 pos)
 	return std::move(player);
 }
 
+std::unique_ptr<ECS::Entity> EntityFactory::PlayerProjectileFirestream(ECS::Entity& player, glm::vec2 origination, glm::vec2 direction)
+{
+	auto projectile = std::make_unique<ECS::Entity>();
+
+	projectile->AddComponent<Component::AnimatedSprite>(
+	    Component::AnimatedSprite(Assets::Factory::GetAnimation(Assets::ANIM_FIRE), 0.8f));
+
+	projectile->AddComponent<Component::LifetimeTimer>({ (47.f / 60.f) });
+	projectile->AddComponent(
+	    Component::Ability(
+	        Component::Ability::ABILITY_FIRESTREAM,
+	        player.ID(),
+	        true,
+	        1.f,  // DPS (stacking)
+	        5.f   // Duration (refreshes)
+	    ));
+
+	float thetaModifier = glm::linearRand(
+	                          -AbilityValues::Pyromancer::FirestreamSpreadRadians * 0.5f,
+	                          AbilityValues::Pyromancer::FirestreamSpreadRadians * 0.5f
+	                      );
+
+	auto vel = glm::rotate(AbilityValues::Pyromancer::FirestreamSpeed * direction, thetaModifier);
+
+	projectile->AddComponent<Component::Position>({ origination });
+	projectile->AddComponent<Component::Velocity>({ vel });
+	projectile->AddComponent(Component::Collision(0.2f, 0.2f, 0.5f, 0.f, false));
+
+	return std::move(projectile);
+}
+
 std::unique_ptr<ECS::Entity> EntityFactory::EnemySkeleton(glm::vec2 pos)
 {
 	auto enemy = std::make_unique<ECS::Entity>();

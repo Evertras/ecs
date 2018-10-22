@@ -141,5 +141,6 @@ namespace Component
 
 	struct AISkeletonActive
 	{
+		float attackCooldown;
 	};
 }

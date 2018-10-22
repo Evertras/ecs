@@ -17,6 +17,8 @@ std::unordered_map<CollisionBucket, std::vector<ECS::Entity*>> bucketsPlayer;
 std::unordered_map<CollisionBucket, std::vector<ECS::Entity*>> bucketsEnemies;
 std::unordered_map<CollisionBucket, std::vector<ECS::Entity*>> bucketsOther;
 
+// TODO: this is better than naive N^2, but still has tons of opportunities
+// for optimization and should be a primary target
 void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 {
 	std::vector<CollisionBucket> buckets;
@@ -86,29 +88,32 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 		glm::vec2 abilityBottomRight = { pos.x + collision.boundingRight, pos.y + collision.boundingBottom };
 		const Component::Ability& ability = e.Data<Component::Ability>();
 
-		for (auto enemy : bucketsEnemies[bucket])
+		if (ability.friendly)
 		{
-			Component::Collision& otherCollision = enemy->Data<Component::Collision>();
-			glm::vec2& enemyPos = enemy->Data<Component::Position>().pos;
-
-			glm::vec2 enemyTopLeft = { enemyPos.x - otherCollision.boundingLeft, enemyPos.y - otherCollision.boundingTop };
-			glm::vec2 enemyBottomRight = { enemyPos.x + otherCollision.boundingRight, enemyPos.y + otherCollision.boundingBottom };
-
-			if (abilityTopLeft.x <= enemyBottomRight.x && abilityTopLeft.y <= enemyBottomRight.y
-			        && abilityBottomRight.x >= enemyTopLeft.x && abilityBottomRight.y >= enemyTopLeft.y)
+			for (auto enemy : bucketsEnemies[bucket])
 			{
-				switch (ability.type)
+				Component::Collision& otherCollision = enemy->Data<Component::Collision>();
+				glm::vec2& enemyPos = enemy->Data<Component::Position>().pos;
+
+				glm::vec2 enemyTopLeft = { enemyPos.x - otherCollision.boundingLeft, enemyPos.y - otherCollision.boundingTop };
+				glm::vec2 enemyBottomRight = { enemyPos.x + otherCollision.boundingRight, enemyPos.y + otherCollision.boundingBottom };
+
+				if (abilityTopLeft.x <= enemyBottomRight.x && abilityTopLeft.y <= enemyBottomRight.y
+				        && abilityBottomRight.x >= enemyTopLeft.x && abilityBottomRight.y >= enemyTopLeft.y)
 				{
-				case Component::Ability::ABILITY_FIRESTREAM:
-					Actions::ApplyBurn(el, *enemy, ability.param1 * d, ability.param2);
-					break;
+					switch (ability.type)
+					{
+					case Component::Ability::ABILITY_FIRESTREAM:
+						Actions::ApplyBurn(el, *enemy, ability.param1 * d, ability.param2);
+						break;
 
-				case Component::Ability::ABILITY_IGNITE:
-					Actions::Damage(el, *enemy, ability.param1);
-					break;
+					case Component::Ability::ABILITY_IGNITE:
+						Actions::Damage(el, *enemy, ability.param1);
+						break;
 
-				default:
-					throw "Unknown ability type";
+					default:
+						SDL_Log("Unknown friendly ability type collision found");
+					}
 				}
 			}
 		}
