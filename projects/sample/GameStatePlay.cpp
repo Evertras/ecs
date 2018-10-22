@@ -79,7 +79,7 @@ GameStatePlay::GameStatePlay(SDL_Window* window) : m_Window(window)
 
 	// Sandbox for initial entities
 	{
-		m_PlayerID = m_EntityList.Add(EntityFactory::PlayerPyromancer({ 2.f, 2.f }));
+		m_PlayerID = m_EntityList.Add(EntityFactory::PlayerPyromancer({ 2.f, 3.f }));
 	}
 
 	// Systems
