@@ -14,4 +14,10 @@ namespace AbilityValues
 		const float FirestreamSpeed = 6.f;
 		const float FirestreamSpreadRadians = .5f;
 	}
+
+	namespace Enemy
+	{
+		const float DamagePerHit = 5.f;
+		const float DamageCooldown = 1.f;
+	}
 }

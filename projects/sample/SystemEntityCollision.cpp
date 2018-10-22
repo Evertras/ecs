@@ -72,7 +72,7 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 
 	el.Run<Component::Collision, Component::Position>(findCollisions, d);
 
-	ECS::EntityListFunction respondToCollisions = [&](ECS::Entity & e,
+	ECS::EntityListFunction handleAbilityHits = [&](ECS::Entity & e,
 	        ECS::DeltaSeconds d)
 	{
 		Component::Collision& collision = e.Data<Component::Collision>();
@@ -123,7 +123,53 @@ void SystemEntityCollision::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 		}
 	};
 
-	el.Run<Component::Ability, Component::Position>(respondToCollisions, d);
+	el.Run<Component::Ability, Component::Position>(handleAbilityHits, d);
+
+	ECS::EntityListFunction handleEnemyHits = [&](ECS::Entity & e,
+	        ECS::DeltaSeconds d)
+	{
+		glm::vec2& pos = e.Data<Component::Position>().pos;
+		CollisionBucket bucket = Hash(pos.x, pos.y);
+
+		auto enemyIter = bucketsEnemies.find(bucket);
+
+		if (enemyIter == bucketsEnemies.end())
+		{
+			return;
+		}
+
+		Component::Collision& collision = e.Data<Component::Collision>();
+		glm::vec2 playerTopLeft = { pos.x - collision.boundingLeft, pos.y - collision.boundingTop };
+		glm::vec2 playerBottomRight = { pos.x + collision.boundingRight, pos.y + collision.boundingBottom };
+
+		for (auto enemy : bucketsEnemies[bucket])
+		{
+			Component::Enemy& enemyData = enemy->Data<Component::Enemy>();
+
+			if (enemyData.attackCooldown >= 0.f)
+			{
+				continue;
+			}
+
+			Component::Collision& otherCollision = enemy->Data<Component::Collision>();
+			glm::vec2& enemyPos = enemy->Data<Component::Position>().pos;
+
+			glm::vec2 enemyTopLeft = { enemyPos.x - otherCollision.boundingLeft, enemyPos.y - otherCollision.boundingTop };
+			glm::vec2 enemyBottomRight = { enemyPos.x + otherCollision.boundingRight, enemyPos.y + otherCollision.boundingBottom };
+
+			if (playerTopLeft.x <= enemyBottomRight.x
+			        && playerTopLeft.y <= enemyBottomRight.y
+			        && playerBottomRight.x >= enemyTopLeft.x
+			        && playerBottomRight.y >= enemyTopLeft.y)
+			{
+				enemyData.attackCooldown = AbilityValues::Enemy::DamageCooldown;
+
+				Actions::Damage(el, e, AbilityValues::Enemy::DamagePerHit);
+			}
+		}
+	};
+
+	el.Run<Component::Player>(handleEnemyHits, d);
 
 	for (auto iter = bucketsPlayer.begin(); iter != bucketsPlayer.end(); ++iter)
 	{

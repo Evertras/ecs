@@ -48,6 +48,8 @@ void SystemAISkeleton::Run(ECS::EntityList& el, ECS::DeltaSeconds d)
 		auto skeleMove = e.Data<Component::Move>();
 		auto dir = glm::normalize(playerPos - skelePos) * skeleMove.unitsPerSecond;
 
+		e.Data<Component::Enemy>().attackCooldown -= d;
+
 		e.Data<Component::Velocity>().vel = dir;
 	};
 

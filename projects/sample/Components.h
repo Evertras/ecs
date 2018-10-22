@@ -9,8 +9,14 @@ namespace Component
 {
 	struct WobbleSprite {};
 	struct Player {};
-	struct Enemy {};
 	struct CameraTarget {};
+
+	struct Enemy
+	{
+		Enemy() : attackCooldown(0.f) {}
+
+		float attackCooldown;
+	};
 
 	struct LevelEditCursor
 	{
@@ -146,6 +152,5 @@ namespace Component
 
 	struct AISkeletonActive
 	{
-		float attackCooldown;
 	};
 }
