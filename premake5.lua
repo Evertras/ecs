@@ -60,23 +60,31 @@ function useGLM()
   defines { "GLM_ENABLE_EXPERIMENTAL" }
 end
 
+function setWindowsSDK()
+  local ver = os.winSdkVersion()
+
+  if ver ~= nil then
+    systemversion(ver .. ".0")
+  end
+end
+
 workspace "ECS"
   location "generated"
   language "C++"
   architecture "x86_64"
   configurations { "debug", "release" }
 
-  filter { "configurations:debug" }
+  filter "configurations:debug"
   	symbols "On"
 
-  filter { "configurations:release" }
+  filter "configurations:release"
   	optimize "On"
 
-  filter {"system:windows", "action:vs*"}
-    systemversion(os.winSdkVersion() .. ".0")
-
-  filter { "action:gmake*" }
+  filter "action:gmake*"
     buildoptions { "-std=c++17" }
+
+  filter "action:vs*"
+    setWindowsSDK()
 
   filter {}
 
@@ -144,10 +152,11 @@ project "Sample"
     }
 
   filter "action:gmake*"
-	  prebuildcommands {
-	    '@echo Copying static assets',
-	    'cp -R ../projects/sample/assets %{cfg.buildtarget.directory}'
-	  }
+    prebuildcommands {
+      '@echo Copying static assets',
+      'mkdir -p %{cfg.buildtarget.directory}',
+      'cp -R ../projects/sample/assets %{cfg.buildtarget.directory}'
+    }
 
   filter {}
 
